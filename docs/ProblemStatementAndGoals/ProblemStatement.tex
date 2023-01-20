@@ -1,0 +1,65 @@
+\documentclass{article}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+
+\title{Problem Statement and Goals\\The Inverted pendulum}
+
+\author{Mina Mahdipour}
+
+\date{January 2023}
+
+\input{}
+
+\begin{document}
+
+\maketitle
+
+\begin{table}[hp]
+\caption{Revision History} \label{TblRevisionHistory}
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
+\midrule
+20 Jan. 2023 & Mina Mahdipour & First version of document\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Problem Statement}
+
+An inverted pendulum is a pendulum upside down with it pivot point under its center of mass. This forms an inherent unstable system. While the inverted pendulum can stand up, any small disturbances will cause the pendulum to fall.
+Inverted Pendulums are Everywhere, from  the human posture systems, Segway, to the launching of a rocket.
+
+\subsection{Problem}
+
+Inverted pendulum is unstable and without additional help will fall over, so it needs a controller to keep pendulum center of mass above its pivot point even when disturbances occur.
+The objective of the control system is to balance the inverted pendulum by applying a force to the place that the pendulum is attached to.
+
+\subsection{Inputs and Outputs}
+
+The pendulum's angle is the input and the calculated force to move the position of the pivot point sideways, will be the output.
+
+\subsection{Stakeholders}
+
+As the inverted pendulum is widely used as a benchmark for testing control strategies and algorithms, and it can be used in different applications, so the potential stakeholders could be all the related industries. On the other hand, it is a classic problem in dynamics and control theory, so the final system can be used in high school as an educational material.
+
+\subsection{Environment}
+
+The final software will be compatible with Windows 10.
+
+\section{Goals}
+
+\begin{enumerate}
+  \item	Designing a software system that can control and stabilize the pendulum.
+  \item Verifying that the controller can handle disturbances.
+  \item	Measuring the effect of the different parameters.
+\end{enumerate}
+\section{Stretch Goals}
+\begin{enumerate}
+  \item Visualizing the problem with an interactive graphic design.
+  \item Making a real model includes a rod with a weight on the bottom and the controller.
+  \item Simulating double inverted pendulum problem.
+\end{enumerate}
+
+\end{document}
