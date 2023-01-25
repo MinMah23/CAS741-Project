@@ -3,7 +3,7 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 
-\title{Problem Statement and Goals\\The Inverted pendulum}
+\title{Problem Statement and Goals\\Pole Balancing}
 
 \author{Mina Mahdipour}
 
@@ -22,23 +22,24 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 20 Jan. 2023 & Mina Mahdipour & First version of document\\
+25 Jan. 2023 & Mina Mahdipour & Changes in problem and input-output sections\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
 
-An inverted pendulum is a pendulum upside down with it pivot point under its center of mass. This forms an inherent unstable system. While the inverted pendulum can stand up, any small disturbances will cause the pendulum to fall.
+An inverted pendulum is a pendulum upside down with it pivot point under its center of mass. it is unstable and without additional help and by any small disturbances will fall over. To stay upright, it needs a controller to keep its center of mass above its pivot point even when disturbances occur. The objective of the control system is to balance the inverted pendulum by applying a force to the place that the pendulum is attached to.
+
 Inverted Pendulums are Everywhere, from  the human posture systems, Segway, to the launching of a rocket.
 
 \subsection{Problem}
 
-Inverted pendulum is unstable and without additional help will fall over, so it needs a controller to keep pendulum center of mass above its pivot point even when disturbances occur.
-The objective of the control system is to balance the inverted pendulum by applying a force to the place that the pendulum is attached to.
+Stabilizing One unstable pole mounted on a cart that can move horizontally is the main problem. There are two degrees of freedom. The horizontally movement of cart and the pendulum angle with vertical axis. Hence there are two equations of motion, one for each. Solving these equations describe the motion needed on the cart to keep the whole system at the equilibrium point.
 
 \subsection{Inputs and Outputs}
 
-The pendulum's angle is the input and the calculated force to move the position of the pivot point sideways, will be the output.
+The inputs of the control system will be the external force to the cart which moves it, and the outputs are the angular position of the pendulum, and the horizontal position of the cart. Although there are lots of parameters such as mass of the card, mass of the pendulum, pendulum length and so on which we consider as constant values.
 
 \subsection{Stakeholders}
 
@@ -46,7 +47,7 @@ As the inverted pendulum is widely used as a benchmark for testing control strat
 
 \subsection{Environment}
 
-The final software will be compatible with Windows 10.
+There is no limitation and the final software will be compatible with Windows, MacOS and Linux operating systems.
 
 \section{Goals}
 
