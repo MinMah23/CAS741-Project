@@ -142,7 +142,7 @@
 February 1, 2023  & 1.0 & First version of document\\
 February 3, 2023  & 1.1 & Complete the Description part\\
 February 4, 2023  & 1.2 & Update Requirements part\\
-February 6, 2023  & 1.2 & Update Specific System Description part\\
+February 6, 2023  & 1.3 & Update Specific System Description part\\
 
 \bottomrule
 \end{tabularx}
@@ -167,7 +167,7 @@ Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed
     \si{\kilogram} & mass & kilogram\\
     \si{\newton} & force & newton\\
     \si{\deg} & angle & degree\\
-    \si{\metre} & distance & metre\\
+    \si{\metre} & distance or length & metre\\
     \si{\tau} & torque & newton.metre\\
     \bottomrule
   \end{tabular}
@@ -185,25 +185,24 @@ their units. The symbols are listed in alphabetical order.
 \textbf{symbol} & \textbf{unit} & \textbf{description}\\
 \midrule
 $b$ & dimensionless & coefficient of friction for the cart\\ 
-$d_py$ & \si{metre}& distance traveled by the center of mass of pendulum in {y} direction\\
-$d_px$ & \si{metre}& distance traveled by the center of mass of pendulum in {x} direction\\
-
-$g$ & \si {\metre\per\square\second} & Acceleration due to gravity\\
+$d_py$ & \si{\metre}& distance traveled by the center of mass of pendulum in {y} direction\\
+$d_px$ & \si{\metre}& distance traveled by the center of mass of pendulum in {x} direction\\
 $F(t)$ & \si {\newton} & Horizontal force exerted on the cart \\
-$I$ & \si {\kilogram\square\metre} & moment of inertia of the pendulum\\
-
-$\ell$ & \si{\metre} & Length to pendulum center of mass\\ 
-$M_c$ & \si{kilogram} & Mass of cart\\
-$m_p$ & \si{kilogram} & Mass of pole\\
+$g$ & \si {\metre\per\square\second} & Acceleration due to gravity\\
 $H$ & \si {\newton} & Horizontal reaction force of the cart or the pole\\
-$P$ & \si {\newton} & Vertical reaction force component of the cart or the pole\\
-$x(t)$ & \si{metre} & The distance which cart transfer during time (t) \\
+$I$ & \si {\kilogram\square\metre} & moment of inertia of the pendulum\\
+$l$ & \si{\metre} & Length to pendulum center of mass\\ 
+$m_c$ & \si{\kilogram} & Mass of cart\\
+$m_p$ & \si{\kilogram} & Mass of pole\\
+$r$ & \si {\metre} &  radius from the axis of rotation to the location where the force is exerted for calculating torque\\
+$V$ & \si {\newton} & Vertical reaction force component of the cart or the pole\\
+$x(t)$ & \si{\metre} & The distance which cart transfer during time (t) \\
 $\dot{x}$ & \si {\metre\per\second} & Velocity of cart\\
 $\ddot{x}$ & \si {\metre\per\square\second} & Acceleration of cart\\  
 $\theta (t)$ & \si{\deg} & Pendulum angle from vertical (down)  \\
 $\dot{\theta}$ & \si {\deg\per\second} & Angular velocity of the pendulum\\
 $\ddot{\theta}$ & \si {\deg\per\square\second} & Angular acceleration of the pendulum\\
- 
+
 \bottomrule
 \end{longtable*}
 
@@ -223,14 +222,14 @@ $\ddot{\theta}$ & \si {\deg\per\square\second} & Angular acceleration of the pen
   PS & Physical System Description\\
   R & Requirement\\
   SRS & Software Requirements Specification\\
-  IP & Simulating the Inverted Pendulum\\
-  T & Theoretical Model\\
+  IP & Inverted Pendulum\\
+  TM & Theoretical Model\\
   \bottomrule
 \end{tabular}\\
 
 \subsection{Mathematical Notation}
 
-{In this document, we do not use any specific mathematical notation.}
+{In this document, the common mathematical notation used in undergraduate-level mathematics will be used.}
 
 \newpage
 
@@ -240,27 +239,26 @@ $\ddot{\theta}$ & \si {\deg\per\square\second} & Angular acceleration of the pen
 
 The Inverted pendulum is a classical control problem used for illustrating non-linear control techniques. The system is motivated by applications such as control of rockets and anti-seismic control of buildings.The inverted pendulum system consists of a pendulum which is attached to a cart that can move horizontally. It is unstable because its center of mass is above its pivot point so without additional help will fall over.The cart move horizontally by an external. This force is the only control input to the system. By manipulating the force, the position of pendulum is to be controlled.\\
 Considering the force, we would like to simulate the behaviour of the system and measure the position and the angle of the pendulum in the presence of the force.
-The following section provides an overview of Software Requirement Specification (SRS) for a pole-cart system. This section explains the purpose of the document, the scope of requirements, the characteristic of the intended reader, and the organization of a document.
+The following section provides an overview of Software Requirement Specification (SRS) for a pole-cart system, discussing the scope and purpose of the work.
 
 \subsection{Purpose of Document}
 
-The main purpose of this document is to describe the mathematical model of IP system. To clarify software requirements, detailed information about goals, assumptions, theoretical models, and definitions will be explained.\\
+The main purpose of this document is to describe the mathematical model of Inverted Pendulum(IP) system. To clarify software requirements, detailed information about goals, assumptions, theoretical models, and definitions will be explained.\\
 Therefore, this document will be the reference during producing the software. It will provide  requirements of the software which will be used in
 planing for design stage.
 The following SRS document will remain abstract exploring what is being solved rather than how it will be solved.
 
 \subsection{Scope of Requirements} 
 
-The problem is restricted to two dimensions. The pendulum is attached to the cart in such a way that it is free to rotate in the pivot. The cart can move horizontally,left or right. for more details, see the assumptions section  (Section~\ref{sec_assumpt})
+The problem is restricted to two dimensions. The pendulum is attached to the cart in such a way that it is free to rotate in the pivot, and the cart can move horizontally,left or right. for more details, see the assumptions section  (Section~\ref{sec_assumpt})
  
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
-Intended Reader(s) or Reviewer(s) should have knowledge about equations of motion in Physics. Good understanding of solving an ordinary differential equation (ODE) in Mathematics is also needed. Both of the topics are offered in the undergrad engineering courses or high school Mathematics and Physics subjects.
+Intended Reader(s) or Reviewer(s) should have knowledge about Physics dynamics and more specifically in equations of motion. Good understanding of solving an ordinary differential equation (ODE) in Mathematics is also needed, both of the topics are offered in the undergrad engineering courses or high school Mathematics and Physics subjects.
 
 
 \subsection{Organization of Document}
 
-The organization of the document follows the template for an SRS for scientific computing software proposed by \cite{article1} The template will present the system's goals, theories, definitions, and assumptions. Goals are good points to start. To be familiar with mathematical model, Section~\ref{sec_theoretical} and then Section~\ref{sec_theoretical}, Section~\ref{sec_gendef}, Section~\ref{sec_instance} can be explored.
-Readers interested in top-down reading can begin by reading the system's goal statements (Section~\ref{Sec_gs}). Subsequently, the theoretical models will elaborate on the goal statements. Lastly, readers can finish with a more  understanding of the system by reading instance models of the system.
+This document follows the SRS template as specified by Smith and Lai\cite{SmithAndLai2005}. It will present the system's goals, theories, definitions, and assumptions. Goals are good points to start. To be familiar with mathematical model, Section~\ref{sec_theoretical} and then Section~\ref{sec_theoretical}, Section~\ref{sec_gendef}, Section~\ref{sec_instance} can be explored. Most of the material is referential and may be read as needed.
 
 \section{General System Description}
 
@@ -269,7 +267,7 @@ interfaces between the system and its environment, describes the user
 characteristics and lists the system constraints.  
 
 \subsection{System Context}
-
+Figure \ref{Fig_SystemContext} represents an abstract view of the software. The rectangular node represents the IP simulator software, and the circular nodes are users who interact the software through an user interface.
 
 \begin{figure}[h!]
 \begin{center}
@@ -279,16 +277,16 @@ characteristics and lists the system constraints.
 \end{center}
 \end{figure}
 
-The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
+The responsibilities of the user and the system are as follows:
 \begin{itemize}
 \item User Responsibilities:
 \begin{itemize}
-\item Provide required inputs including cart and pole features.
+\item Provide required inputs including cart and pole specifications.
 \end{itemize}
 \item The Inverted Pendulum simulation software Responsibilities:
 \begin{itemize}
 \item Ensure all inputs are in correct format and detect data type mismatch.
-\item Calculate and show the outputs.
+\item Calculate and show the expected outputs including the position of the cart and the pendulum.
 \end{itemize}
 \end{itemize}
 
@@ -352,7 +350,7 @@ includes the following elements:
  \end{figure}
  
 \subsubsection{Goal Statements}
- Given the cart and pendulum features and external force, the goal statements are:
+ Given the cart and pendulum specifications and external force, the goal statements are:
 
 \begin{itemize}
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_model}:]
@@ -383,9 +381,8 @@ The pendulum is smooth and friction-less.
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_pendulumInertia}:]
 The pendulum is unified and its moment of inertia is constant.
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_cosTheta}:]
-The equations of the problem are non linear equations and to make them linear, we can assume that $\theta$ is small enough to have, $\cos(\theta)$$ is equal to $1.
-\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_sinTheta}:]
-According to previous assumption, for small angle of $\theta$, $\sin(\theta)$ is equal to $\theta$.\\
+The $\theta$ is small and less than.
+
 \end{itemize}
 
 
@@ -407,7 +404,7 @@ Label&  \bf Newton's Second Law of Motion\\
 \hline
 Equation & {$ F = m.a$ }\\ 
 \hline
-Description & {Newton’s second law of motion pertains to the behavior of objects for which all existing forces are not balanced. The second law states that the acceleration of an object is dependent upon two variables, the net force acting upon the object which is $a$ and the mass of the object that is $m$. The acceleration of an object depends directly upon the net force acting upon the object, and inversely upon the mass of the object. As the force acting upon an object is increased, the acceleration of the object is increased. As the mass of an object is increased, the acceleration of the object is decreased.}  \\
+Description & {Newtonâ€™s second law of motion pertains to the behavior of objects for which all existing forces are not balanced. The second law states that the acceleration of an object is dependent upon two variables, the net force acting upon the object which is $a$ and the mass of the object that is $m$. The acceleration of an object depends directly upon the net force acting upon the object, and inversely upon the mass of the object. As the force acting upon an object is increased, the acceleration of the object is increased. As the mass of an object is increased, the acceleration of the object is decreased.}  \\
 \hline
 Notes & none. \\ 
 \hline
@@ -428,7 +425,7 @@ Ref.\ By &  \dref{NLHC},\dref{NLHP},\dref{NLVP}, \iref{Findx} \\
 \rowcolor[gray]{0.9}
 Number& TM\refstepcounter{theorynum}\thetheorynum\label{NSLR}\\
 \hline
-Label&  \bf Newton’s Second Law for Rotation\\
+Label&  \bf Newtonâ€™s Second Law for Rotation\\
 \hline
 Equation & {$\sum(\tau)$=$I$.$\alpha$ }\\ 
 \hline
@@ -438,7 +435,7 @@ Description & {If more than one torque acts on a rigid body about a fixed axis, 
 \hline
 Notes & none. \\ 
 \hline
-Sources& \url{https://www.physicsclassroom.com/class/newtlaws/Lesson-3/Newton-s-Second-Law} \\
+Sources& \url{https://courses.lumenlearning.com/suny-osuniversityphysics/chapter/10-7-newtons-second-law-for-rotation/} \\
 \hline
 Ref.\ By &  \iref{FindTehta} \\
 \hline
@@ -524,9 +521,9 @@ Label &\bf Newton's second law of motion for cart in horizontal \\
 % \hline
 SI Units& \si{\newton} \\
 \hline
-Equation& $M_c\ddot{x}= F-H_c-b\dot{x}$,  \\
+Equation& $m_c\ddot{x}= F-H_c-b\dot{x}$,  \\
 \hline
-Description & Based on Newton's second law of motion, sum of all forces applied to the cart is equal to $M_c.a$.
+Description & Based on Newton's second law of motion, sum of all forces applied to the cart is equal to $m_c.a$.
 \\
 & $F$ is the external force exerted to the cart in \si{\newton}.\\
 & $H_c$ is the force component in {x} direction of the reaction force which pendulum applies on the cart and measured in \si{\newton}.\\
@@ -618,7 +615,7 @@ Label &\bf Calculate angular displacement of the pendulum \\
 \hline
 % Units&$MLt^{-3}T^0$\\
 % \hline
-SI Units& \tau\\
+SI Units& \si{\tau}\\
 \hline
 Equation& $I$.$\ddot{\theta}$ =$l$.( $V.\sin(\theta)$ - $H.\cos(\theta)$)\\
 \hline
@@ -789,15 +786,15 @@ models.
   \hline
   Label& \bf Equation of motion for the cart\\
   \hline
-  Input& $F$, $M_c$, $m_p$, $b$, $l$ from \iref{}\\0
+  Input& $F$, $m_c$, $m_p$, $b$, $l$\\
   & The input is constrained so that $\theta$ is small\\
   \hline
-  Output& $x(t)$, such that $F$= $ (M_c+m_p)\ddot{x}+ b\dot{x} + m_pl\ddot{\theta}\cos{\theta} - m_pl(\dot{\theta}) ^ 2 \sin{\theta} \rightarrow$\\
-&$\ddot{x} =\dfrac{F- b\dot{x}- m_pl\ddot{\theta}\cos{\theta}+ m_pl(\dot{\theta}) ^ 2 \sin{\theta}}{(M_c+m_p)}$ \\
+  Output& $x(t)$, such that $F$= $ (m_c+m_p)\ddot{x}+ b\dot{x} + m_pl\ddot{\theta}\cos{\theta} - m_pl(\dot{\theta}) ^ 2 \sin{\theta} \rightarrow$\\
+&$\ddot{x} =\dfrac{F- b\dot{x}- m_pl\ddot{\theta}\cos{\theta}+ m_pl(\dot{\theta}) ^ 2 \sin{\theta}}{(m_c+m_p)}$ \\
  
   \hline
   Description&
-  $M_c$ is the mass of the cart (\si{\kilogram}).\\
+  $m_c$ is the mass of the cart (\si{\kilogram}).\\
   &$m_p$ is the mass of the pendulum (\si{\kilogram}).\\
   &$b$ is the coefficient friction of the cart (dimensionless).\\
   &$l$ is the length of pendulum.\\
@@ -827,7 +824,7 @@ models.
   \hline
   Label& \bf Equation of motion for the pendulum\\
   \hline
-  Input&  $M_c$, $m_p$, $b$, $l$\\
+  Input&  $m_c$, $m_p$, $b$, $l$\\
 
   \hline
   Output & $\theta(t)$, such that $(I+m_pl^2)\ddot{\theta} + m_pl\ddot{x}\cos{\theta} - m_pgl\sin{\theta} = 0 $\rightarrow\\
@@ -835,7 +832,7 @@ models.
   & \\
   \hline
   Description&
-  $M_c$ is the mass of the cart (\si{\kilogram}).\\
+  $m_c$ is the mass of the cart (\si{\kilogram}).\\
   &$m_p$ is the mass of the pendulum (\si{\kilogram}).\\
   &$l$ is the length of pendulum.  \\
   \hline
@@ -880,7 +877,7 @@ Table~\ref{TblSpecParams}.
                              \textbf{Typical Value} & \textbf{Uncertainty}\\
   \midrule 
   $m_p$ & $m_p > 0$ & $m_p > 0$ & 0.2 \si[per-mode=symbol] {\kilogram} &  \\
- $M_c$ & $M_c > 0$ & $M_c > 0$ & 0.5 \si[per-mode=symbol] {\kilogram} &  \\
+ $m_c$ & $m_c > 0$ & $m_c > 0$ & 0.5 \si[per-mode=symbol] {\kilogram} &  \\
  $b$ & $b > 0$ & $b > 0$ & 0.1\si[per-mode=symbol]  (dimensionless) &  \\
  $l$ & $l > 0$ & $l> 0$ & 0.3 \si[per-mode=symbol] {\metre} &  \\
  $I$ & $I > 0$ & $I> 0$ & 0.006 \si[per-mode=symbol] {\kilogram. \metre^2} &  \\
@@ -930,7 +927,7 @@ IP simulation software is expected to complete, and the nonfunctional requiremen
 \noindent \begin{itemize}
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_Inputs}:] 
-{Provide input values.}
+{Provide input values such as the cart and pole features according to Table\ref{TblInputVar}.}
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_OutputInputs}:] {Calculate horizontal position of the cart form \iref{Findx}}
 
@@ -1060,13 +1057,6 @@ other.
 \section{Development Plan}
 
 \section{Values of Auxiliary Constants}
-
-\plt{Show the values of the symbolic parameters introduced in the report.}
-
-\plt{The definition of the requirements will likely call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.}
-
-\plt{The value of FRACTION, for the Maintainability NFR would be given here.}
 
 \newpage
 
