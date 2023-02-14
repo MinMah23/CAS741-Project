@@ -12,13 +12,22 @@
 }
 \usepackage[round]{natbib}
 
-\input{../Comments}
-\input{../Common}
+\input{}
+\newcommand{\colZwidth}{1.0\textwidth}
+\newcommand{\colAwidth}{0.13\textwidth}
+\newcommand{\colBwidth}{0.82\textwidth}
+\newcommand{\colCwidth}{0.1\textwidth}
+\newcommand{\colDwidth}{0.05\textwidth}
+\newcommand{\colEwidth}{0.8\textwidth}
+\newcommand{\colFwidth}{0.17\textwidth}
+\newcommand{\colGwidth}{0.5\textwidth}
+\newcommand{\colHwidth}{0.28\textwidth}
+
 
 \begin{document}
 
-\title{Project Title: System Verification and Validation Plan for \progname{}} 
-\author{\authname}
+\title{Project Title: System Verification and Validation Plan for Simulating the Inverted Pendulum system} 
+\author{Mina Mahdipour}
 \date{\today}
 	
 \maketitle
@@ -27,10 +36,10 @@
 
 \section{Revision History}
 
-\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\begin{tabularx}{\textwidth}{p{4cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
+February 13, 2023 & 1.0 & The first version of VnV\\
 Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
@@ -40,10 +49,8 @@ Date 2 & 1.1 & Notes\\
 \tableofcontents
 
 \listoftables
-\wss{Remove this section if it isn't needed}
 
 \listoffigures
-\wss{Remove this section if it isn't needed}
 
 \newpage
 
@@ -61,14 +68,14 @@ Date 2 & 1.1 & Notes\\
 \wss{symbols, abbreviations or acronyms --- you can simply reference the SRS
   \citep{SRS} tables, if appropriate}
 
-\wss{Remove this section if it isn't needed}
+
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
+This document provides an introductory blurb and road map of the
+  Verification and Validation plan.
 
 \section{General Information}
 
@@ -77,21 +84,18 @@ This document ... \wss{provide an introductory blurb and roadmap of the
 \wss{Say what software is being tested.  Give its name and a brief overview of
   its general functions.}
 
-\subsection{Objectives}
+This document provides test plans for the Simulating the Inverted Pendulum System Software. This Software aims to simulate and describe the behaviour of the system of a cart-pendulum, in the presence of different values of external force. To do that, it will calculate the cart position and pendulum's angle after applying the force. 
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+\subsection{Objectives}
+The objectives of this document are listed below:
+\begin{itemize}
+\item Make sure about software correctness.
+\item Demonstrate adequate usability.
+\end{itemize}
 
 \subsection{Relevant Documentation}
-
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.}
-
+The Software Requirements Specification presents an overview of the problem and solution.
+The final report of running the test which described in this document, will be shown in VnV Report.
 \citet{SRS}
 
 \section{Plan}
@@ -100,10 +104,29 @@ This document ... \wss{provide an introductory blurb and roadmap of the
   come.}
 
 \subsection{Verification and Validation Team}
+Our team includes:
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+\hline
 
-\wss{Your teammates.  Maybe your supervisor.
-  You shoud do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
+Roles& Responsibility \label{R&R}\\
+\hline
+Supervisor &\bf \\
+\hline
+% \hline
+Writer&  \\
+\hline
+
+% \hline
+Reviwer&  \\
+\hline
+
+\end{tabular}
+\end{minipage}\\
+
+
 
 \subsection{SRS Verification Plan}
 
