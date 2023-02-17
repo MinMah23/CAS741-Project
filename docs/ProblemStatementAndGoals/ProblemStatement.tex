@@ -3,11 +3,11 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 
-\title{Problem Statement and Goals\\Pole Balancing}
+\title{Problem Statement and Goals\\Inverted Pendulum Simulator}
 
 \author{Mina Mahdipour}
 
-\date{January 2023}
+\date{}
 
 \input{}
 
@@ -23,6 +23,7 @@
 \midrule
 20 Jan. 2023 & Mina Mahdipour & First version of document\\
 25 Jan. 2023 & Mina Mahdipour & Changes in problem and input-output sections\\
+16 Feb. 2023 & Mina Mahdipour & Refine some part accoring to SRS\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -35,11 +36,11 @@ Inverted Pendulums are Everywhere, from  the human posture systems, Segway, to t
 
 \subsection{Problem}
 
-Stabilizing One unstable pole mounted on a cart that can move horizontally is the main problem. There are two degrees of freedom. The horizontally movement of cart and the pendulum angle with vertical axis. Hence there are two equations of motion, one for each. Solving these equations describe the motion needed on the cart to keep the whole system at the equilibrium point.
+Simulating the system of One unstable pole mounted on a cart that can move horizontally is the main problem. There are two degrees of freedom. The horizontally movement of cart and the pendulum angle with vertical axis. Hence there are two equations of motion, one for each. Solving these equations describe the motion needed on the cart to keep the whole system at the equilibrium point.
 
 \subsection{Inputs and Outputs}
 
-The inputs of the control system will be the external force to the cart which moves it, and the outputs are the angular position of the pendulum, and the horizontal position of the cart. Although there are lots of parameters such as mass of the card, mass of the pendulum, pendulum length and so on which we consider as constant values.
+The inputs of the system will be the the cart and pendulum specifications such as mass of the card, mass of the pendulum, pendulum length, and also external force to the cart which moves it, and the outputs are the angular position of the pendulum, and the horizontal position of the cart.
 
 \subsection{Stakeholders}
 
@@ -47,19 +48,18 @@ As the inverted pendulum is widely used as a benchmark for testing control strat
 
 \subsection{Environment}
 
-There is no limitation and the final software will be compatible with Windows, MacOS and Linux operating systems.
+There is no limitation and the final software will be compatible with Windows, MacOS, and Linux operating systems.
 
 \section{Goals}
 
 \begin{enumerate}
-  \item	Designing a software system that can control and stabilize the pendulum.
-  \item Verifying that the controller can handle disturbances.
+  \item Designing a software system which simulates the behaviour of the system.
   \item	Measuring the effect of the different parameters.
 \end{enumerate}
 \section{Stretch Goals}
 \begin{enumerate}
   \item Visualizing the problem with an interactive graphic design.
-  \item Making a real model includes a rod with a weight on the bottom and the controller.
+  \item Designing a software system that can control and stabilize the pendulum.
   \item Simulating double inverted pendulum problem.
 \end{enumerate}
 
