@@ -19,6 +19,7 @@
 \usepackage{caption}
 \usepackage{pdflscape}
 \usepackage{afterpage}
+\usepackage{gensymb}
 \usepackage[round]{natbib}
 
 \input{}
@@ -116,7 +117,7 @@
 
 \begin{document}
 
-\title{Software Requirements Specification for: Simulating the Inverted Pendulum System} 
+\title{Software Requirements Specification for IP Simulator: A tool for simulating the Inverted Pendulum System} 
 \author{Mina Mahdipour}
 \date{\today}
 \maketitle
@@ -139,6 +140,7 @@ February 3, 2023  & 1.1 & Complete the Description part\\
 February 4, 2023  & 1.2 & Update Requirements part\\
 February 6, 2023  & 1.3 & Update Specific System Description part\\
 February 10, 2023 & 1.4 & Refine Solution Characteristic Specification\\
+February 15, 2023 & 1.5 & Refine according to Dr.Smith comments\\
 \bottomrule
 \end{tabularx}
 
@@ -161,9 +163,9 @@ Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed
     \midrule 
     \si{\kilogram} & mass & kilogram\\
     \si{\newton} & force & newton\\
-    \si{\deg} & angle & degree\\
+   \si{\radian} & angle & radian\\
     \si{\metre} & distance or length & metre\\
-    \si{\tau} & torque & newton.metre\\
+    \si{\newton.\metre} & torque & newton.metre\\
     \bottomrule
   \end{tabular}
   %	\caption{Provide a caption}
@@ -180,9 +182,9 @@ their units. The symbols are listed in alphabetical order.
 \textbf{symbol} & \textbf{unit} & \textbf{description}\\
 \midrule
 $b$ & dimensionless & Coefficient of friction for the cart\\ 
-$d_py$ & \si{\metre}& Distance traveled by the center of mass of pendulum in {y} direction\\
-$d_px$ & \si{\metre}& Distance traveled by the center of mass of pendulum in {x} direction\\
-$F(t)$ & \si {\newton} & Horizontal force exerted on the cart \\
+$d_py$ & \si{\metre}& Distance traveled by the center of mass of pendulum in {$y$} direction\\
+$d_px$ & \si{\metre}& Distance traveled by the center of mass of pendulum in {$x$} direction\\
+$F(t)$ & \si {\newton} & Horizontal force exerted on the cart over time \\
 $g$ & \si {\metre\per\square\second} & Acceleration due to gravity\\
 $H$ & \si {\newton} & Horizontal reaction force of the cart or the pole\\
 $I$ & \si {\kilogram\square\metre} & Moment of inertia of the pendulum\\
@@ -194,9 +196,9 @@ $V$ & \si {\newton} & Vertical reaction force component of the cart or the pole\
 $x(t)$ & \si{\metre} & The distance which cart transfer during time (t) \\
 $\dot{x}$ & \si {\metre\per\second} & Velocity of the cart\\
 $\ddot{x}$ & \si {\metre\per\square\second} & Acceleration of the cart\\  
-$\theta (t)$ & \si{\deg} & Pendulum angle from vertical\\
-$\dot{\theta}$ & \si {\deg\per\second} & Angular velocity of the pendulum\\
-$\ddot{\theta}$ & \si {\deg\per\square\second} & Angular acceleration of the pendulum\\
+$\theta (t)$ & \si{\radian} & Pendulum angle from vertical\\
+$\dot{\theta}$ & \si {\radian\per\second} & Angular velocity of the pendulum\\
+$\ddot{\theta}$ & \si {\radian\per\square\second} & Angular acceleration of the pendulum\\
 
 \bottomrule
 \end{longtable*}
@@ -232,22 +234,23 @@ $\ddot{\theta}$ & \si {\deg\per\square\second} & Angular acceleration of the pen
 
 \section{Introduction}
 
-The Inverted pendulum is a classical control problem used for illustrating non-linear control techniques. The system is motivated by applications such as control of rockets and anti-seismic control of buildings.The inverted pendulum system consists of a pendulum which is attached to a cart that can move horizontally. It is unstable because its center of mass is above its pivot point so without additional help will fall over.The cart move horizontally by an external force which is the only control input to the system. By manipulating the force, the position of pendulum is to be controlled.\\
-Considering the force, we would like to simulate the behaviour of the system and measure the position of the cart and the angle of the pendulum in the presence of the force.
+The inverted pendulum is a classical control problem used for illustrating non-linear control techniques. The system is motivated by applications such as control of rockets and anti-seismic control of buildings.The inverted pendulum system consists of a pendulum which is attached to a cart that can move horizontally. It is unstable because its center of mass is above its pivot point so without additional help will it fall over.The cart moves horizontally by an external force, which is the only control input to the system. By manipulating the force, the position of pendulum is controlled.\\
+Considering the force, we would like to simulate the behaviour of the system and measure the position of the cart and the angle of the pendulum in the presence of the force. we called the software, IP Simulator. It can also be incorporated later into a control system to stabilize the inverted pendulum.
 The following section provides an overview of Software Requirement Specification (SRS) for a pole-cart system, discussing the scope and purpose of the work.
 
 \subsection{Purpose of Document}
 
-The main purpose of this document is to describe the mathematical model of Inverted Pendulum(IP) system. To clarify software requirements, detailed information about goals, assumptions, theoretical models, and definitions will be explained.\\
+The main purpose of this document is to describe the mathematical model of Inverted Pendulum (IP) system. To clarify software requirements, detailed information about goals, assumptions, theoretical models, and definitions will be explained.\\
 Therefore, this document will be the reference during producing the software. It will provide  requirements of the software which will be used in
 planing for design stage. The following SRS document will remain abstract,  exploring what is being solved rather than how it will be solved.
 
 \subsection{Scope of Requirements} 
 
-The problem is restricted to two dimensions. The pendulum is attached to the cart in such a way that it is free to rotate in the pivot, and the cart can move horizontally,left or right. for more details, see the assumptions section  (Section~\ref{sec_assumpt})
+The problem is restricted to two dimensions. The pendulum is attached to the cart in such a way that it is free to rotate in the pivot, and the cart can move horizontally left or right. This project dos not cover the control algorithms.
+For more details, the reader can refer to the assumptions section (Section~\ref{sec_assumpt}).
  
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
-Intended Reader(s) or Reviewer(s) should have knowledge about Physics and more specifically in equations of motion. Good understanding of solving an ordinary differential equation (ODE) in Mathematics is also needed, both of the topics are offered in the undergraduate engineering courses or high school Mathematics and Physics subjects.
+Intended Reader(s) or Reviewer(s) should have knowledge about Physics and more specifically in the equations of motion. Good understanding of solving an ordinary differential equation (ODE) in Mathematics is also needed, both of the topics are offered in the undergraduate engineering courses or high school Mathematics and Physics subjects.
 
 
 \subsection{Organization of Document}
@@ -261,7 +264,7 @@ interfaces between the system and its environment, describes the user
 characteristics and lists the system constraints.  
 
 \subsection{System Context}
-Figure \ref{Fig_SystemContext} represents an abstract view of the software. The rectangular node represents the IP simulator tool, and the circular nodes are users who interact the software through an user interface.
+Figure \ref{Fig_SystemContext} represents an abstract view of the software. The rectangular node represents the IP simulator tool, and the circular nodes are users who interact the software through a user interface.
 
 \begin{figure}[h!]
 \begin{center}
@@ -277,7 +280,7 @@ The responsibilities of the user and the software are as follows:
 \begin{itemize}
 \item Provide required inputs including cart and pole specifications.
 \end{itemize}
-\item The Inverted Pendulum simulation software Responsibilities:
+\item The Inverted Pendulum simulation software responsibilities:
 \begin{itemize}
 \item Ensure all inputs are in correct format and detect data type mismatch.
 \item Calculate and show the expected outputs including the position of the cart and position of the pendulum.
@@ -286,7 +289,7 @@ The responsibilities of the user and the software are as follows:
 
 \subsection{User Characteristics} \label{SecUserCharacteristics}
 
-The end user of the IP simulation software should have an understanding of undergraduate Calculus and Physics.
+The end user of the IP simulation software should have an understanding of first-level undergraduate Calculus and Physics.
 
 \subsection{System Constraints}
 
@@ -301,7 +304,7 @@ specification, which presents the assumptions, theories, definitions and finally
 The inverted pendulum system inherently has two equilibrium points, one of which is stable while the other is unstable. The stable equilibrium corresponds to a state in which the pendulum is pointing downwards. In the absence of any
 control force, the system will naturally return to this state. The unstable equilibrium corresponds to a state in which the pendulum points strictly upwards and thus requires a control force to maintain this position.\\
 
-The Inverted Pendulum simulation tool is intended to describe and simulate the behaviour of the system in the presence of different value of input. As the IP is widely used as a benchmark to demonstrate concepts and test control strategies and algorithms in nonlinear control, the final tool can show system status and be a great help as an educational material for students and engineers.
+The Inverted Pendulum simulation tool is intended to describe and simulate the behaviour of the system in the presence of different value of input. As the IP is widely used as a benchmark to demonstrate concepts and test control strategies and algorithms in nonlinear control, the final tool can show system status and be a great help as an educational material for students and engineers, It also can be incorporated into control software to stabilize the whole pendulum-cart system.
 
 
 \subsubsection{Terminology and  Definitions}
@@ -317,7 +320,16 @@ sections and their meaning, with the purpose of reducing ambiguity and making it
 \item{Friction: The force that resists the sliding or rolling of one solid object over another.}
 
 \item{Moment: The turning effect of a force is called the moment. The moment is the result of the force multiplied by the perpendicular distance from the line of action of the force to the pivot or point where the object will turn.}
+
+\item{Center of Mass: The center of mass is a position defined relative to an object or system of objects. It is the average position of all the parts of the system, weighted according to their masses.
+For simple rigid objects with uniform density, the center of mass is located at the centroid.}
+
+\item{Centroid: In mathematics and physics, the centroid, also known as geometric center or center of figure, of a plane figure or solid figure is the arithmetic mean position of all the points in the surface of the figure}
+
+\item{Moment of Inertia: A quantity expressing a body's tendency to resist angular acceleration. It is the sum of the products of the mass of each particle in the body with the square of its distance from the axis of rotation.    .}
 \end{itemize}
+
+
 
 \subsubsection{Physical System Description} \label{sec_phySystDescrip}
   
@@ -344,13 +356,13 @@ includes the following elements:
  \end{figure}
  
 \subsubsection{Goal Statements}
- Given the cart and the pendulum specifications and external force, the goal statements are:
+ Given the cart and the pendulum specifications, initial conditions and external force, the goal statements are:
 
 \begin{itemize}
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_calPosition}:]
-Calculate the position of the cart.
+Calculate the position of the cart over time.
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_calTheta}:]
-Calculate the angle of the pendulum arm
+Calculate the angle of the pendulum arm over time.
 \end{itemize}
 
 \subsection{Solution Characteristics Specification}
@@ -367,11 +379,13 @@ likely change [LC], in which the respective assumption is used.
 \begin{itemize}
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_systemdimension}:]
-The system has a two-degree of freedom, so the pendulum is allowed to rotate in a two-dimensional plane.
+The system has a two-degree of freedom.
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_pendfrictionl}:]
-The pendulum is smooth and friction-less.
+The pendulum is friction-less.
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_pendulumInertia}:]
-The pendulum is unified and its moment of inertia is constant.
+The  moment of inertia of the pendulum is constant.
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_CartDimension}:]
+The cart is allowed to move in a one-dimension plane, horizontally left or right.
 
 \end{itemize}
 
@@ -392,9 +406,12 @@ Number& TM\refstepcounter{theorynum}\thetheorynum\label{NSL}\\
 \hline
 Label&  \bf Newton's Second Law of Motion\\
 \hline
-Equation & {$ F = m.a$ }\\ 
+Equation & {$ F = ma$ }\\ 
 \hline
-Description & {Newton’s second law of motion pertains to the behavior of objects for which all existing forces are not balanced. The second law states that the acceleration of an object is dependent upon two variables, the net force acting upon the object which is $a$ and the mass of the object that is $m$. The acceleration of an object depends directly upon the net force acting upon the object, and inversely upon the mass of the object. As the force acting upon an object is increased, the acceleration of the object is increased. As the mass of an object is increased, the acceleration of the object is decreased.}  \\
+Description & {Newton’s second law of motion pertains to the behavior of objects for which all existing forces are not balanced. The second law states that the acceleration of an object is dependent upon two variables, the net force acting upon the object which is $a$ and the mass of the object that is $m$. The acceleration of an object depends directly upon the net force acting upon the object, and inversely upon the mass of the object. As the force acting upon an object is increased, the acceleration of the object is increased. As the mass of an object is increased, the acceleration of the object is decreased.}\\
+& $F$ is the net force acting upon the object in \si{\newton},\\
+& $a$ is the acceleration of the object in \si {\metre\per\square\second},\\
+& $m$ is the mass of that object in {\si{\kilogram}}.  \\
 \hline
 Notes & none. \\ 
 \hline
@@ -417,11 +434,12 @@ Number& TM\refstepcounter{theorynum}\thetheorynum\label{NSLR}\\
 \hline
 Label&  \bf Newton’s Second Law for Rotation\\
 \hline
-Equation & {$\sum(\tau)$=$I$.$\alpha$ }\\ 
+Equation & {$\sum(\tau)$=$I$$\alpha$ }\\ 
 \hline
 Description & {If more than one torque acts on a rigid body about a fixed axis, then the sum of the torques equals the moment of inertia times the angular acceleration.}  \\
-&  $I$ is the moment of inertia for a point particle. \\
-& $\alpha$ is angular acceleration of the object.\\
+& $\tau$ is sum of the torques act on an object in \si{\newton\metre},\\ 
+&  $I$ is the moment of inertia for a point particle in \si {\kilogram\square\metre}, \\
+& $\alpha$ is angular acceleration of the object in \si{\radian\per\sec}.\\
 \hline
 Notes & none. \\ 
 \hline
@@ -447,10 +465,10 @@ Label&  \bf Torque Definition \\
 Equation & {$\tau=rF\sin(\theta)$ }\\ 
 \hline
 Description & {Measure of the twisting action caused by a force that can cause an object to rotate about an axis.}  \\
-& $\tau$ is torque, \\
-& $F$ is applied force,\\
-&$r$ is the radius from the axis of rotation to the location where the force is exerted,\\
-&$\theta$ is the angle between $F$ and $r$.\\
+& $\tau$ is torque, the rotational equivalent of linear force.in \si{\newton\metre}, \\
+& $F$ is applied force to an object that makes the object to rotate around an axis in \si{\newton},\\
+&$r$ is the radius from the axis of rotation to the location where the force is exerted in \si{\metre},\\
+&$\theta$ is the angle between $F$ and $r$ in \si{\radian}.\\
 \hline
 Notes & none. \\ 
 \hline
@@ -474,11 +492,11 @@ Number& TM\refstepcounter{theorynum}\thetheorynum \label{FoG}\\
 \hline
 Label&  \bf Force of Gravity\\
 \hline
-Equation & {$ W = m.g$ } \\ 
+Equation & {$ W = mg$ } \\ 
 \hline
 Description & { Gravity is a force that attracts objects toward the Earth. It is an approximation of the gravitational force that attracts objects of mass toward each other at great distances.}\\
-&$g$ is the acceleration due to gravity,\\ 
-&$m$ is the mass of the object. \\ 
+& $g$ is the acceleration due to gravity in \si{\metre\per\square\second},\\ 
+& $m$ is the mass of the object in \si{\kilogram}. \\ 
 \hline
 Notes & none. \\
 \hline
@@ -581,7 +599,7 @@ Description & Based on Newton's second law of motion, sum of all forces applied 
 
 & $V_p$ is the force component in {$y$} direction of the force exerted by cart on the pendulum and measured in \si{\newton}.\\
 & $m_p$ is mass of the pendulum.\\
-& $l-l\cos(\theta)$ is the Vertical displacement of the pendulum.\\
+& $l-l\cos(\theta)$ is the vertical displacement of the pendulum.\\
 \hline
 Source &\url{https://ctms.engin.umich.edu/CTMS/index.php/example=InvertedPendulum&section=SystemModeling }\\
   \hline
@@ -608,7 +626,7 @@ SI Units& \si{\tau}\\
 \hline
 Equation& $I$.$\ddot{\theta}$ =$l$.( $V.\sin(\theta)$ - $H.\cos(\theta)$)\\
 \hline
-Description & Let's take the center of mass of the pendulum as a center of rotation so the pendulum rotates about its center of mass. The torques due to forces exerted to pendulum will calculate as below: the torque of weight force of pendulum is zero since the perpendicular distance of this force uh from center of rotation is zero. For reaction forces $Vp$, $Hp$, we decompose these forces to components which are perpendicular to the pendulum which we have, $V.\sin(\theta)$ and $H.\cos(\theta)$.\\
+Description & Let's take the center of mass of the pendulum as a center of rotation so the pendulum rotates about its center of mass. The torques due to forces exerted to pendulum will calculate as below: the torque of weight force of pendulum is zero since the perpendicular distance of this force from center of rotation is zero. For reaction forces $Vp$, $Hp$, we decompose these forces to components which are perpendicular to the pendulum which we have, $V.\sin(\theta)$ and $H.\cos(\theta)$.\\
 & $I$ is the moment of inertia of the pendulum.\\
 & $\ddot{\theta}$ is pendulum angular acceleration.\\
 \hline
@@ -657,6 +675,9 @@ Symbol &$d_px$\\
 Description & 
 The distance traveled by the center of mass of the pendulum is due to two reasons, first, horizontal displacement of the cart, and second, due to angular rotation of the pendulum. The distance due to angular rotation in the pendulum will be $ =l\sin(\theta)$ while the half length of the pendulum is $l$, and the angular rotation in the pendulum is $\theta(t)$.
 Therefore, the total distance traveled by the center of mass of pendulum is equal to $ =l\sin(\theta) + {x(t)} $.\\
+& $l$ is  the half length of the pendulum in \si{\metre}, \\
+& $x(t)$ is the horizontal distance traveled by the center of mass of the pendulum in \si{\metre},\\
+&$\theta(t)$ is the angular rotation in the pendulum in \si{\radian}. \\
  \hline
   Sources & \url{https://www.youtube.com/watch?v=c3z4eo6s0Ek} \\
   \hline
@@ -687,8 +708,9 @@ Symbol &$d_py$\\
   \hline
   Equation& $d_py= l-l\cos(\theta)$\\
  \hline
-Description & When the pendulum rotates, its center of mass travels a vertical displacement, and as the half length of the pendulum is $l$, so the vertical distance travelled by the center of mass of the pendulum will be equal to $l\cos(\theta)$, hence the total displacement is equal to $l-l\cos(\theta).$
-   \\
+Description & When the pendulum rotates, its center of mass travels a vertical displacement, and as the half length of the pendulum is $l$, so the vertical distance travelled by the center of mass of the pendulum will be equal to $l\cos(\theta)$, hence the total displacement is equal to $l-l\cos(\theta).$   \\
+& $l$ is  the half length of the pendulum in \si{\metre}, \\
+&$\theta(t)$ is the angular rotation in the pendulum in \si{\radian}. \\
   \hline
   Sources & \url{https://www.youtube.com/watch?v=c3z4eo6s0Ek} \\
   \hline
@@ -755,10 +777,9 @@ This section is not applicable for the problem.
   \hline
   Label& \bf Equation of motion for the cart\\
   \hline
-  Input& $F$, $m_c$, $m_p$, $b$, $l$\\
-  & The input is constrained so that $\theta$ is small\\
+  Input& $F(t)$, $m_c$, $m_p$, $b$, $l$\\
   \hline
-  Output& $x(t)$, such that $F$= $ (m_c+m_p)\ddot{x}+ b\dot{x} + m_pl\ddot{\theta}\cos{\theta} - m_pl(\dot{\theta}) ^ 2 \sin{\theta} \rightarrow$\\
+  Output& $x(t)$ in \si{\metre}, such that $F$= $ (m_c+m_p)\ddot{x}+ b\dot{x} + m_pl\ddot{\theta}\cos{\theta} - m_pl(\dot{\theta}) ^ 2 \sin{\theta} \rightarrow$\\
 &$\ddot{x} =\dfrac{F- b\dot{x}- m_pl\ddot{\theta}\cos{\theta}+ m_pl(\dot{\theta}) ^ 2 \sin{\theta}}{(m_c+m_p)}$ \\
  
   \hline
@@ -767,6 +788,7 @@ This section is not applicable for the problem.
   &$m_p$ is the mass of the pendulum (\si{\kilogram}).\\
   &$b$ is the coefficient friction of the cart (dimensionless).\\
   &$l$ is the length of pendulum.\\
+  &$\theta$ is the pendulum angle from vertical in \si{\radian} \\
   & and by writing equation of motion for the cart, the relationship between inputs and cart motion clarified. \\
   %&$\eta = \frac{h_P A_P}{h_C A_C}$ is a constant (dimensionless).\\
   %& The above equation applies as long as the water is in liquid form,
@@ -803,7 +825,9 @@ This section is not applicable for the problem.
   Description&
   $m_c$ is the mass of the cart (\si{\kilogram}).\\
   &$m_p$ is the mass of the pendulum (\si{\kilogram}).\\
-  &$l$ is the length of pendulum.  \\
+  &$l$ is the length of pendulum.\\
+  &$b$ is the coefficient friction of the cart (dimensionless).\\
+  
   &This equation show the relationship between motion of pendulum and the system.\\
   \hline
   Sources&  \url{https://www.mathworks.com/help/control/ug/control-of-an-inverted-pendulum-on-a-cart.html } \\
@@ -881,7 +905,7 @@ Table~\ref{TblSpecParams}.
 \subsubsection{Properties of a Correct Solution} \label{sec_CorrectSolution}
 
 \noindent
-Table~\ref{TblOutputVar}shows the physical constraints on the output.
+Table~\ref{TblOutputVar} shows the physical constraints on the output.
 
 \begin{table}[!h]
 \caption{Output Variables} \label{TblOutputVar}
@@ -1066,9 +1090,9 @@ This section is optional. It is used to explain the plan for developing the soft
 		\textbf{Units} \\
 		\midrule 
 
-  ${\theta_{min}}$ & the maximum value for the pendulum angle & 0 & \si{\deg}
+  ${\theta_{min}}$ & the maximum value for the pendulum angle & 0 & \si{\radian}
 		\\
-		${\theta_{max}}$ & the minimum value for for the pendulum angle &  360 & \si{\deg}\\
+		${\theta_{max}}$ & the minimum value for for the pendulum angle &  360 & \si{\radian}\\
   $g$ & Acceleration due to gravity & 9.8 & \si{\metre\per\square\second}\\
 
 		\bottomrule		
@@ -1083,24 +1107,5 @@ This section is optional. It is used to explain the plan for developing the soft
 \bibliographystyle {plainnat}
 \bibliography {ref}
 
-\newpage
-\section*{Appendix --- Reflection}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.  Please answer the following questions:
-
-\begin{enumerate}
-  \item What knowledge and skills will the team collectively need to acquire to
-  successfully complete this capstone project?  Examples of possible knowledge
-  to acquire include domain specific knowledge from the domain of your
-  application, or software engineering knowledge, mechatronics knowledge or
-  computer science knowledge.  Skills may be related to technology, or writing,
-  or presentation, or team management, etc.  You should look to identify at
-  least one item for each team member.
-  \item For each of the knowledge areas and skills identified in the previous
-  question, what are at least two approaches to acquiring the knowledge or
-  mastering the skill?  Of the identified approaches, which will each team
-  member pursue, and why did they make this choice?
-\end{enumerate}
 
 \end{document}
