@@ -26,7 +26,7 @@
 
 \begin{document}
 
-\title{Project Title: System Verification and Validation Plan for Simulating the Inverted Pendulum system} 
+\title{System Verification and Validation Plan for IP Simulator: A software for simulating inverted pendulum system}
 \author{Mina Mahdipour}
 \date{\today}
 	
@@ -40,7 +40,8 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 February 13, 2023 & 1.0 & The first version of VnV\\
-Date 2 & 1.1 & Notes\\
+February 13, 2023 & 1.1 & Added test cases\\
+February 17, 2023 & 1.2 & Added tests for NFRs\\
 \bottomrule
 \end{tabularx}
 
@@ -61,50 +62,55 @@ Date 2 & 1.1 & Notes\\
   \toprule		
   \textbf{symbol} & \textbf{description}\\
   \midrule 
-  T & Test\\
-  \bottomrule
+ 
+  FR & Functional Requirements\\
+  MIS & Management Information Systems\\
+  NFR & Nonfunctional Requirements\\
+  N/A & Not Applicable\\
+  VnV & Verification and Validation\\
+SRS & Software Requirements Specification\\
+ T & Test\\
+\bottomrule
 \end{tabular}\\
-
-\wss{symbols, abbreviations or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
-
 
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document provides an introductory blurb and road map of the
-  Verification and Validation plan.
+This document outlines road map of the Verification and Validation plan for Inverted Pendulum (IP) Simulator to help ensure (but not prove) correctness and completeness of the program.
+It includes a plan for testing the functional and non-functional requirements, an overview of the system tests, and an outline of the unit tests (not yet complete as it is depended
+on the MIS).
 
 \section{General Information}
 
 \subsection{Summary}
 
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
 
-This document provides test plans for the Simulating the Inverted Pendulum System Software. This Software aims to simulate and describe the behaviour of the system of a cart-pendulum, in the presence of different values of external force. To do that, it will calculate the cart position and pendulum's angle after applying the force. 
+This document provides the validation and verification plans for the IP Simulator Software. This software aims to simulate and describe the behaviour of the system of a cart-pendulum in the presence of different values of external force. To do that, it will calculate the cart position and pendulum's angle after applying the force. 
 
 \subsection{Objectives}
+
 The objectives of this document are listed below:
 \begin{itemize}
-\item Make sure about software correctness.
+\item Establish confidence in software correctness.
 \item Demonstrate adequate usability.
+\item Verify and validate the final product.
 \end{itemize}
 
 \subsection{Relevant Documentation}
-The Software Requirements Specification presents an overview of the problem and solution.
-The final report of running the test which described in this document, will be shown in VnV Report.
-\citet{SRS}
+
+\href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/ProblemStatementAndGoals/ProblemStatement.pdf}{Problem Statement} presents an overview of the problem.
+The requirements and an outline of the solution for the IP Simulator are captured in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{Software Requirements Specification}.
+The final report of running the test which described in this document, will be shown in \href{https://github.com/Maryamvalian/project741/blob/main/docs/VnVReport/VnVReport.pdf}{VnV Report}.
+The software design information is captured in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/Design}{Module Guide}.
 
 \section{Plan}
-
-\wss{Introduce this section.   You can provide a roadmap of the sections to
-  come.}
-
+This section provides a road map of plans for different steps of producing the final product.
 \subsection{Verification and Validation Team}
-Our team includes:
+Our team includes:\\
+\\
+
 \noindent
 \begin{minipage}{\textwidth}
 \renewcommand*{\arraystretch}{1.5}
@@ -116,11 +122,11 @@ Roles& Responsibility \label{R&R}\\
 Supervisor &\bf \\
 \hline
 % \hline
-Writer&  \\
+Author&  \\
 \hline
 
 % \hline
-Reviwer&  \\
+Reviewer&  \\
 \hline
 
 \end{tabular}
@@ -130,33 +136,25 @@ Reviwer&  \\
 
 \subsection{SRS Verification Plan}
 
-\wss{List any approaches you intend to use for SRS verification.  This may include
-  ad hoc feedback from reviewers, like your classmates, or you may plan for 
-  something more rigorous/systematic.}
-
-\wss{Maybe create an SRS checklist?}
+The SRS will be independently peer-reviewed by members of the VnV team according to \href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/SRS-Checklist.pdf}{SRS-Checklist}, consisting of the domain expert Deesha Patel and the SRS reviewer, Maryam Valian, as well as Dr. Spencer Smith.
+The SRS document has been published to GitHub. Any issues identified during the review are tracked and verified in Github platform.
 
 \subsection{Design Verification Plan}
 
-\wss{Plans for design verification}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+The design document MIS will be reviewed by the MIS review team, consisting of the domain expert Deesha Patel and the MIS reviewer, Joachim de Fourestier, as well as Dr. Spencer Smith.
+The MIS document will be published to GitHub. Defects will be addressed with issues
+on the GitHub platform.
+There is also \href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/MIS-Checklist.pdf}{MIS-Checklist}, that can be used.
 
 \subsection{Verification and Validation Plan Verification Plan}
-
-\wss{The verification and validation plan is an artifact that should also be verified.}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+The VnV plan document will be reviewed by the VnV plan review team, consisting of the domain expert Deesha Patel and the reviewer, Karen Wang as well as Dr. Spencer Smith.
+This document will be published to GitHub. Defects will be addressed with issues
+on the GitHub platform.
+There is also \href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/VnV-Checklist.pdf}{VnV-Checklist}, that can be used.
 
 \subsection{Implementation Verification Plan}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
-
+The implementation of the IP Simulator will be tested under the test cases listed in this document including ,  , , ,.
 \wss{In this section you would also give any details of any plans for static verification of
   the implementation.  Potential techniques include code walkthroughs, code
   inspection, static analyzers, etc.}
