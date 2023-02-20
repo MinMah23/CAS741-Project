@@ -109,8 +109,10 @@ The software design information will be captured in the \href{https://github.com
 This section provides a road map of plans for different steps of producing the final product.
 \subsection{Verification and Validation Team}
 Our team includes:
-\begin{center}
+
 \begin{table}[h!]
+\caption{Verification and Validation Team} \label{team}
+\vspace*{3mm}
 \begin{tabular}{| p{\colFwidth} | p{\colHwidth}|p{\colHwidth}|p{\colHwidth}|}
 \hline
 \textbf{Role} & \textbf{Responsibility} & \textbf{Assignee} & \textbf{Document} \label{R&R} \\
@@ -128,9 +130,7 @@ Secondary Reviewer&Review and provide feedbacks&Karen Wang&VnV plan\\
 Secondary Reviewer&Review and provide feedbacks&Joachim de Fourestie&MG + MIS\\
 \hline
 \end{tabular}
-\caption{Verification and Validation Team} 
 \end{table}
-\end{center}
 
 
 
@@ -164,7 +164,7 @@ Automated Testing and Verification Tools will be extensively used in the develop
 There are no plans for the Validation of the IP Simulator software.
 
 \section{System Test Description}\label{test}
-This section will define the tests to ensure IP Simulator meets the functional requirements seen in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS} document for simulating inverted pendulum system. The subsections combine several requirements that are be separated based on common ideas.
+This section will define the tests to ensure IP Simulator meets the functional requirements seen in section 5 of the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS} document for simulating inverted pendulum system. The subsections combine several requirements that are be separated based on common ideas.
 
 \subsection{Tests for Functional Requirements}
 This section contains the systems test cases for the functional requirements which are described in the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS}.
@@ -173,12 +173,14 @@ This section contains the systems test cases for the functional requirements whi
 This section includes tests to verify that the software rejects invalid input values such as non-numerical values or values outside of specified range and to make sure that the it accepts valid input values within specified range, R1 and R2 of requirements in section5 of the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS}.
 
 
-\begin{table}
+\begin{table}[h!]
+\centering
+\caption{Input Validation Test Cases} \label{tbl_inputValidation}
+\vspace*{2mm}
  \begin{tabular}{|c|c c c c c| c c|} 
  \hline
- \multicolumn{1}{l|}{}   & \multicolumn{5}{c|}{Input}                            & \multicolumn{2}{c}{Expected Output} \\ \hline
-\hline
-\multicolumn{1}{c|}{TC} &   $m_p$ & $m_c$ & $l$ & $F$ & $b$  &   $Validity$   &   $Error Message$ \\ \hline
+   & &&\textbf{Input}&& &  &\textbf{Expected Output} \\ \hline
+\textbf{TC} &   $m_p$ & $m_c$ & $l$ & $F$ & $b$  &   $Validity$   &   $Error Message$ \\ \hline
 1-1 &0.2 & 0.5& 0.3& 50& 0.2 & Yes & None\\
  \hline
 2-1 &0 & 0.5& 0.3& 50& 0.2 & No & Error: invalid input, Put non-zero values  \\
@@ -219,7 +221,7 @@ This section includes tests to verify that the software rejects invalid input va
  7-1 &0.2 & 0.5& 0.3& 0& 0.2& Yes & None\\
  \hline
 \end{tabular}
-\caption{\label{tbl_inputValidation}Input Validation Test Cases}
+
 \end{table}		
 
  
@@ -227,7 +229,7 @@ This section includes tests to verify that the software rejects invalid input va
 
 \begin{enumerate}
 
-\item{TC-IP-1: valid inputs}
+\item{TC-IP-1: Valid Inputs}
 
 Control: Automatic
 					
@@ -241,7 +243,7 @@ Test Case Derivation: Derived form IP Simulator, as a normal and valid set of in
 					
 How test will be performed: Automatic test using Pytest.
 
-\item{TC-IP-2: zero inputs}
+\item{TC-IP-2: Zero Inputs}
 
 Control: Automatic
 					
@@ -255,7 +257,7 @@ Test Case Derivation: Zero input for mass of pendulum, mass of cart, and length 
 					
 How test will be performed: Automatic test using Pytest.
 
-\item{TC-IP-3: valid and zero inputs}
+\item{TC-IP-3: Valid and Zero Inputs}
 
 Control: Automatic
 					
@@ -269,7 +271,7 @@ Test Case Derivation: Derived form IP Simulator, as a normal and valid set of in
 					
 How test will be performed: Automatic test using Pytest.
 
-\item{TC-IP-4: negative inputs}
+\item{TC-IP-4: Negative Inputs}
 
 Control: Automatic
 					
@@ -283,7 +285,7 @@ Test Case Derivation: Inputs can not be negative values.
 					
 How test will be performed: Automatic test using Pytest.
 
-\item{TC-IP-5: out of bound inputs}
+\item{TC-IP-5: Out of Bound Inputs}
 
 Control: Automatic
 					
@@ -297,7 +299,7 @@ Test Case Derivation: The user should prepare values for inputs in the valid ran
 
 How test will be performed: Automatic test using Pytest.
 
-\item{TC-IP-6: missing inputs}
+\item{TC-IP-6: Missing Inputs}
 
 Control: Automatic
 					
@@ -320,11 +322,13 @@ This section presents tests to make confidence in Error handling in the software
 The other goal of these tests is to verify that system simulates the cart moving back and forth and the pendulum rotates according to input values, as the R3 and R4 of requirements in section5 of the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS} has defined.
 
 \begin{table}
+\caption{Output Validation Test Cases}\label{tbl_outValidation}
+\vspace*{2mm}
  \begin{tabular}{|c|c c c c c| c|} 
  \hline
- \multicolumn{1}{l|}{}   & \multicolumn{5}{c|}{Input}                            & \multicolumn{1}{c}{Expected Output} \\ \hline
-\hline
-\multicolumn{1}{c|}{TC} &   $m_p$ & $m_c$ & $l$ & $F$ & $b$  &   $Output$ \\ \hline
+    & &&\textbf{Input}&&     & \textbf{Expected Output} \\ \hline
+
+\textbf{TC} &   $m_p$ & $m_c$ & $l$ & $F$ & $b$  &   $Output$ \\ \hline
 1-1 &0.2 & 0.5& 0.3& 50& 0.2 &$x$ the position of cart ,and $\theta$, the angle of pendulum \\
  \hline
 2-1 &0 & 0.5& 0.3& 50& 0.2 & Error: invalid input, Put non-zero values  \\
@@ -336,7 +340,7 @@ The other goal of these tests is to verify that system simulates the cart moving
 5-1 & & 0.5& 0.3& 50& 0.2 & Error: invalid input, Missed input \\
   \hline
 \end{tabular}
-\caption{\label{tbl_outValidation}Output Validation Test Cases}
+
 \end{table}		
 
 \begin{enumerate}
@@ -350,6 +354,7 @@ Initial State: the software has run by the input values of 1-1 in Table \ref{tbl
 Input: input variables like 1-1 in Table \ref{tbl_outValidation}.
 					
 Output: The $x$ can be positive or negative which means the cart moves left or right from the source and $\theta$ is positive or zero.
+
 Test Case Derivation: Derived form IP Simulator, as a normal and valid set of inputs have been provided.
 					
 How test will be performed: It will be performed by IP Simulator and Pytest.
@@ -377,12 +382,15 @@ How test will be performed:  It will be performed by IP Simulator, Pytest and Fl
 
 \begin{enumerate}
 
-\item{T1: portability\\}
-
+\item{T1: Portability}
+\vspace{3mm}
+\newline
 Type: Manual
 					
 Initial State: None. 
+
 Requirement ID(s): NFR-1					
+
 Input/Condition: Executes all tests in \ref{inp_val} and \ref{out_val} in the IP Simulator in different OS.
 					
 Output/Result: Successful test implies portability of software.
@@ -398,16 +406,23 @@ each test for functional requirements.
 
 \begin{enumerate}
 
-\item{T1: usability}
+\item{T1: Usability}
+\vspace{3mm}
+\newline
 Testing the usability will determine if the users have an efficient interaction with the software and also the software is easy to use or not. The system will be tested against a usability test and survey which the details are in the Appendix \ref{appendix}.
 
 Type: Manual
 					
-Initial State: The IP Simulator runs. \\
-Requirement ID(s): NFR-2\\				
-Input/Condition: Any tests considering inputs criteria can be run by a group of individuals who have varying levels of experience with inverted pendulum systems and the software including  at least an undergraduate Physics student, an undergraduate Engineering student, a high school student, and the domain expert, Deesha Patel, and the checklist.\\  		
-Output/Result: According to the feed backs from the survey, the usability of the software will be tested.\\
-How test will be performed: Manually, as it is a test of usability by the user, and thus requires the test to be run by the user.\\
+Initial State: The IP Simulator runs. 
+
+Requirement ID(s): NFR-2			
+
+Input/Condition: Any tests considering inputs criteria can be run by a group of individuals who have varying levels of experience with inverted pendulum systems and the software including at least an undergraduate Physics student, an undergraduate Engineering student, a high school student, and the domain expert, Deesha Patel.
+We will administer the questionnaire to the participants while they use the software and observe their behavior and note any issues they encounter.
+
+Output/Result: According to the feedbacks from the survey, the usability of the software will be tested.
+
+How test will be performed: Manually, as it is a test of usability by the user, and thus requires the test to be run by the user.
 
 \end{enumerate}				
 
@@ -417,21 +432,25 @@ How test will be performed: Manually, as it is a test of usability by the user, 
 
 \begin{enumerate}
 
-\item{T1: accuracy}
-The accuracy test should be done through comparing the results with benchmarks or experimental data from an actual inverted pendulum system, however, the author do not have access to none of them and suggest to compare the results of IP Simulator with a similar system which has been developed by the other engineer and using MATLAB \cite{al-khazraji_2022} 
+\item{T1: Accuracy}
+\vspace{3mm}
+\newline
+The accuracy test should be done through comparing the results with benchmarks or experimental data from an actual inverted pendulum system, however, the author do not have access to none of them and suggest to compare the results of IP Simulator with a similar system which is available on the Internet and has been developed using MATLAB \cite{al-khazraji_2022} 
 
 Type: Manual
 					
-Initial State: The IP Simulator and the similar project in MATLAB with the same inputs run.\\
-Requirement ID(s): NFR-3\\				
-Input/Condition: All of the test in \ref{inp_val} will be done.\\  		
+Initial State: The IP Simulator and the similar project in MATLAB with the same inputs run.
+
+Requirement ID(s): NFR-3			
+
+Input/Condition: All of the test in \ref{inp_val} will be done.  		
 Output/Result: Comparing the outputs of models to the values of the other software.The Euclidean distance between both results from the two software will be reported as an error measurement for some cases. The euclidean distance formula will be calculated as follows:\\
 \newline
 $d\left( r,l\right)   = \sqrt {\sum _{i=1}^{n}  \left( l_{i}-r_{i}\right)^2 } $ \\
 \newline
 Where $r$ is the output vector of IP Simulator and $l$ is the output vector of \cite{al-khazraji_2022} for a specific test case. 
-\\
-How test will be performed: Manually, as both the projects should be run manually.\\
+
+How test will be performed: Manually, as both the projects should be run manually.
 
 \end{enumerate}
 
@@ -440,6 +459,8 @@ A traceability between test cases and requirements is shown in Table \ref{tbl_re
 
 
 \begin{table} [h!]
+\caption{Traceability Matrix between tests and requirements}\label{tbl_rel}
+\vspace*{3mm}
 \centering
 \begin{tabular}{|c|c| c| c| c | c|c | c|}
 \hline
@@ -456,7 +477,7 @@ Test Cases & R1 & R2 & R3& R4& NFR1& NFR2&NFR3  \\
   \ref{nfr3}  &&& & &  &&X\\
  \hline
 \end{tabular}
-\caption{\label{tbl_rel}Traceability Matrix between tests and requirements.}
+
 \end{table}
 
 
