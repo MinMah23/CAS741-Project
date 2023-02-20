@@ -183,40 +183,41 @@ This section includes tests to verify that the software rejects invalid input va
 \textbf{TC} &   $m_p$ & $m_c$ & $l$ & $F$ & $b$  &   $Validity$   &   $Error Message$ \\ \hline
 1-1 &0.2 & 0.5& 0.3& 50& 0.2 & Yes & None\\
  \hline
-2-1 &0 & 0.5& 0.3& 50& 0.2 & No & Error: invalid input, Put non-zero values  \\
+2-1 &0 & 0.5& 0.3& 50& 0.2 & No & Error: invalid input  \\
  \hline
-2-2 &0.2 & 0& 0.3& 50& 0.2& No & Error: invalid input, Put non-zero values \\
+2-2 &0.2 & 0& 0.3& 50& 0.2& No & Error: invalid input\\
  \hline
-2-3 &0.2 & 0.5& 0& 50& 0.2 &  No & Error: invalid input, Put non-zero values \\
+2-3 &0.2 & 0.5& 0& 50& 0.2 &  No & Error: invalid input\\
  \hline
 3-1 &0.2 & 0.5& 0.3& 50& 0 & Yes & None\\
  \hline
- 4-1 &-0.2 & 0.5& 0.3& 50& 0.2&  No & Error: invalid input, Put non-negative values\\
+ 4-1 &-0.2 & 0.5& 0.3& 50& 0.2&  No & Error: invalid input\\
  \hline
- 4-2 &0.2 & -0.5& 0.3& 50& 0.2&   No & Error: invalid input, Put non-negative values\\
+ 4-2 &0.2 & -0.5& 0.3& 50& 0.2&   No & Error: invalid input\\
  \hline
- 4-3 &0.2 & 0.5& -0.3& 50& 0.2&   No & Error: invalid input, Put non-negative values\\
+ 4-3 &0.2 & 0.5& -0.3& 50& 0.2&   No & Error: invalid input\\
  \hline
- 4-4 &0.2 & 0.5& 0.3& -50& 0.2 &   No & Error: invalid input, Put non-negative values\\
+ 4-4 &0.2 & 0.5& 0.3& -50& 0.2 &   No & Error: invalid input\\
  \hline
- 4-5 &0.2 & 0.5& 0.3& 50& -0.2 &   No & Error: invalid input, Put non-negative values\\
+ 4-5 &0.2 & 0.5& 0.3& 50& -0.2 &   No & Error: invalid input\\
  \hline
- 5-1 & 50& 0.5& 0.3& 50& 0.2 & No & Error: invalid input, Out of boundary \\
+ 5-1 & 50& 0.5& 0.3& 50& 0.2 & No & Error: invalid input\\
  \hline
-5-2 & 0.2& 50& 0.3& 50& 0.2 & No & Error: invalid input, Out of boundary \\
+5-2 & 0.2& 50& 0.3& 50& 0.2 & No & Error: invalid input\\
  \hline
-5-3 & 0.2& 0.5& 1& 50& 0.2& No & Error: invalid input, Out of boundary \\
+5-3 & 0.2& 0.5& 1& 50& 0.2& No & Error: invalid input \\
  \hline
-5-4 & 0.2& 0.5& 0.3& 200& 0.2 & No & Error: invalid input, Out of boundary \\
+5-4 & 0.2& 0.5& 0.3& 200& 0.2 & No & Error: invalid input\\
  \hline
-6-1 & & 0.5& 0.3& 50& 0.2 & No & Error: invalid input, Missed input \\
+6-1 & & 0.5& 0.3& 50& 0.2 & No & Error: invalid input \\
   \hline
-6-2 &0.2 & &0.3 & 50& 0.2 & No & Error: invalid input, Missed input \\  \hline
- 6-3 & 0.2& 0.5& & 50& 0.2 & No & Error: invalid input, Missed input \\
+6-2 &0.2 & &0.3 & 50& 0.2 & No & Error: invalid input\\  
+\hline
+ 6-3 & 0.2& 0.5& & 50& 0.2 & No & Error: invalid input \\
   \hline
-  6-4 & 0.2& 0.5& 0.3& & 0.2 & No & Error: invalid input, Missed input \\
+  6-4 & 0.2& 0.5& 0.3& & 0.2 & No & Error: invalid input\\
   \hline
-   6-5 & 0.2& 0.5& 0.3& 50&  & No & Error: invalid input, Missed input \\
+   6-5 & 0.2& 0.5& 0.3& 50&  & No & Error: invalid input \\
   \hline
  7-1 &0.2 & 0.5& 0.3& 0& 0.2& Yes & None\\
  \hline
@@ -251,9 +252,9 @@ Initial State: N/A
 					
 Input: Set of input values as 2-1 to 2-3 in Table \ref{tbl_inputValidation}.
 					
-Output: Error message
+Output: Error message of invalid input because of zero inputs
 
-Test Case Derivation: Zero input for mass of pendulum, mass of cart, and length of the cart are not valid.
+Test Case Derivation: Zero input for mass of the pendulum, mass of the cart, and length of the cart are not valid.
 					
 How test will be performed: Automatic test using Pytest.
 
@@ -279,7 +280,7 @@ Initial State: N/A
 					
 Input: Set of input values as 4-1 through 4-5 in Table \ref{tbl_inputValidation}.
 					
-Output: Error message
+Output: Error message of invalid negative input 
 
 Test Case Derivation: Inputs can not be negative values.
 					
@@ -293,7 +294,7 @@ Initial State: N/A
 					
 Input: Set of input values as 5-1 through 5-4 in Table \ref{tbl_inputValidation}.
 					
-Output: Error message
+Output: Error message of inputs because of constraints
 
 Test Case Derivation: The user should prepare values for inputs in the valid range for each.
 
@@ -307,7 +308,7 @@ Initial State: N/A
 					
 Input: Set of input values as 6-1 through 6-5 in Table \ref{tbl_inputValidation}.
 					
-Output: Error message
+Output: Error message of invalid missing input
 
 Test Case Derivation: The user should provide all the inputs without missing.
 					
@@ -319,7 +320,7 @@ How test will be performed: Automatic test using Pytest.
 \subsubsection{Output Validity \label{out_val}}
 
 This section presents tests to make confidence in Error handling in the software which means system can handle unexpected errors gracefully and provides clear error messages when errors occur.
-The other goal of these tests is to verify that system simulates the cart moving back and forth and the pendulum rotates according to input values, as the R3 and R4 of requirements in section5 of the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS} has defined.
+The other goal of these tests is to verify that system simulates the cart moving back and forth and the pendulum rotates according to input values, as the R3 and R4 of requirements in section 5 of the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS} has defined.
 
 \begin{table}
 \caption{Output Validation Test Cases}\label{tbl_outValidation}
