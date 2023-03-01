@@ -1,8 +1,11 @@
 # Project Name
+IP Simulatopr, a simulation of inverted pendulum system.
 
 Developer Names:
+Mina Mahdipour
 
 Date of project start:
+Jan. 2023
 
 This project is ...
 
