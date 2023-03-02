@@ -1,6 +1,7 @@
 \documentclass[12pt, titlepage]{article}
 
 \usepackage{fullpage}
+\usepackage[square,numbers]{natbib}
 \usepackage[round]{natbib}
 \usepackage{multirow}
 \usepackage{booktabs}
@@ -16,8 +17,7 @@
     urlcolor=blue
 }
 
-\input{../../Comments}
-\input{../../Common}
+\input{}
 
 \newcounter{acnum}
 \newcommand{\actheacnum}{AC\theacnum}
@@ -33,8 +33,8 @@
 
 \begin{document}
 
-\title{Module Guide for \progname{}} 
-\author{\authname}
+\title{Module Guide for IP simulator} 
+\author{Mina Mahdipour}
 \date{\today}
 
 \maketitle
@@ -46,7 +46,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
+March 1, 2023 & 1.0 & Created the document and fill initial data\\
 Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
@@ -66,15 +66,16 @@ This section records information for easy reference.
   \midrule 
   AC & Anticipated Change\\
   DAG & Directed Acyclic Graph \\
+  IP & Inverted Pendulum\\
   M & Module \\
   MG & Module Guide \\
+  ODE & Ordinary Differential Equation\\
   OS & Operating System \\
   R & Requirement\\
   SC & Scientific Computing \\
   SRS & Software Requirements Specification\\
-  \progname & Explanation of program name\\
   UC & Unlikely Change \\
-  \wss{etc.} & \wss{...}\\
+
   \bottomrule
 \end{tabular}\\
 
@@ -94,14 +95,9 @@ This section records information for easy reference.
 
 Decomposing a system into modules is a commonly accepted approach to developing
 software.  A module is a work assignment for a programmer or programming
-team~\citep{ParnasEtAl1984}.  We advocate a decomposition
-based on the principle of information hiding~\citep{Parnas1972a}.  This
-principle supports design for change, because the ``secrets'' that each module
-hides represent likely future changes.  Design for change is valuable in SC,
-where modifications are frequent, especially during initial development as the
-solution space is explored.  
+team \cite{ParnasEtAl1984}.  We advocate a decomposition based on the principle of information hiding \cite{Parnas1972a}.  This principle supports design for change, because the ``secrets'' that each module hides represent likely future changes.  Design for change is valuable in SC, where modifications are frequent, especially during initial development as the solution space is explored.  
 
-Our design follows the rules layed out by \citet{ParnasEtAl1984}, as follows:
+Our design follows the rules layed out by \cite{ParnasEtAl1984}, as follows:
 \begin{itemize}
 \item System details that are likely to change independently should be the
   secrets of separate modules.
@@ -111,15 +107,11 @@ Our design follows the rules layed out by \citet{ParnasEtAl1984}, as follows:
 \end{itemize}
 
 After completing the first stage of the design, the Software Requirements
-Specification (SRS), the Module Guide (MG) is developed~\citep{ParnasEtAl1984}. The MG
-specifies the modular structure of the system and is intended to allow both
-designers and maintainers to easily identify the parts of the software.  The
-potential readers of this document are as follows:
+Specification (SRS), the Module Guide (MG) is developed \cite{ParnasEtAl1984}. The MG specifies the modular structure of the system and is intended to allow both designers and maintainers to easily identify the parts of the software.  The potential readers of this document are as follows:
 
 \begin{itemize}
 \item New project members: This document can be a guide for a new project member
-  to easily understand the overall structure and quickly find the
-  relevant modules they are searching for.
+  to easily understand the overall structure and quickly find the relevant modules they are searching for.
 \item Maintainers: The hierarchical structure of the module guide improves the
   maintainers' understanding when they need to make changes to the system. It is
   important for a maintainer to update the relevant sections of the document
@@ -153,15 +145,21 @@ unlikely changes are listed in Section \ref{SecUchange}.
 Anticipated changes are the source of the information that is to be hidden
 inside the modules. Ideally, changing one of the anticipated changes will only
 require changing the one module that hides the associated decision. The approach
-adapted here is called design for
-change.
+adapted here is called design for change.Anticipated changes are numbered by \textbf{AC} followed by a number.
 
 \begin{description}
 \item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
   hardware on which the software is running.
-\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
-  initial input data.
-\item ...
+\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the initial input data.
+\item[\refstepcounter{acnum} \actheacnum \label{acParams}:] The format of the  input parameters.
+\item[\refstepcounter{acnum} \actheacnum \label{acVerify}:] The constraints on
+  the input parameters.
+\item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] The format of the  final output data.
+\item[\refstepcounter{acnum} \actheacnum \label{acDS}:] The choice of data structures used for storing and manipulating the data.
+\item[\refstepcounter{acnum} \actheacnum \label{acVerifyOut}:] The constraints on the output results.
+\item[\refstepcounter{acnum} \actheacnum \label{acODEs}:] How the governing Ordinary Differential Equations (ODEs) are defined using the input parameters.
+\item[\refstepcounter{acnum} \actheacnum \label{acSolver}:] The algorithm used for solving the equations of motions ODEs.
+\item[\refstepcounter{acnum} \actheacnum \label{acPlot}:] The implementation of plotting the output.
 \end{description}
 
 \subsection{Unlikely Changes} \label{SecUchange}
@@ -174,22 +172,32 @@ will potentially need to be modified. Hence, it is not intended that these
 decisions will be changed.
 
 \begin{description}
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucInput}:] There will always be a source of input data external to the software.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucOutput}:] Output data are
+  displayed to the output device.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucGoal}:] The goal of the system is to calculate the position of cart and the angle of pendulum.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructure}:] The ODEs for the cart and pendulum motions can be defined using parameters defined in the input parameters module.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucEqM}:] How the equations of motions of the cart and the pendulum are defined using the specification of the system.
+ 
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
 
-This section provides an overview of the module design. Modules are summarized
-in a hierarchy decomposed by secrets in Table \ref{TblMH}. The modules listed
-below, which are leaves in the hierarchy tree, are the modules that will
-actually be implemented.
+This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table \ref{TblMH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.Modules are numbered by \textbf{M} followed by a number. 
 
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
-\item ...
+\item [\refstepcounter{mnum} \mthemnum \label{mParams}:] Input Parameters Module
+\item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Parameters Module
+%\item [\refstepcounter{mnum} \mthemnum \label{mVerifyOut}:] Output Verification Module%
+\item [\refstepcounter{mnum} \mthemnum \label{mSolver}:] ODE Solver Module
+\item [\refstepcounter{mnum} \mthemnum \label{mPlot}:] Plotting Module
 \end{description}
+
+
+Note that \mref{mHH} is a commonly used module and is already implemented by the operating system.  It will not be reimplemented.  Similarly, \mref{mODEs}, \mref{mSolver} and \mref{mPlot} are already available in Python and will not be reimplemented.
+
 
 
 \begin{table}[h!]
@@ -202,19 +210,13 @@ actually be implemented.
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\ 
-& ?\\
+\multirow{3}{0.3\textwidth}{Behaviour-Hiding Module} & Input Parameters Module\\
+& Output Parameters Module\\
+
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module} & {?}\\
-& ?\\
-& ?\\
+\multirow{3}{0.3\textwidth}{Software Decision Module} & {ODE Solver Module}\\
+& Plotting Module\\
 \bottomrule
 
 \end{tabular}
@@ -224,9 +226,24 @@ actually be implemented.
 
 \section{Connection Between Requirements and Design} \label{SecConnection}
 
-The design of the system is intended to satisfy the requirements developed in
-the SRS. In this stage, the system is decomposed into modules. The connection
+The design of the system is intended to satisfy the requirements developed in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{SRS}. In this stage, the system is decomposed into modules. The connection
 between requirements and modules is listed in Table~\ref{TblRT}.
+\begin{table}[H]
+\centering
+\begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
+\toprule
+\textbf{Req.} & \textbf{Modules}\\
+\midrule
+R1 &  \mref{mHH}, \mref{mParams}\\
+R2 & \mref{mParams}\\
+R3 & \mref{mSolver}\\
+R4 & \mref{mHH}, \mref{mOutput}, \mref{mPlot}\\
+
+\bottomrule
+\end{tabular}
+\caption{Trace Between Requirements and Modules}
+\label{TblRT}
+\end{table}
 
 \section{Module Decomposition} \label{SecMD}
 
@@ -234,21 +251,15 @@ Modules are decomposed according to the principle of ``information hiding''
 proposed by \citet{ParnasEtAl1984}. The \emph{Secrets} field in a module
 decomposition is a brief statement of the design decision hidden by the
 module. The \emph{Services} field specifies \emph{what} the module will do
-without documenting \emph{how} to do it. For each module, a suggestion for the
-implementing software is given under the \emph{Implemented By} title. If the
-entry is \emph{OS}, this means that the module is provided by the operating
-system or by standard programming language libraries.  \emph{\progname{}} means the
-module will be implemented by the \progname{} software.
+without documenting \emph{how} to do it. For each module, a suggestion for the implementing software is given under the \emph{Implemented By} title. If the entry is \emph{OS}, this means that the module is provided by the operating system or by standard programming language libraries.  \emph{IP Simulator} means the module will be implemented by the IP Simulator software.
 
 Only the leaf modules in the hierarchy have to be implemented. If a dash
-(\emph{--}) is shown, this means that the module is not a leaf and will not have
-to be implemented.
+(\emph{--}) is shown, this means that the module is not a leaf and will not have to be implemented.
 
 \subsection{Hardware Hiding Modules (\mref{mHH})}
 
 \begin{description}
-\item[Secrets:]The data structure and algorithm used to implement the virtual
-  hardware.
+\item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
 \item[Services:]Serves as a virtual hardware used by the rest of the
   system. This module provides the interface between the hardware and the
   software. So, the system can use it to display outputs or to accept inputs.
@@ -258,8 +269,8 @@ to be implemented.
 \subsection{Behaviour-Hiding Module}
 
 \begin{description}
-\item[Secrets:]The contents of the required behaviours.
-\item[Services:]Includes programs that provide externally visible behaviour of
+\item[Secrets:] The contents of the required behaviours.
+\item[Services:] Includes programs that provide externally visible behaviour of
   the system as specified in the software requirements specification (SRS)
   documents. This module serves as a communication layer between the
   hardware-hiding module and the software decision module. The programs in this
@@ -267,35 +278,49 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Input Format Module (\mref{mInput})}
+\subsubsection{Input Parameters Module (\mref{mParams})}
 
 \begin{description}
-\item[Secrets:]The format and structure of the input data.
-\item[Services:]Converts the input data into the data structure used by the
-  input parameters module.
-\item[Implemented By:] [Your Program Name Here]
-\item[Type of Module:] [Record, Library, Abstract Object, or Abstract Data Type]
-  [Information to include for leaf modules in the decomposition by secrets tree.]
+\item[Secrets:] The data structure for input parameters, how the values are input and how the values are verified.  The load and verify secrets are isolated to their own access programs (like submodules).  This, combined with the fact that all of the services are invoked together, suggests that the one module one secret rule can be relaxed here.
+\item[Services:] Gets input from user (including material properties, processing conditions, and numerical parameters), stores input and verifies that the input parameters comply with physical and software constraints. Throws an error if a parameter violates a physical constraint. Throws a warning if a parameter violates a software constraint.  Stored parameters can be read individually, but write access is only to redefine the entire set of inputs.
+ % This module knows how many parameters it stores.
+\item[Implemented By:] IP Simulator
 \end{description}
+\subsubsection{Output Parameters Module (\mref{mOutput})}
 
-\subsubsection{Etc.}
-
+\begin{description}
+\item[Secrets:] The format and structure of the output data.
+\item[Services:] Outputs the results of the calculations, including the position of the cart and the angle of the pendulum, stores them and verifies that the output parameters comply with physical and software constraints.
+% verify them and 
+\item[Implemented By:] IP Simulator
+\end{description} 
 
 \subsection{Software Decision Module}
 
 \begin{description}
-\item[Secrets:] The design decision based on mathematical theorems, physical
-  facts, or programming considerations. The secrets of this module are
-  \emph{not} described in the SRS.
-\item[Services:] Includes data structure and algorithms used in the system that
-  do not provide direct interaction with the user. 
+\item[Secrets:] The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are \emph{not} described in the SRS.
+\item[Services:] Includes data structure and algorithms used in the system that do not provide direct interaction with the user. 
   % Changes in these modules are more likely to be motivated by a desire to
   % improve performance than by externally imposed changes.
 \item[Implemented By:] --
 \end{description}
+\subsubsection{ODE Solver Module (\mref{mSolver})}
 
-\subsubsection{Etc.}
+\begin{description}
+\item[Secrets:] The algorithm to solve a system of first or higher orders ODEs initial
+  value problem from a given starting time until the given event function shows termination.
+\item[Services:] Solves an ODE using the governing equation, initial
+  conditions, event function and numerical parameters.
+\item[Implemented By:] Python
+\end{description}
 
+\subsubsection{Plotting Module (\mref{mPlot})}
+
+\begin{description}
+\item[Secrets:] The data structures and algorithms for plotting data graphically.
+\item[Services:] Provides a plot function.
+\item[Implemented By:] Python
+\end{description}
 \section{Traceability Matrix} \label{SecTM}
 
 This section shows two traceability matrices: between the modules and the
@@ -303,28 +328,7 @@ requirements and between the modules and the anticipated changes.
 
 % the table should use mref, the requirements should be named, use something
 % like fref
-\begin{table}[H]
-\centering
-\begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
-\toprule
-\textbf{Req.} & \textbf{Modules}\\
-\midrule
-R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mInput}, \mref{mParams}\\
-R3 & \mref{mVerify}\\
-R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
-\bottomrule
-\end{tabular}
-\caption{Trace Between Requirements and Modules}
-\label{TblRT}
-\end{table}
+
 
 \begin{table}[H]
 \centering
@@ -333,15 +337,13 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 \textbf{AC} & \textbf{Modules}\\
 \midrule
 \acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \mref{mInput}\\
-\acref{acParams} & \mref{mParams}\\
-\acref{acVerify} & \mref{mVerify}\\
+\acref{acInput} & \\
+\acref{acParams} &\\
+\acref{acVerify} & \\
 \acref{acOutput} & \mref{mOutput}\\
-\acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acODEs} & \mref{mODEs}\\
-\acref{acEnergy} & \mref{mEnergy}\\
-\acref{acControl} & \mref{mControl}\\
-\acref{acSeqDS} & \mref{mSeqDS}\\
+\acref{acDS} & \\
+\acref{acVerifyOut} & \mref{mOutput}\\
+\acref{acODEs} & \mref{mSolver}\\
 \acref{acSolver} & \mref{mSolver}\\
 \acref{acPlot} & \mref{mPlot}\\
 \bottomrule
@@ -352,16 +354,12 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 
 \section{Use Hierarchy Between Modules} \label{SecUse}
 
-In this section, the uses hierarchy between modules is
-provided. \citet{Parnas1978} said of two programs A and B that A {\em uses} B if
-correct execution of B may be necessary for A to complete the task described in
-its specification. That is, A {\em uses} B if there exist situations in which
-the correct functioning of A depends upon the availability of a correct
-implementation of B.  Figure \ref{FigUH} illustrates the use relation between
-the modules. It can be seen that the graph is a directed acyclic graph
-(DAG). Each level of the hierarchy offers a testable and usable subset of the
-system, and modules in the higher level of the hierarchy are essentially simpler
-because they use modules from the lower levels.
+
+In this section, the uses hierarchy between modules is provided. \cite{Parnas1978} said of two programs A and B that A {\em uses} B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A {\em uses} B if there exist situations in which
+the correct functioning of A depends upon the availability of a correct implementation of B.  Figure \ref{FigUH} illustrates the use relation between the modules. It can be seen that the graph is a tree. Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+
+
+%It can be seen that the graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
 
 \begin{figure}[H]
 \centering
@@ -373,7 +371,7 @@ because they use modules from the lower levels.
 %\section*{References}
 
 \bibliographystyle {plainnat}
-\bibliography{../../../refs/References}
+\bibliography{reference.bib}
 
 \newpage{}
 
