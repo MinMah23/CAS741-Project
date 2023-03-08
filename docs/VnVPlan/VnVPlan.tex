@@ -83,12 +83,12 @@ Section 1 of \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS
 \pagenumbering{arabic}
 
 This document outlines the roadmap of the verification and validation plan for Inverted Pendulum (IP) Simulator to help ensure (but not prove) the correctness and completeness of the program.
-It includes a plan for testing the functional and non-functional requirements, an overview of the system tests, and an outline of the unit tests (not yet complete as it is depended on the MIS).
+It includes a plan for testing the functional and non-functional requirements, an overview of the system tests, and an outline of the unit tests (not yet complete as they depend on the as yet incomplete MIS).
 
 \section{General Information}
 
 \subsection{Summary}
-This document provides the validation and verification plans for the IP Simulator Software. This software aims to simulate and describe the behavior of a cart-pendulum system in the presence of different values of external force. To do that, it will calculate the cart position and pendulum's angle after applying the force.
+This document provides the validation and verification plans for the IP Simulator Software. This software aims to simulate and describe the behavior of a cart-pendulum system in the presence of different values of external force. To do that, it will calculate the cart position and pendulum's angle after applying a time varying force.
 \subsection{Objectives}
 
 The objectives of this document are listed below:
@@ -97,17 +97,17 @@ The objectives of this document are listed below:
 \item Demonstrate adequate usability.
 \item Verify and validate the final product.
 \end{itemize}
-
+Performance testing, stress testing, and maintainability testing are outside of the scope of this document.
 \subsection{Relevant Documentation}
 
 \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/ProblemStatementAndGoals/ProblemStatement.pdf}{Problem Statement} presents an overview of the problem.
-The requirements and an outline of the solution for the IP Simulator are captured in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{Software Requirements Specification}. The software design information will be captured in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/Design}{Module Guide}and MIS too. The final report of running the test which described in this document, will be shown in \href{https://github.com/Maryamvalian/project741/blob/main/docs/VnVReport/VnVReport.pdf}{VnV Report}.
+The requirements and an outline of the solution for the IP Simulator are captured in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{Software Requirements Specification}. The software design information will be captured in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/Design}{Module Guide}. The final report of running the test which described in this document, will be shown in \href{https://github.com/Maryamvalian/project741/blob/main/docs/VnVReport/VnVReport.pdf}{VnV Report}.
 
 
 \section{Plan}
 This section provides a roadmap of plans for different steps of producing the final product.
 \subsection{Verification and Validation Team}
-Our team includes:
+Our team details are described in table \ref{team}:
 
 \begin{table}[h!]
 \caption{Verification and Validation Team} \label{team}
@@ -122,11 +122,11 @@ Author& Create the products and refine them by feedbacks & Mina Mahdipour & All 
 \hline
  Domain Expert/ Reviewer& Review and provide feedbacks&Deesha Patel &All documents \\
   \hline
-Secondary Reviewer&Review and provide feedbacks&Maryam VAlian&SRS\\
+Secondary Reviewer&Review and provide feedbacks&Maryam Valian&SRS\\
 \hline  
 Secondary Reviewer&Review and provide feedbacks&Karen Wang&VnV plan\\
 \hline 
-Secondary Reviewer&Review and provide feedbacks&Joachim de Fourestie&MG + MIS\\
+Secondary Reviewer&Review and provide feedbacks&Joachim de Fourestier &MG + MIS\\
 \hline
 \end{tabular}
 \end{table}
@@ -151,7 +151,7 @@ There is also \href{https://github.com/smiths/capTemplate/blob/main/docs/Checkli
 \subsection{Implementation Verification Plan}
 
 The IP Simulator will be developed in Python programming language. The implementation of the software will be tested under the test cases listed in section \ref{test}. The tests will either be automated, performed manually. \\
-Static analysis will be done using Code Walkthrough technique by the Domain expert (Deesha Patel). During a meeting, the author presents the document under review, while the domain expert will run the test cases over the code by hand. She may also ask the author any relevant questions and discuss her findings with the author. Visual Studio Code will be used for program debugging and for checking syntax errors. \\
+Static analysis will be done using Code Walkthrough technique by the Domain expert (Deesha Patel). During a meeting, the author presents the document under review, while the domain expert will run the test cases over the code by hand. She may also ask the author any relevant questions and discuss her findings with the author. Visual Studio Code will be used for program debugging and for checking syntax errors \cite{codeWalkThrough}. \\
  
 \subsection{Automated Testing and Verification Tools}
 
@@ -168,7 +168,7 @@ This section will define the tests to ensure IP Simulator meets the functional r
 This section contains the system test cases for the functional requirements which are described in the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS}.
 
 \subsubsection{Input validation \label{inp_val}}
-This section includes tests to verify that the software rejects invalid input values such as non-numerical values or values outside of specified range and to make sure that the it accepts valid input values within specified range, FR1 and FR2 of requirements in section5 of the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS}.
+This section includes tests to verify that the software rejects invalid input values such as non-numerical values or values outside of specified range. These tests also help to make sure that the the IP Simulator accepts valid input values within specified range, FR1 and FR2 of requirements in section5 of the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS}.
 
 
 \begin{table}[h!]
@@ -266,7 +266,7 @@ Input: Set of input values as 3-1  and 7-1 in Table \ref{tbl_inputValidation}.
 					
 Output: $x$, the position of the cart and $\theta$, the angle of the pendulum
 
-Test Case Derivation: Derived form IP Simulator, as a normal and valid set of inputs, however it should be considered that with inputs as 7-1, the position of cart stay without change and the pendulum falls and its angle will be 180 $rad$.
+Test Case Derivation: Derived from IP Simulator, as a normal and valid set of inputs, however it should be considered that with inputs as 7-1, the position of cart stay without change and the pendulum falls and its angle will be 180 $rad$.
 					
 How test will be performed: Automatic test using Pytest.
 
@@ -317,7 +317,7 @@ How test will be performed: Automatic test using Pytest.
 
 \subsubsection{Output Validity \label{out_val}}
 
-This section presents tests to make confidence in Error handling in the software, which means the system can handle unexpected errors gracefully and provides clear error messages when errors occur.
+This section presents tests to make confidence in error handling in the software, which means the system can handle unexpected errors gracefully and provides clear error messages when errors occur.
 The other goal of these tests is to verify that system simulates the cart moving back and forth and the pendulum rotates according to input values, as the R3 and R4 of requirements in section 5 of the  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS} has defined.
 
 \begin{table}
@@ -328,7 +328,7 @@ The other goal of these tests is to verify that system simulates the cart moving
     & &&\textbf{Input}&&     & \textbf{Expected Output} \\ \hline
 
 \textbf{TC} &   $m_p$ & $m_c$ & $l$ & $F$ & $b$  &   $Output$ \\ \hline
-1-1 &0.2 & 0.5& 0.3& 50& 0.2 &$x$ the position of cart ,and $\theta$, the angle of pendulum \\
+1-1 &0.2 & 0.5& 0.3& 50& 0.2 &$x$ the position of cart, and $\theta$, the angle of pendulum \\
  \hline
 2-1 &0 & 0.5& 0.3& 50& 0.2 & Error: invalid input, Put non-zero values  \\
  \hline
@@ -352,7 +352,7 @@ Initial State: the software has run by the input values of 1-1 in Table \ref{tbl
 					
 Input: input variables like 1-1 in Table \ref{tbl_outValidation}.
 					
-Output: The $x$ can be positive or negative which means the cart moves left or right from the source and $\theta$ is positive or zero.
+Output: The $x$ can be positive or negative, which means the cart moves left or right from the source and $\theta$ is positive or zero.
 
 Test Case Derivation: Derived form IP Simulator, as a normal and valid set of inputs have been provided.
 					
@@ -390,12 +390,11 @@ Initial State: None.
 
 Requirement ID(s): NFR-1					
 
-Input/Condition: Executes all tests in \ref{inp_val} and \ref{out_val} in the IP Simulator in different OS.
+Input/Condition: Executes all tests in \ref{inp_val} and \ref{out_val} in the IP Simulator in different OS, including Linux, Windows, MacOS.
 					
 Output/Result: Successful test implies portability of the software.
 
-How test will be performed: The test will be performed manual by executing the software and tests in different OS, including Linux,
-Windows, MacOS. A successful test is specified by the verification of
+How test will be performed: The test will be performed manual by executing the software and tests in different OS, including Linux, Windows, MacOS. A successful test is specified by the verification of
 each test for functional requirements. 
 				
 \end{enumerate}
@@ -444,11 +443,8 @@ Requirement ID(s): NFR-3
 
 Input/Condition: All of the test in \ref{inp_val} will be done.
 
-Output/Result: Comparing the outputs of IP Simualtor to the values of the other software. The Euclidean distance between both results from the two software will be reported as an error measurement for some cases. The euclidean distance formula will be calculated as follows:\\
-\newline
-$d\left( r,l\right)   = \sqrt {\sum _{i=1}^{n}  \left( l_{i}-r_{i}\right)^2 } $ \\
-\newline
-Where $r$ is the output vector of IP Simulator and $l$ is the output vector of \cite{al-khazraji_2022} for a specific test case. 
+Output/Result: Comparing the outputs of IP Simulator to the result of \cite{al-khazraji_2022}.
+the relative error
 
 How test will be performed: Manually, as both the projects should be run manually.
 
@@ -497,6 +493,6 @@ This section is intentionally left blank until the MIS is completed.
 \section{Appendix\label{appendix}}
 
 \subsection{Usability Survey Questions?}
-To test usability of the IP Simulator, the questionnaire \cite{hinderks_schrepp_thomaschewski} will be used.
+To test usability of the IP Simulator, the Hinderks et al. questionnaire \cite{hinderks_schrepp_thomaschewski} will be used.
 \newpage{}
 \end{document}
