@@ -47,7 +47,7 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 March 1, 2023 & 1.0 & Created the document and fill initial data\\
-Date 2 & 1.1 & Notes\\
+March 9, 2023 & 2.0 & Updated modules and add module hierarchy diagram\\
 \bottomrule
 \end{tabularx}
 
@@ -65,7 +65,6 @@ This section records information for easy reference.
   \textbf{symbol} & \textbf{description}\\
   \midrule 
   AC & Anticipated Change\\
-  DAG & Directed Acyclic Graph \\
   IP & Inverted Pendulum\\
   M & Module \\
   MG & Module Guide \\
@@ -122,16 +121,14 @@ Specification (SRS), the Module Guide (MG) is developed \cite{ParnasEtAl1984}. T
   decomposition, and flexibility of the design.
 \end{itemize}
 
-The rest of the document is organized as follows. Section
+The author uses the \cite{Smith2016} as a reference. The rest of the document is organized as follows. Section
 \ref{SecChange} lists the anticipated and unlikely changes of the software
 requirements. Section \ref{SecMH} summarizes the module decomposition that
 was constructed according to the likely changes. Section \ref{SecConnection}
 specifies the connections between the software requirements and the
 modules. Section \ref{SecMD} gives a detailed description of the
 modules. Section \ref{SecTM} includes two traceability matrices. One checks
-the completeness of the design against the requirements provided in the SRS. The
-other shows the relation between anticipated changes and the modules. Section
-\ref{SecUse} describes the use relation between modules.
+the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section \ref{SecUse} describes the use relation between modules.
 
 \section{Anticipated and Unlikely Changes} \label{SecChange}
 
@@ -145,7 +142,7 @@ unlikely changes are listed in Section \ref{SecUchange}.
 Anticipated changes are the source of the information that is to be hidden
 inside the modules. Ideally, changing one of the anticipated changes will only
 require changing the one module that hides the associated decision. The approach
-adapted here is called design for change.Anticipated changes are numbered by \textbf{AC} followed by a number.
+adapted here is called design for change. Anticipated changes are numbered by \textbf{AC} followed by a number.
 
 \begin{description}
 \item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
@@ -157,9 +154,11 @@ adapted here is called design for change.Anticipated changes are numbered by \te
 \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] The format of the  final output data.
 \item[\refstepcounter{acnum} \actheacnum \label{acDS}:] The choice of data structures used for storing and manipulating the data.
 \item[\refstepcounter{acnum} \actheacnum \label{acVerifyOut}:] The constraints on the output results.
-\item[\refstepcounter{acnum} \actheacnum \label{acODEs}:] How the governing Ordinary Differential Equations (ODEs) are defined using the input parameters.
+\item[\refstepcounter{acnum} \actheacnum \label{acODEsC}:] How the governing Ordinary Differential Equation (ODE) for the cart is defined using the input parameters.
+\item[\refstepcounter{acnum} \actheacnum \label{acODEsP}:] How the governing ODE for the pendulum is defined using the input parameters.
 \item[\refstepcounter{acnum} \actheacnum \label{acSolver}:] The algorithm used for solving the equations of motions ODEs.
-\item[\refstepcounter{acnum} \actheacnum \label{acPlot}:] The implementation of plotting the output.
+\item[\refstepcounter{acnum} \actheacnum \label{acPlot}:] How the plotting of the output is implemented.
+\item[\refstepcounter{acnum} \actheacnum \label{acControl}:] The overall control of the calculation.
 \end{description}
 
 \subsection{Unlikely Changes} \label{SecUchange}
@@ -174,29 +173,35 @@ decisions will be changed.
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucInput}:] There will always be a source of input data external to the software.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucOutput}:] Output data are
-  displayed to the output device.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucGoal}:] The goal of the system is to calculate the position of cart and the angle of pendulum.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructure}:] The ODEs for the cart and pendulum motions can be defined using parameters defined in the input parameters module.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucEqM}:] How the equations of motions of the cart and the pendulum are defined using the specification of the system.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucOutput}:] Output data are displayed to the output device.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucGoal}:] The goal of the system is to calculate the position of the cart and the angle of pendulum.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructureC}:] The equation of motion of the cart can be defined using parameters defined in the input parameters module.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructureP}:] The equation of motion of the pendulum can be defined using parameters defined in the input parameters module.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucEqM}:] How the equations of motions of the cart and the pendulum are defined using the specification of the system due to laws of Physics.
  
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
 
-This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table \ref{TblMH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.Modules are numbered by \textbf{M} followed by a number. 
+This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table \ref{TblMH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented. Modules are numbered by \textbf{M} followed by a number. 
 
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
 \item [\refstepcounter{mnum} \mthemnum \label{mParams}:] Input Parameters Module
+\item [\refstepcounter{mnum} \mthemnum \label{mCons}:] 
+Constant Parameter Module
 \item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Parameters Module
-%\item [\refstepcounter{mnum} \mthemnum \label{mVerifyOut}:] Output Verification Module%
+\item [\refstepcounter{mnum} \mthemnum \label{mODEC}:] The cart equation of motion ODE Module
+\item [\refstepcounter{mnum} \mthemnum \label{mODEP}:] The pendulum equation of motion ODE Module
+\item [\refstepcounter{mnum} \mthemnum \label{mControl}:] IP Control Module
 \item [\refstepcounter{mnum} \mthemnum \label{mSolver}:] ODE Solver Module
 \item [\refstepcounter{mnum} \mthemnum \label{mPlot}:] Plotting Module
+\item [\refstepcounter{mnum} \mthemnum \label{mDS}:]
+Data Structure Module
 \end{description}
 
 
-Note that \mref{mHH} is a commonly used module and is already implemented by the operating system.  It will not be reimplemented.  Similarly, \mref{mODEs}, \mref{mSolver} and \mref{mPlot} are already available in Python and will not be reimplemented.
+Note that \mref{mHH} is a commonly used module and is already implemented by the operating system.  It will not be reimplemented.  Similarly, \mref{mSolver} , \mref{mPlot} and  \mref{mDS} are already available in Python and will not be reimplemented.
 
 
 
@@ -210,12 +215,16 @@ Note that \mref{mHH} is a commonly used module and is already implemented by the
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Behaviour-Hiding Module} & Input Parameters Module\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding Module} & Input Parameters Module\\
 & Output Parameters Module\\
-
+& Constant Parameter Module\\
+&The cart equation of motion ODE Module\\
+& The pendulum equation of motion ODE Module\\
+& IP Control Module\\
 \midrule
 
 \multirow{3}{0.3\textwidth}{Software Decision Module} & {ODE Solver Module}\\
+& Data Structure Module\\
 & Plotting Module\\
 \bottomrule
 
@@ -234,10 +243,10 @@ between requirements and modules is listed in Table~\ref{TblRT}.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 &  \mref{mHH}, \mref{mParams}\\
-R2 & \mref{mParams}\\
-R3 & \mref{mSolver}\\
-R4 & \mref{mHH}, \mref{mOutput}, \mref{mPlot}\\
+R1 &  \mref{mHH}, \mref{mParams}, \mref{mControl}\\
+R2 & \mref{mParams}, \mref{mControl}\\
+R3 & \mref{mCons}, \mref{mODEC}, \mref{mODEP}, \mref{mControl}, \mref{mSolver}, \mref{mDS}\\
+R4 & \mref{mHH}, \mref{mOutput}, \mref{mControl}, \mref{mPlot}\\
 
 \bottomrule
 \end{tabular}
@@ -271,7 +280,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \begin{description}
 \item[Secrets:] The contents of the required behaviours.
 \item[Services:] Includes programs that provide externally visible behaviour of
-  the system as specified in the software requirements specification (SRS)
+  the system as specified in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{SRS}
   documents. This module serves as a communication layer between the
   hardware-hiding module and the software decision module. The programs in this
   module will need to change if there are changes in the SRS.
@@ -281,11 +290,20 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \subsubsection{Input Parameters Module (\mref{mParams})}
 
 \begin{description}
-\item[Secrets:] The data structure for input parameters, how the values are input and how the values are verified.  The load and verify secrets are isolated to their own access programs (like submodules).  This, combined with the fact that all of the services are invoked together, suggests that the one module one secret rule can be relaxed here.
-\item[Services:] Gets input from user (including material properties, processing conditions, and numerical parameters), stores input and verifies that the input parameters comply with physical and software constraints. Throws an error if a parameter violates a physical constraint. Throws a warning if a parameter violates a software constraint.  Stored parameters can be read individually, but write access is only to redefine the entire set of inputs.
- % This module knows how many parameters it stores.
+\item[Secrets:] The input data required for IP Simulator to run the simulation.
+
+\item[Services:]This module reads input data from input file (including the mass of the pendulum, the mass of the cart, the length of the pendulum, the friction of the cart, and the external force) and stores them in the data structures. Then checks if the physical and software are met. It throws a related error if inputs are not valid.
 \item[Implemented By:] IP Simulator
 \end{description}
+
+
+\subsubsection{Constant Parameter Module (\mref{mCons})}
+\begin{description}
+\item[Secrets:] The constant values used in the code.
+\item[Services:] Stores all the constant values, including parameters, constraints and conditions on the input/output values that are mentioned in the table of specification parameters in the SRS document.
+
+\item[Implemented By:] IP Simulator
+\end{description} 
 \subsubsection{Output Parameters Module (\mref{mOutput})}
 
 \begin{description}
@@ -294,6 +312,35 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 % verify them and 
 \item[Implemented By:] IP Simulator
 \end{description} 
+
+
+
+
+\subsubsection{The cart equation of motion ODE Module (\mref{mODEC})}
+
+\begin{description}
+\item[Secrets:] The ODEs for solving the position of the cart, using the input parameters.
+\item[Services:] Defines the ODE using the parameters in the input parameters module.
+
+\item[Implemented By:] IP Simulator
+\end{description} 
+
+\subsubsection{The pendulum equation of motion ODE Module (\mref{mODEP})}
+\begin{description}
+\item[Secrets:] The ODEs for finding the angle of the pendulum, using the input parameters.
+\item[Services:] Defines the ODE using the parameters in the input parameters module.
+
+\item[Implemented By:] IP Simulator
+\end{description} 
+
+\subsubsection{IP Control Module(\mref{mControl})}
+
+\begin{description}
+\item[Secrets:] Execution flow of the IP Simulator. 
+\item[Services:] Provides the main program and calls the different modules in the appropriate order.
+\item[Implemented By:] IP Simulator
+\end{description} 
+
 
 \subsection{Software Decision Module}
 
@@ -307,24 +354,32 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \subsubsection{ODE Solver Module (\mref{mSolver})}
 
 \begin{description}
-\item[Secrets:] The algorithm to solve a system of first or higher orders ODEs initial
-  value problem from a given starting time until the given event function shows termination.
-\item[Services:] Solves an ODE using the governing equation, initial
-  conditions, event function and numerical parameters.
+\item[Secrets:] The algorithm to solve a system of first or higher orders ODEs with initial values.
+\item[Services:] Solves an ODE using the governing equation, initial conditions, and numerical parameters.
 \item[Implemented By:] Python
 \end{description}
 
 \subsubsection{Plotting Module (\mref{mPlot})}
 
 \begin{description}
-\item[Secrets:] The data structures and algorithms for plotting data graphically.
+\item[Secrets:] The data structures and algorithms for plotting the output data.
 \item[Services:] Provides a plot function.
 \item[Implemented By:] Python
 \end{description}
+
+\subsubsection{ Data Structure Module (\mref{mDS})}
+
+\begin{description}
+\item[Secrets:] The data structure for a sequence data type.
+\item[Services:] Provides creating an array, reading a specific entry, manipulating, including building an array, and storing the data.
+\item[Implemented By:] Python
+\end{description}
+
 \section{Traceability Matrix} \label{SecTM}
 
-This section shows two traceability matrices: between the modules and the
-requirements and between the modules and the anticipated changes.
+Table \ref{TblACT} shows the traceability matrix between the modules and the anticipated changes.
+The traceability matrix between the modules the
+requirements has been shown table \ref{TblRT}.
 
 % the table should use mref, the requirements should be named, use something
 % like fref
@@ -337,15 +392,17 @@ requirements and between the modules and the anticipated changes.
 \textbf{AC} & \textbf{Modules}\\
 \midrule
 \acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \\
-\acref{acParams} &\\
-\acref{acVerify} & \\
-\acref{acOutput} & \mref{mOutput}\\
-\acref{acDS} & \\
+\acref{acInput} & \mref{mParams}\\
+\acref{acParams} &\mref{mParams}\\
+\acref{acVerify} & \mref{mParams}, \mref{mCons}\\
+\acref{acOutput} & \mref{mCons}, \mref{mOutput}\\
+\acref{acDS} & \mref{mDS}\\
 \acref{acVerifyOut} & \mref{mOutput}\\
-\acref{acODEs} & \mref{mSolver}\\
+\acref{acODEsC} & \mref{mCons}, \mref{mSolver}\\
+\acref{acODEsP} &  \mref{mCons}, \mref{mSolver}\\
 \acref{acSolver} & \mref{mSolver}\\
 \acref{acPlot} & \mref{mPlot}\\
+\acref{acControl} & \mref{mControl}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
@@ -363,7 +420,7 @@ the correct functioning of A depends upon the availability of a correct implemen
 
 \begin{figure}[H]
 \centering
-%\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+\includegraphics[width=0.7\textwidth]{hierarchy.jpg}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
