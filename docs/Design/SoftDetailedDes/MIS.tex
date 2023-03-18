@@ -1,7 +1,7 @@
 \documentclass[12pt, titlepage]{article}
 
 \usepackage{amsmath, mathtools}
-
+\usepackage[square,numbers]{natbib}
 \usepackage[round]{natbib}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -31,16 +31,15 @@ urlcolor=cyan          % color of external links
 
 \usepackage{array}
 
-\externaldocument{../../SRS/SRS}
+\externaldocument{}
 
-\input{../../Comments}
-\input{../../Common}
+\input{}
 
 \begin{document}
 
-\title{Module Interface Specification for \progname{}}
+\title{Module Interface Specification for IP Simulator}
 
-\author{\authname}
+\author{Mina Mahdipour}
 
 \date{\today}
 
@@ -53,8 +52,10 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+March 2, 2023 & 1.0 & First version, created and added introduction parts\\
+March 10, 2023 & 1.1 &  Added three modules\\
+March 12, 2023 & 1.2 &  Added the rest of modules\\
+March 17, 2023 & 1.3 &  Updated ODE modules\\
 \bottomrule
 \end{tabularx}
 
@@ -62,13 +63,14 @@ Date 2 & 1.1 & Notes\\
 
 \section{Symbols, Abbreviations and Acronyms}
 
-See SRS Documentation at \wss{give url}
-
-\wss{Also add any additional symbols, abbreviations or acronyms}
+The reader can refer to \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{SRS}. 
 
 \newpage
 
 \tableofcontents
+\listoftables
+%\listoffigures
+
 
 \newpage
 
@@ -76,17 +78,12 @@ See SRS Documentation at \wss{give url}
 
 \section{Introduction}
 
-The following document details the Module Interface Specifications for
-\wss{Fill in your project name and description}
-
-Complementary documents include the System Requirement Specifications
-and Module Guide.  The full documentation and implementation can be
-found at \url{...}.  \wss{provide the url for your repo}
+The following document details the Module Interface Specifications for IP Simulator software. This document specifies how every module is interfacing with every other part of the program based on "module state machine" approach.
+\\Complementary documents include the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{System Requirement Specifications}
+and \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/Design/SoftArchitecture}{Module Guide}.  The full documentation and implementation can be
+found at the \href{https://github.com/MinMah23/CAS741-Project}{github repository for the IP Simulator}. The author uses \cite{Smith2016} as a reference to write this document.
 
 \section{Notation}
-
-\wss{You should describe your notation.  You can use what is below as
-  a starting point.}
 
 The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
 with the addition that template modules have been adapted from
@@ -95,7 +92,7 @@ with the addition that template modules have been adapted from
 multiple assignment statement and conditional rules follow the form $(c_1
 \Rightarrow r_1 | c_2 \Rightarrow r_2 | ... | c_n \Rightarrow r_n )$.
 
-The following table summarizes the primitive data types used by \progname. 
+The following table summarizes the primitive data types used by IP Simulator. 
 
 \begin{center}
 \renewcommand{\arraystretch}{1.2}
@@ -106,23 +103,20 @@ The following table summarizes the primitive data types used by \progname.
 \midrule
 character & char & a single symbol or digit\\
 integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
-natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
+non-negative integer& $\mathbb{N}_0$ &a number without a fractional component in [0, $\infty$)\\
 \bottomrule
 \end{tabular} 
 \end{center}
 
 \noindent
-The specification of \progname \ uses some derived data types: sequences, strings, and
-tuples. Sequences are lists filled with elements of the same data type. Strings
-are sequences of characters. Tuples contain a list of values, potentially of
-different types. In addition, \progname \ uses functions, which
-are defined by the data types of their inputs and outputs. Local functions are
-described by giving their type signature followed by their specification.
+The specification of IP Simulator uses some derived data types: sequences, strings, and tuples. Sequences are lists filled with elements of the same data type. strings
+are sequences of characters. Tuples contain a list of values, potentially of different types. In addition, IP Simulator uses functions, which are defined by the data types of their inputs and outputs. Local functions are described by giving their type signature followed by their specification.
 
 \section{Module Decomposition}
 
-The following table is taken directly from the Module Guide document for this project.
+The following table is taken directly from the \href{https://github.com/MinMah23/CAS741-Project/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide} document for this project.
+
 
 \begin{table}[h!]
 \centering
@@ -131,21 +125,19 @@ The following table is taken directly from the Module Guide document for this pr
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
 
-{Hardware-Hiding} & ~ \\
+{Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
-& Output Format\\
-& Output Verification\\
-& Temperature ODEs\\
-& Energy Equations\\ 
-& Control Module\\
-& Specification Parameters Module\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding Module} & Input Parameters Module\\
+& Output Parameters Module\\
+& Constant Parameter Module\\
+&The Equation of Motion ODE Module\\
+& IP Control Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision} & {Sequence Data Structure}\\
-& ODE Solver\\
-& Plotting\\
+\multirow{3}{0.3\textwidth}{Software Decision Module} & {ODE Solver Module}\\
+& Data Structure Module\\
+& Plotting Module\\
 \bottomrule
 
 \end{tabular}
@@ -154,21 +146,334 @@ The following table is taken directly from the Module Guide document for this pr
 \end{table}
 
 \newpage
-~\newpage
 
-\section{MIS of \wss{Module Name}} \label{Module} \wss{Use labels for
-  cross-referencing}
 
-\wss{You can reference SRS labels, such as R\ref{R_Inputs}.}
+\section{ MIS of Input Parameters Module \label{MInput} }
+This module is responsible for reading the input parameters from a file and storing them in the data structures. It also verifies them using Constant Parameter Module.
 
-\wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
+\subsection{Module}
+InputM
+
+\subsection{Uses}
+ConstantM (Section \ref{MConstant})
+
+\subsection{Syntax}
+
+
+
+\subsubsection{Exported Constants}
+None
+\subsubsection{Exported Access Programs}
+
+\begin{tabular}{p{3cm} p{2cm} p{2cm} >{\raggedright\arraybackslash}p{6cm}}
+\toprule
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\midrule
+load\_inputs & string & - &  FileError \\
+verify\_inputs & - & - & InvalidInput Error \\
+$ m_p$ & - & $\mathbb{R}$\\
+$l_p$ & - & $\mathbb{R}$\\
+$m_c$ & - & $\mathbb{R}$\\
+$friction$ & - & $\mathbb{R}$\\
+$f\_external(t)$ & $\mathbb{R}$ & $\mathbb{R}$&InvalidFunction\\
+$i_p$& - & $\mathbb{R}$\\
+\bottomrule
+\end{tabular}
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+\#From R1:\\
+$ m_p$: $\mathbb{R}$\\
+$l_p$: $\mathbb{R}$\\
+$m_c$: $\mathbb{R}$\\
+$friction$: $\mathbb{R}$\\
+$f\_external(t)$: $\mathbb{R} \rightarrow \mathbb{R}$\\
+$i_p$: $\mathbb{R}$
+
+\subsubsection{Environment Variables}
+In the case of this module, the environment variable is the input file which is containing the input data.
+
+
+\subsubsection{Assumptions}
+\begin{itemize}
+
+\item load\_inputs will be called before the values of any state variables will be accessed.
+
+\item The file contains the expected inputs data in order, each on a new line. The order of the input data is as below:
+\begin{itemize}
+\item line 1: the mass of the pendulum 
+\item line 2: the length of the pendulum  
+\item line 3: the mass of the cart
+\item line 4: the friction of the cart
+\item line 5: the external force as a function of time
+\end{itemize}
+
+\end{itemize}
+\subsubsection{Access Routine Semantics}
+The value of each state variable can be accessed through its name (getter). An access program is available for each state variable. There are no setters for the state variables, since the values will be set and checked by load params and not changed for the life of the program.\\
+\\
+\noindent load\_inputs($fName$: string):
+\begin{itemize}
+\item transition: The filename $fName$ is associated with the inputFile. The state variables are modified with the following procedures:
+\begin{enumerate}
+\item Read data  from inputFile to populate the state variables from R1.
+\item Store the data parameters.
+\item Calculate the derived quantity as follows (from DD3 in SRS):\\
+        $i_p$= $\frac{1}{12}(m_p)(l_p^2)$ 
+\item Verify the inputs through verify\_inputs().
+\end{enumerate}
+
+\item exception: exc := a file name $fName$ cannot be found OR the format of inputFile is incorrect $\Rightarrow$  FileError
+\end{itemize}
+
+\noindent verify\_inputs():
+\begin{itemize}
+\item out: \textit{out} := none
+\item exception: exc := 
+\end{itemize}
+
+\noindent \begin{longtable*}[l]{l l} 
+$\neg (m_{\text{pmin}} \leq m_p \leq m_{\text{pmax}})$ & $\Rightarrow$ Invalid Mass of the Pendulum\\
+
+$\neg (l_{\text{pmin}} \leq l_p \leq l_{\text{pmax}})$& $\Rightarrow$  Invalid Length of the Pendulum\\
+$\neg (m_{\text{cmin}} \leq m_c\leq m_{\text{cmax}})$ & $\Rightarrow$  Invalid Mass of the Cart \\
+$\neg ($friction$ >= 0)$ & $\Rightarrow$ Invalid Value of the Car Friction\\
+$f\_external$ is not a function of t & $\Rightarrow$ InvalidFunction\\
+\end{longtable*}
+etc.  See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and associated error messages.\\
+\newline
+\noindent InputM.$m_p$:
+\begin{itemize}
+\item output: \textit{out} := $m_p$
+\item exception: none
+\end{itemize}
+
+\noindent InputM.$l_p$:
+\begin{itemize}
+\item output: \textit{out} := $l_p$
+\item exception: none
+\end{itemize}
+
+\noindent InputM.$m_c$:
+\begin{itemize}
+\item output: \textit{out} :=$m_c$
+\item exception: none
+\end{itemize}
+
+\noindent InputM.$friction$:
+\begin{itemize}
+\item output: \textit{out} := $friction$
+\item exception: none
+\end{itemize}\noindent 
+
+\noindent /InputM.$f\_external(t)$:
+\begin{itemize}
+\item output: \textit{out} := $f\_external(t)$
+\item exception: none
+\end{itemize}\noindent 
+
+
+\subsubsection{Local Functions}
+None
+
+\newpage
+\section{MIS of Output Parameters Module\label{MOutput} }
+
+
+\subsection{Module}
+OutputM
+
+\subsection{Uses}
+ConstantM (Section \ref{MConstant})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm} p{8cm} p{2cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+ output& $fOName$: string, $t$$: \mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
+ \mathbb{R}$ & - & -\\
+\hline
+verify\_out&  [$x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
+ \mathbb{R}$] & - & InvalidOutput \\
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+None
+\subsubsection{Environment Variables}
+The environment variable is the output file which includes the angle of the pendulum and position of the cart with regards to the data inputs.
+
+\subsubsection{Assumptions}
+All of the fields of the input parameters structure have been assigned a value.
+\subsubsection{Access Routine Semantics}
+
+
+\noindent output ($fOName$: string, $t$$: \mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
+ \mathbb{R}$):
+\begin{itemize}
+
+\item transition: The filename $fOName$ is associated with the outputFile. The following procedure:
+\begin{enumerate}
+\item verify\_out ($x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
+ \mathbb{R}$)
+\item write the calculated cart position, cart velocity, pendulum angle, and pendulum velocity for a specified time in the output file.
+\end{enumerate}
+
+\item exception: none 
+
+\end{itemize}
+
+\noindent verify\_out ($x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$):
+\begin{itemize}
+\item output: none
+\item exception: exec:= 
+\end{itemize}
+
+
+
+
+\noindent
+\begin{longtable*}[l]{l l} 
+ $\theta$ $\leq$ $0$ & $\Rightarrow$ Invalid Angle the Pendulum\\
+
+$\dot{\theta}$ $\leq$ $0$ & $\Rightarrow$ Invalid Velocity of the Pendulum\\
+\end{longtable*}
+
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of Constant Parameter Module \label{MConstant}} 
+
 
 \subsection{Module}
 
-\wss{Short name for the module}
+ConstantM
 
 \subsection{Uses}
 
+Not Applicable
+\subsection{Syntax}
+
+
+\subsubsection{Exported Constants}
+\# From Table 2 in \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{SRS}
+\begin{center}
+\begin{tabular}{p{2cm} p{2cm} p{2 cm} p{8cm}}
+\hline
+
+\textbf{Name} & \textbf{Type} & \textbf{Value} & \textbf{Description} \\
+\hline
+ $g$ & $\mathbb{R}$ & 9.81 \si {\metre\per\square\second}&the gravity of the earth\\
+ $m_{\text{pmin}}$&$\mathbb{R}$&0.01 \si{\kg} &minimum value of the pendulum mass\\
+$ m_{\text{pmax}}$&$\mathbb{R}$& 50 \si{\kg} &maximum value of the pendulum mass\\
+$ l_{\text{pmin}}$&$\mathbb{R}$&0.01 \si{\m}&minimum value of the length of the pendulum\\
+$ l_{\text{pmax}}$&$\mathbb{R}$&10 \si{\m}&maximum value of the length of the pendulum\\
+$ m_{\text{cmin}}$&$\mathbb{R}$& 0.01 \si{\kg} &minimum value of the mass of the cart\\
+$ m_{\text{cmax}}$&$\mathbb{R}$&50 \si{\kg} &maximum value of the mass of the cart\\
+$x$&$\mathbb{R}$&0 & the initial condition of the position of the cart\\
+$\dot{x}$&$\mathbb{R}$&0 \si {\metre\per\square\second}&the initial condition of the velocity of the cart\\
+$\theta$& $\mathbb{R}$ &$\pi$ $ \si{\radian} $& the initial condition of the angle of the pendulum\\
+$\dot{\theta}$&$\mathbb{R}$&0 \si {\metre\per\square\second}&the initial condition of the velocity of the pendulum\\
+$t_\text{start}$&$\mathbb{R}$&0 \si {\min}&the start time of simulation\\
+$t_\text{span}$&$\mathbb{R}$&100 \si {\min}&the duration time of simulation\\
+ \hline
+
+\end{tabular}
+\end{center}
+\subsubsection{Exported Access Programs}
+None
+\subsection{Semantics}
+
+Not Applicable
+
+
+
+\newpage
+\section{MIS of Equation of Motion ODE Module  \label{MC} }
+
+
+\subsection{Module}
+
+EqMo
+
+\subsection{Uses}
+
+ConstantM (Section \ref{MConstant})
+
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{3cm} p{6cm} p{4cm} p{3cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+ODE\_Motion & $ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t)$, $i_p$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$) & $\dot{x}$: $\mathbb{R}$, $\ddot{x}$: $\mathbb{R}$, $\dot{\theta}$: $\mathbb{R}$, $\ddot{\theta}$: $\mathbb{R}$  & - \\
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+None
+\subsubsection{Environment Variables}
+None
+\subsubsection{Assumptions}
+None
+\subsubsection{Access Routine Semantics}
+
+
+
+
+\noindent ODE\_Motion($ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t))$:
+\\
+
+$\ddot{x} =\dfrac{ friction } {(m_c+m_p)}\dot{x}+ \dfrac{ f\_external(t)- m_pl_p\ddot{\theta}\cos{\theta}+ m_pl_p(\dot{\theta}) ^ 2 \sin{\theta}} {(m_c+m_p)}$\\
+
+$\ddot{\theta}$= $\dfrac{m_pgl_p}{(i_p+m_pl_p^2)}\sin{\theta}-\dfrac{m_pl_p\ddot{x}}{(i_p+m_pl_p^2)}\cos{\theta}$\
+\begin{itemize}
+\item output:
+[$\dot{x}$, $\ddot{x}$, $\dot{\theta}$, $\ddot{\theta}$]
+
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+
+\newpage
+\section{MIS of IP Control Module \label{MControl} }
+
+\subsection{Module}
+Control
+
+
+\subsection{Uses}
+InputM (Section \ref{MInput}),
+OutputM (Section \ref{MOutput}),
+EqMo (Section \ref{MC}),
+ODE Solver (Section \ref{MODE}),
+Plot (Section \ref{MPlot}),
 
 \subsection{Syntax}
 
@@ -181,61 +486,156 @@ The following table is taken directly from the Module Guide document for this pr
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-\wss{accessProg} & - & - & - \\
+control & - & - & - \\
 \hline
 \end{tabular}
 \end{center}
 
 \subsection{Semantics}
-
+The Control Module is designed to control the process flow in the software. It organizes all other modules to satisfy all the requirements and also helps maintainability and expandability of IP Simulator by classifying different parts of the code.
 \subsubsection{State Variables}
-
-\wss{Not all modules will have state variables.  State variables give the module
-  a memory.}
-
+None
 \subsubsection{Environment Variables}
-
-\wss{This section is not necessary for all modules.  Its purpose is to capture
-  when the module has external interaction with the environment, such as for a
-  device driver, screen interface, keyboard, file, etc.}
-
+None
 \subsubsection{Assumptions}
-
-\wss{Try to minimize assumptions and anticipate programmer errors via
-  exceptions, but for practical purposes assumptions are sometimes appropriate.}
+None
 
 \subsubsection{Access Routine Semantics}
 
-\noindent \wss{accessProg}():
+\noindent control():
 \begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
+\item transition: Control the flow input data, calculation, and the output data by following below steps: \\
+\noindent Get ($fName$: string) from user\\
+\noindent load\_inputs($fName$)\\
+\noindent verify\_inputs()\\
+\noindent ODE\_Motion($ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t)$, $i_p$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$))\\
+\noindent solveODE($\textbf{f}: (\mathbb{R}^{8} \rightarrow \mathbb{R}^4),  t_\text{start}: \mathbb{R}, \textbf{y}_\text{iniCond}: \mathbb{R}^6, t_\text{span}: \mathbb{R}$ )\\
+\noindent verify\_out($x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$)\\
+\noindent output($fOName$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$)\\
+\noindent plot($t$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\theta$: $\mathbb{R}$)\\
+\item exception: none
 \end{itemize}
 
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
 \subsubsection{Local Functions}
+None
 
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
 
 \newpage
 
+\section{MIS of ODE Solver Module \label{MODE}}
+
+\subsection{Module}
+ODE Solver
+\subsection{Uses}
+
+None
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2.5cm} >{\raggedright\arraybackslash}p{8cm} >{\raggedright\arraybackslash}p{2.43cm} p{2cm}}
+  \hline
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Except.} \\
+  \hline
+  solveODE & $\textbf{f}: (\mathbb{R}^{8} \rightarrow \mathbb{R}^4),  t_\text{start}: \mathbb{R}, \textbf{y}_\text{iniCond}: \mathbb{R}^6, t_\text{span}: \mathbb{R}$ & $\textbf{y}$: [$x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$] & ODE\_Error\\
+ 
+\end{tabular}
+\end{center}
+
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+None
+\subsubsection{Environment Variables}
+None
+\subsubsection{Assumptions}
+None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent solveODE($\textbf{f}$, $t_\text{start}$, $\textbf{y}_\text{iniCond}$, $t_\text{span}$): 
+\begin{itemize}
+\item output: $out := \textbf{y}(t)$ where 
+$$\textbf{y}(t) = \textbf{y}_\text{iniCond} + \int_{t_\text{start}}^{t_\text{span}} \textbf{f}(s, \textbf{y}(s)) ds$$ 
+$y(t)$ is calculated from $t = t_\text{start}$ to $t = t_\text{span}$.\\
+We have two coupled ODE in the IP which $s$ is $\theta$ the first one and $x$ in the second one. 
+\item exception: $exc :=$ ( ODE Solver Fails $\Rightarrow$ ODE\_ERR)
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+\newpage
+
+
+\section{MIS of Plotting Module \label{MPlot}}
+
+
+\subsection{Module}
+Plot
+\subsection{Uses}
+Not Applicable
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+\subsubsection{Exported Access Programs}
+\begin{center}
+\begin{tabular}{p{2cm} p{4cm} p{2cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+plot & $t$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\theta$: $\mathbb{R}$ & Graph & - \\
+\hline
+\end{tabular}
+\end{center}
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+None
+\subsubsection{Environment Variables}
+win: 2D diagram displayed on the screen
+\subsubsection{Assumptions}
+
+
+\subsubsection{Access Routine Semantics}
+
+\noindent  plot($t$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\theta$: $\mathbb{R}$):
+\begin{itemize}
+\item transition: Modify win to display a plot where the vertical axis
+  is the angle of the pendulum and the position of the cart.  The time should run from $t_\text{start}$ to $t_\text{span}$.
+\item exception: none
+\end{itemize}
+
+
+\subsubsection{Local Functions}
+\newpage
+
+
+
 \bibliographystyle {plainnat}
-\bibliography {../../../refs/References}
+\bibliography {reference.bib}
 
 \newpage
 
 \section{Appendix} \label{Appendix}
-
-\wss{Extra information if required}
-
+\begin{longtable}{l p{12cm}}
+\caption{Possible Exceptions} \\
+\toprule
+\textbf{Message ID} & \textbf{Error Message} \\
+\midrule
+FileError & Error: The expected file does not exist. \\
+InvalidFunction & Error: The function of external force must be only the function of time.\\
+Invalid Mass of the Pendulum& Error: The mass of the pendulum should be positive.\\
+Invalid Length of the Pendulum&Error: The length of the pendulum should be positive. \\
+Invalid Mass of the Cart&Error: The mass of the cart should be positive.\\
+Invalid Value of the Car Friction&Error: The $friction$ must be greater that zero.\\
+InvalidOutput& Error: The angle and velocity of the pendulum must be greater that zero.\\
+ODE\_Error&Error: When fails to solve the ODE.\\
+\bottomrule
+\end{longtable}
 \end{document}

@@ -47,7 +47,8 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 March 1, 2023 & 1.0 & Created the document and fill initial data\\
-March 9, 2023 & 2.0 & Updated modules and add module hierarchy diagram\\
+March 9, 2023 & 1.1 & Updated modules and added module hierarchy diagram\\
+March 17, 2023 & 1.2 & Merged two ODE modules and updated the document based on that.\\
 \bottomrule
 \end{tabularx}
 
@@ -175,8 +176,7 @@ decisions will be changed.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucInput}:] There will always be a source of input data external to the software.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucOutput}:] Output data are displayed to the output device.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucGoal}:] The goal of the system is to calculate the position of the cart and the angle of pendulum.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructureC}:] The equation of motion of the cart can be defined using parameters defined in the input parameters module.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructureP}:] The equation of motion of the pendulum can be defined using parameters defined in the input parameters module.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructureC}:] The equation of motion of the cart and pendulum can be defined using parameters defined in the input parameters module.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucEqM}:] How the equations of motions of the cart and the pendulum are defined using the specification of the system due to laws of Physics.
  
 \end{description}
@@ -191,8 +191,8 @@ This section provides an overview of the module design. Modules are summarized i
 \item [\refstepcounter{mnum} \mthemnum \label{mCons}:] 
 Constant Parameter Module
 \item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Parameters Module
-\item [\refstepcounter{mnum} \mthemnum \label{mODEC}:] The cart equation of motion ODE Module
-\item [\refstepcounter{mnum} \mthemnum \label{mODEP}:] The pendulum equation of motion ODE Module
+\item [\refstepcounter{mnum} \mthemnum \label{mODEC}:] The Equation of Motion ODE Module
+
 \item [\refstepcounter{mnum} \mthemnum \label{mControl}:] IP Control Module
 \item [\refstepcounter{mnum} \mthemnum \label{mSolver}:] ODE Solver Module
 \item [\refstepcounter{mnum} \mthemnum \label{mPlot}:] Plotting Module
@@ -218,8 +218,7 @@ Note that \mref{mHH} is a commonly used module and is already implemented by the
 \multirow{5}{0.3\textwidth}{Behaviour-Hiding Module} & Input Parameters Module\\
 & Output Parameters Module\\
 & Constant Parameter Module\\
-&The cart equation of motion ODE Module\\
-& The pendulum equation of motion ODE Module\\
+&The Equation of Motion ODE Module\\
 & IP Control Module\\
 \midrule
 
@@ -235,7 +234,7 @@ Note that \mref{mHH} is a commonly used module and is already implemented by the
 
 \section{Connection Between Requirements and Design} \label{SecConnection}
 
-The design of the system is intended to satisfy the requirements developed in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{SRS}. In this stage, the system is decomposed into modules. The connection
+The design of the system is intended to satisfy the requirements described in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{SRS}. In this stage, the system is decomposed into modules. The connection
 between requirements and modules is listed in Table~\ref{TblRT}.
 \begin{table}[H]
 \centering
@@ -244,8 +243,8 @@ between requirements and modules is listed in Table~\ref{TblRT}.
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
 R1 &  \mref{mHH}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mParams}, \mref{mControl}\\
-R3 & \mref{mCons}, \mref{mODEC}, \mref{mODEP}, \mref{mControl}, \mref{mSolver}, \mref{mDS}\\
+R2 & \mref{mParams}, \mref{mCons}, \mref{mControl}\\
+R3 & \mref{mCons}, \mref{mODEC}, \mref{mControl}, \mref{mSolver}, \mref{mDS}\\
 R4 & \mref{mHH}, \mref{mOutput}, \mref{mControl}, \mref{mPlot}\\
 
 \bottomrule
@@ -292,7 +291,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \begin{description}
 \item[Secrets:] The input data required for IP Simulator to run the simulation.
 
-\item[Services:]This module reads input data from input file (including the mass of the pendulum, the mass of the cart, the length of the pendulum, the friction of the cart, and the external force) and stores them in the data structures. Then checks if the physical and software are met. It throws a related error if inputs are not valid.
+\item[Services:]This module reads input data from input file (including the mass of the pendulum, the mass of the cart, the length of the pendulum, the friction of the cart, and the external force as a function of time) and stores them in the data structures. Then checks if the physical and software are met. It throws a related error if inputs are not valid.
 \item[Implemented By:] IP Simulator
 \end{description}
 
@@ -308,7 +307,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 
 \begin{description}
 \item[Secrets:] The format and structure of the output data.
-\item[Services:] Outputs the results of the calculations, including the position of the cart and the angle of the pendulum, stores them and verifies that the output parameters comply with physical and software constraints.
+\item[Services:] Outputs the results of the calculations, including the position of the cart and the angle of the pendulum over time, stores them and verifies that the output parameters comply with physical and software constraints.
 % verify them and 
 \item[Implemented By:] IP Simulator
 \end{description} 
@@ -316,22 +315,15 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 
 
 
-\subsubsection{The cart equation of motion ODE Module (\mref{mODEC})}
+\subsubsection{The Equation of Motion ODE Module (\mref{mODEC})}
 
 \begin{description}
-\item[Secrets:] The ODEs for solving the position of the cart, using the input parameters.
+\item[Secrets:] The ODEs for finding the position of the cart and  the angle of the pendulum, using the input parameters.
 \item[Services:] Defines the ODE using the parameters in the input parameters module.
 
 \item[Implemented By:] IP Simulator
 \end{description} 
 
-\subsubsection{The pendulum equation of motion ODE Module (\mref{mODEP})}
-\begin{description}
-\item[Secrets:] The ODEs for finding the angle of the pendulum, using the input parameters.
-\item[Services:] Defines the ODE using the parameters in the input parameters module.
-
-\item[Implemented By:] IP Simulator
-\end{description} 
 
 \subsubsection{IP Control Module(\mref{mControl})}
 
@@ -370,7 +362,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \subsubsection{ Data Structure Module (\mref{mDS})}
 
 \begin{description}
-\item[Secrets:] The data structure for a sequence data type.
+\item[Secrets:] The data structure for storing data types.
 \item[Services:] Provides creating an array, reading a specific entry, manipulating, including building an array, and storing the data.
 \item[Implemented By:] Python
 \end{description}
