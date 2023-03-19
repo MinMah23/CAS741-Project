@@ -256,7 +256,7 @@ etc.  See Appendix (Section~\ref{Appendix}) for the complete list of exceptions 
 
 \noindent InputM.$m_c$:
 \begin{itemize}
-\item output: \textit{out} :=$m_c$
+\item output: \textit{out} := $m_c$
 \item exception: none
 \end{itemize}
 
@@ -266,7 +266,7 @@ etc.  See Appendix (Section~\ref{Appendix}) for the complete list of exceptions 
 \item exception: none
 \end{itemize}\noindent 
 
-\noindent /InputM.$f\_external(t)$:
+\noindent InputM.$f\_external(t)$:
 \begin{itemize}
 \item output: \textit{out} := $f\_external(t)$
 \item exception: none
@@ -298,7 +298,7 @@ None
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
  output& $fOName$: string, $t$$: \mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
- \mathbb{R}$ & - & -\\
+ \mathbb{R}$ & Output file & -\\
 \hline
 verify\_out&  [$x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
  \mathbb{R}$] & - & InvalidOutput \\
@@ -561,8 +561,9 @@ None
 \begin{itemize}
 \item output: $out := \textbf{y}(t)$ where 
 $$\textbf{y}(t) = \textbf{y}_\text{iniCond} + \int_{t_\text{start}}^{t_\text{span}} \textbf{f}(s, \textbf{y}(s)) ds$$ 
-$y(t)$ is calculated from $t = t_\text{start}$ to $t = t_\text{span}$.\\
-We have two coupled ODE in the IP which $s$ is $\theta$ the first one and $x$ in the second one. 
+$y(t)$ is calculated from $t = t_\text{start}$ to $t = t_\text{span}$, and the $\textbf{y}_\text{iniCond}$ is the initial conditions for solving the ODE.\\
+We have two coupled ODE in the IP, which the first one describes the motion of the cart and the second one describes the motion of the pendulum.
+
 \item exception: $exc :=$ ( ODE Solver Fails $\Rightarrow$ ODE\_ERR)
 \end{itemize}
 
@@ -613,6 +614,7 @@ win: 2D diagram displayed on the screen
 
 
 \subsubsection{Local Functions}
+None
 \newpage
 
 
@@ -623,7 +625,7 @@ win: 2D diagram displayed on the screen
 \newpage
 
 \section{Appendix} \label{Appendix}
-\begin{longtable}{l p{12cm}}
+\begin{longtable}{l p{9cm}}
 \caption{Possible Exceptions} \\
 \toprule
 \textbf{Message ID} & \textbf{Error Message} \\
