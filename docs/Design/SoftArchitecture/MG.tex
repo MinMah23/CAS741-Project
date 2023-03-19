@@ -153,7 +153,7 @@ adapted here is called design for change. Anticipated changes are numbered by \t
 \item[\refstepcounter{acnum} \actheacnum \label{acVerify}:] The constraints on
   the input parameters.
 \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] The format of the  final output data.
-\item[\refstepcounter{acnum} \actheacnum \label{acDS}:] The choice of data structures used for storing and manipulating the data.
+\item[\refstepcounter{acnum} \actheacnum \label{acDS}:] The choice of data structures used for differentoperations on the data.
 \item[\refstepcounter{acnum} \actheacnum \label{acVerifyOut}:] The constraints on the output results.
 \item[\refstepcounter{acnum} \actheacnum \label{acODEsC}:] How the governing Ordinary Differential Equation (ODE) for the cart is defined using the input parameters.
 \item[\refstepcounter{acnum} \actheacnum \label{acODEsP}:] How the governing ODE for the pendulum is defined using the input parameters.
@@ -291,17 +291,19 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \begin{description}
 \item[Secrets:] The input data required for IP Simulator to run the simulation.
 
-\item[Services:]This module reads input data from input file (including the mass of the pendulum, the mass of the cart, the length of the pendulum, the friction of the cart, and the external force as a function of time) and stores them in the data structures. Then checks if the physical and software are met. It throws a related error if inputs are not valid.
+\item[Services:]This module reads input data from input file (including the mass of the pendulum, the mass of the cart, the length of the pendulum, the friction of the cart, and the external force as a function of time) and stores them in the data structures. Then checks if the physical and software constraints are met. It throws a related error if inputs are not valid.
 \item[Implemented By:] IP Simulator
+\item[Type of Module:] Abstract Data Type
 \end{description}
 
 
 \subsubsection{Constant Parameter Module (\mref{mCons})}
 \begin{description}
 \item[Secrets:] The constant values used in the code.
-\item[Services:] Stores all the constant values, including parameters, constraints and conditions on the input/output values that are mentioned in the table of specification parameters in the SRS document.
+\item[Services:] Stores all the constant values, including constraints and conditions on the input/output values that are mentioned in the table of specification parameters in the SRS document.
 
 \item[Implemented By:] IP Simulator
+\item[Type of Module:] Record
 \end{description} 
 \subsubsection{Output Parameters Module (\mref{mOutput})}
 
@@ -310,6 +312,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \item[Services:] Outputs the results of the calculations, including the position of the cart and the angle of the pendulum over time, stores them and verifies that the output parameters comply with physical and software constraints.
 % verify them and 
 \item[Implemented By:] IP Simulator
+\item[Type of Module:] Abstract Data Type
 \end{description} 
 
 
@@ -322,6 +325,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \item[Services:] Defines the ODE using the parameters in the input parameters module.
 
 \item[Implemented By:] IP Simulator
+\item[Type of Module:] Abstract Object
 \end{description} 
 
 
@@ -331,6 +335,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \item[Secrets:] Execution flow of the IP Simulator. 
 \item[Services:] Provides the main program and calls the different modules in the appropriate order.
 \item[Implemented By:] IP Simulator
+\item[Type of Module:] Abstract Data Type
 \end{description} 
 
 
@@ -349,6 +354,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \item[Secrets:] The algorithm to solve a system of first or higher orders ODEs with initial values.
 \item[Services:] Solves an ODE using the governing equation, initial conditions, and numerical parameters.
 \item[Implemented By:] Python
+\item[Type of Module:] Library
 \end{description}
 
 \subsubsection{Plotting Module (\mref{mPlot})}
@@ -357,6 +363,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \item[Secrets:] The data structures and algorithms for plotting the output data.
 \item[Services:] Provides a plot function.
 \item[Implemented By:] Python
+\item[Type of Module:] Library
 \end{description}
 
 \subsubsection{ Data Structure Module (\mref{mDS})}
@@ -365,6 +372,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \item[Secrets:] The data structure for storing data types.
 \item[Services:] Provides creating an array, reading a specific entry, manipulating, including building an array, and storing the data.
 \item[Implemented By:] Python
+\item[Type of Module:] Library
 \end{description}
 
 \section{Traceability Matrix} \label{SecTM}
