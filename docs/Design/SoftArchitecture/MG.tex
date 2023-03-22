@@ -33,7 +33,7 @@
 
 \begin{document}
 
-\title{Module Guide for IP simulator} 
+\title{Module Guide for IP Simulator} 
 \author{Mina Mahdipour}
 \date{\today}
 
@@ -49,6 +49,7 @@
 March 1, 2023 & 1.0 & Created the document and fill initial data\\
 March 9, 2023 & 1.1 & Updated modules and added module hierarchy diagram\\
 March 17, 2023 & 1.2 & Merged two ODE modules and updated the document based on that.\\
+March 21, 2023 & 1.3 & Updated according to feedback from reviewers.\\
 \bottomrule
 \end{tabularx}
 
@@ -157,7 +158,7 @@ adapted here is called design for change. Anticipated changes are numbered by \t
 \item[\refstepcounter{acnum} \actheacnum \label{acVerifyOut}:] The constraints on the output results.
 \item[\refstepcounter{acnum} \actheacnum \label{acODEsC}:] How the governing Ordinary Differential Equation (ODE) for the cart is defined using the input parameters.
 \item[\refstepcounter{acnum} \actheacnum \label{acODEsP}:] How the governing ODE for the pendulum is defined using the input parameters.
-\item[\refstepcounter{acnum} \actheacnum \label{acSolver}:] The algorithm used for solving the equations of motions ODEs.
+\item[\refstepcounter{acnum} \actheacnum \label{acSolver}:] The algorithm used for solving the equations of motions.
 \item[\refstepcounter{acnum} \actheacnum \label{acPlot}:] How the plotting of the output is implemented.
 \item[\refstepcounter{acnum} \actheacnum \label{acControl}:] The overall control of the calculation.
 \end{description}
@@ -175,8 +176,8 @@ decisions will be changed.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucInput}:] There will always be a source of input data external to the software.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucOutput}:] Output data are displayed to the output device.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucGoal}:] The goal of the system is to calculate the position of the cart and the angle of pendulum.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructureC}:] The equation of motion of the cart and pendulum can be defined using parameters defined in the input parameters module.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucGoal}:] The goal of the system is to calculate the cart position and the pendulum angle.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructureC}:] The equation of motion of the cart and the pendulum can be defined using parameters defined in the input parameters module.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucEqM}:] How the equations of motions of the cart and the pendulum are defined using the specification of the system due to laws of Physics.
  
 \end{description}
@@ -191,7 +192,7 @@ This section provides an overview of the module design. Modules are summarized i
 \item [\refstepcounter{mnum} \mthemnum \label{mCons}:] 
 Constant Parameter Module
 \item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Parameters Module
-\item [\refstepcounter{mnum} \mthemnum \label{mODEC}:] The Equation of Motion ODE Module
+\item [\refstepcounter{mnum} \mthemnum \label{mODEC}:] Motion ODE  Module
 
 \item [\refstepcounter{mnum} \mthemnum \label{mControl}:] IP Control Module
 \item [\refstepcounter{mnum} \mthemnum \label{mSolver}:] ODE Solver Module
@@ -218,7 +219,7 @@ Note that \mref{mHH} is a commonly used module and is already implemented by the
 \multirow{5}{0.3\textwidth}{Behaviour-Hiding Module} & Input Parameters Module\\
 & Output Parameters Module\\
 & Constant Parameter Module\\
-&The Equation of Motion ODE Module\\
+&Motion ODE  Module\\
 & IP Control Module\\
 \midrule
 
@@ -236,22 +237,7 @@ Note that \mref{mHH} is a commonly used module and is already implemented by the
 
 The design of the system is intended to satisfy the requirements described in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{SRS}. In this stage, the system is decomposed into modules. The connection
 between requirements and modules is listed in Table~\ref{TblRT}.
-\begin{table}[H]
-\centering
-\begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
-\toprule
-\textbf{Req.} & \textbf{Modules}\\
-\midrule
-R1 &  \mref{mHH}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mParams}, \mref{mCons}, \mref{mControl}\\
-R3 & \mref{mCons}, \mref{mODEC}, \mref{mControl}, \mref{mSolver}, \mref{mDS}\\
-R4 & \mref{mHH}, \mref{mOutput}, \mref{mControl}, \mref{mPlot}\\
 
-\bottomrule
-\end{tabular}
-\caption{Trace Between Requirements and Modules}
-\label{TblRT}
-\end{table}
 
 \section{Module Decomposition} \label{SecMD}
 
@@ -293,14 +279,14 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 
 \item[Services:]This module reads input data from input file (including the mass of the pendulum, the mass of the cart, the length of the pendulum, the friction of the cart, and the external force as a function of time) and stores them in the data structures. Then checks if the physical and software constraints are met. It throws a related error if inputs are not valid.
 \item[Implemented By:] IP Simulator
-\item[Type of Module:] Abstract Data Type
+\item[Type of Module:] Abstract Object
 \end{description}
 
 
 \subsubsection{Constant Parameter Module (\mref{mCons})}
 \begin{description}
 \item[Secrets:] The constant values used in the code.
-\item[Services:] Stores all the constant values, including constraints and conditions on the input/output values that are mentioned in the table of specification parameters in the SRS document.
+\item[Services:] Stores all the constant values, including constraints on the input/output values that are mentioned in the table of specification parameters in the SRS document.
 
 \item[Implemented By:] IP Simulator
 \item[Type of Module:] Record
@@ -309,20 +295,20 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 
 \begin{description}
 \item[Secrets:] The format and structure of the output data.
-\item[Services:] Outputs the results of the calculations, including the position of the cart and the angle of the pendulum over time, stores them and verifies that the output parameters comply with physical and software constraints.
+\item[Services:] Outputs the results of the calculations, including the cart position and the pendulum angle over time, stores them and verifies that the output parameters comply with physical and software constraints.
 % verify them and 
 \item[Implemented By:] IP Simulator
-\item[Type of Module:] Abstract Data Type
+\item[Type of Module:] Abstract Object
 \end{description} 
 
 
 
 
-\subsubsection{The Equation of Motion ODE Module (\mref{mODEC})}
+\subsubsection{Motion ODE  Module (\mref{mODEC})}
 
 \begin{description}
-\item[Secrets:] The ODEs for finding the position of the cart and  the angle of the pendulum, using the input parameters.
-\item[Services:] Defines the ODE using the parameters in the input parameters module.
+\item[Secrets:] The ODEs for finding the position of the cart and  the angle of the pendulum, using the input parameters. The equations are coupled to each other, so this module is responsible for defining both.
+\item[Services:] Defines the ODEs using the parameters in the input parameters module.
 
 \item[Implemented By:] IP Simulator
 \item[Type of Module:] Abstract Object
@@ -335,7 +321,7 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 \item[Secrets:] Execution flow of the IP Simulator. 
 \item[Services:] Provides the main program and calls the different modules in the appropriate order.
 \item[Implemented By:] IP Simulator
-\item[Type of Module:] Abstract Data Type
+\item[Type of Module:] Abstract Object
 \end{description} 
 
 
@@ -377,12 +363,27 @@ Only the leaf modules in the hierarchy have to be implemented. If a dash
 
 \section{Traceability Matrix} \label{SecTM}
 
-Table \ref{TblACT} shows the traceability matrix between the modules and the anticipated changes.
-The traceability matrix between the modules the
-requirements has been shown table \ref{TblRT}.
+Table \ref{TblRT} shows the traceability matrix between the modules and the
+requirements. The traceability matrix between the modules and the anticipated changes has been shown in table \ref{TblACT}.
 
 % the table should use mref, the requirements should be named, use something
 % like fref
+\begin{table}[H]
+\centering
+\begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
+\toprule
+\textbf{Req.} & \textbf{Modules}\\
+\midrule
+R1 &  \mref{mHH}, \mref{mParams}, \mref{mControl}\\
+R2 & \mref{mParams}, \mref{mCons}, \mref{mControl}\\
+R3 & \mref{mCons}, \mref{mODEC}, \mref{mControl}, \mref{mSolver}, \mref{mDS}\\
+R4 & \mref{mHH}, \mref{mOutput}, \mref{mControl}, \mref{mPlot}\\
+
+\bottomrule
+\end{tabular}
+\caption{Trace Between Requirements and Modules}
+\label{TblRT}
+\end{table}
 
 
 \begin{table}[H]
