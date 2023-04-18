@@ -1,7 +1,7 @@
 # Define variables
 PYTHON = python3
 PIP = pip3
-PROJECT_DIR = CAS741-Project/src
+PROJECT_DIR = CAS741-Project
 
 # Define targets
 .PHONY: setup run test clean
@@ -12,11 +12,11 @@ setup:
 
 # Run the project
 run:
-    $(PYTHON) $(PROJECT_DIR)/mainM.py
+    $(PYTHON) $(PROJECT_DIR)/src/mainM.py
 
 # Run tests using pytest
 test:
-    $(PYTHON) -m pytest CAS741-Project/test/
+    $(PYTHON) -m pytest $(PROJECT_DIR)/test/
 
 # Clean up any temporary files
 clean:
