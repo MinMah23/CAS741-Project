@@ -7,7 +7,7 @@
 
 \author{Mina Mahdipour}
 
-\date{}
+\date{\today}
 
 \input{}
 
@@ -21,40 +21,40 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-20 Jan. 2023 & Mina Mahdipour & First version of document\\
-25 Jan. 2023 & Mina Mahdipour & Changes in problem and input-output sections\\
-16 Feb. 2023 & Mina Mahdipour & Refine some part accoring to SRS\\
+January 20, 2023 & Mina Mahdipour & First version of document\\
+January 25, 2023 & Mina Mahdipour & Changes in problem and input-output sections\\
+March 29, 2023 & Mina Mahdipour & Checking consistencies in all artifacts\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
 
-An inverted pendulum is a pendulum upside down with it pivot point under its center of mass. it is unstable and without additional help and by any small disturbances will fall over. To stay upright, it needs a controller to keep its center of mass above its pivot point even when disturbances occur. The objective of the control system is to balance the inverted pendulum by applying a force to the place that the pendulum is attached to.
-
-Inverted Pendulums are Everywhere, from  the human posture systems, Segway, to the launching of a rocket.
+An inverted pendulum is a pendulum upside down with it pivot point under its center of mass. It is unstable and without additional help and by any small disturbances will fall over. To stay upright, it needs a controller to keep its center of mass above its pivot point even when disturbances occur. The objective of the control system is to balance the inverted pendulum by applying a force to the place that the pendulum is attached to.\\
+Inverted Pendulums are everywhere, from the human posture system, Segway, to the launching of a rocket.
 
 \subsection{Problem}
 
-Simulating the system of One unstable pole mounted on a cart that can move horizontally is the main problem. There are two degrees of freedom. The horizontally movement of cart and the pendulum angle with vertical axis. Hence there are two equations of motion, one for each. Solving these equations describe the motion needed on the cart to keep the whole system at the equilibrium point.
+Simulating the system of an unstable pole mounted on a cart, which can move horizontally, is the main problem of this project. There are two degrees of freedom in this problem, the horizontally movement of cart and the pendulum angle with vertical axis. Therefore, there are two equations of motion, one for each. Solving these equations describe the motion of the cart and the pendulum.
 
 \subsection{Inputs and Outputs}
 
-The inputs of the system will be the the cart and pendulum specifications such as mass of the card, mass of the pendulum, pendulum length, and also external force to the cart which moves it, and the outputs are the angular position of the pendulum, and the horizontal position of the cart.
+The inputs of the system will be the cart and pendulum specifications such as mass of cart, mass of pendulum, pendulum length, inertia of the pendulum, the coefficient of friction of the cart, and also an external force to the cart which can be a function of time.\\
+The outputs are the angular position of the pendulum and the horizontal position of the cart.
 
 \subsection{Stakeholders}
 
-As the inverted pendulum is widely used as a benchmark for testing control strategies and algorithms, and it can be used in different applications, so the potential stakeholders could be all the related industries. On the other hand, it is a classic problem in dynamics and control theory, so the final system can be used in high school as an educational material.
+As the inverted pendulum is widely used as a benchmark for testing control strategies and algorithms, and it can be used in different applications, the potential stakeholders could be all the related industries using this system. On the other hand, it is a classic problem in dynamics and control theory, so the final system can be used in high schools as an educational material.
 
 \subsection{Environment}
 
-There is no limitation and the final software will be compatible with Windows, MacOS, and Linux operating systems.
+There is no limitation on this system and the final software will be compatible with different operating systems such as Windows, MacOS, and Linux.
 
 \section{Goals}
 
 \begin{enumerate}
-  \item Designing a software system which simulates the behaviour of the system.
-  \item	Measuring the effect of the different parameters.
+  \item Designing a software system which simulates the behavior of the system.
+  \item Showing the effects of the different parameters values on the system behavior.
 \end{enumerate}
 \section{Stretch Goals}
 \begin{enumerate}
