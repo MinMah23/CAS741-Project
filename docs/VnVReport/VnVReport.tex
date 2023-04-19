@@ -1,8 +1,11 @@
 \documentclass[12pt, titlepage]{article}
-
+\usepackage{float}
+\usepackage{amsmath} 
+\usepackage{pdflscape}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{graphicx}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -10,19 +13,17 @@
     linkcolor=red,
     urlcolor=blue
 }
-\usepackage[round]{natbib}
+\usepackage[numbers]{natbib}
 
-\input{../Comments}
-\input{../Common}
+\input{}
 
 \begin{document}
 
-\title{Verification and Validation Report: \progname} 
-\author{\authname}
+\title{Verification and Validation Report: IP Simulator} 
+\author{Mina Mahdipour}
 \date{\today}
 	
 \maketitle
-
 \pagenumbering{roman}
 
 \section{Revision History}
@@ -30,8 +31,9 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+April 16, 2023 & 1.0 & First draft of report\\
+April 18, 2023 & 1.1 & Added non functional and unit tests\\
+
 \bottomrule
 \end{tabularx}
 
@@ -45,10 +47,16 @@ Date 2 & 1.1 & Notes\\
   \textbf{symbol} & \textbf{description}\\
   \midrule 
   T & Test\\
+    TC & Test Case\\
+  SRS & Software Requirements Specification\\
+  VnV & Verification and Validation\\
+  IP Simulator & Inverted Pendulum Simulator\\
+  MG& Module Guide\\
+  MIS&Module Interface Specification\\
   \bottomrule
 \end{tabular}\\
 
-\wss{symbols, abbreviations or acronyms -- you can reference the SRS tables if needed}
+Section 1 of \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS/SRS.pdf}{SRS} document can be referred by the reader for complete symbols used within the system.
 
 \newpage
 
@@ -62,46 +70,612 @@ Date 2 & 1.1 & Notes\\
 
 \pagenumbering{arabic}
 
-This document ...
+This document provides a summary of the verification and validation
+(VnV) of the IP Simulator software. The test cases listed in the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/VnVPlan}{VnV plan} were executed, and this document contains a summary of the results. Sections \ref{FunR} and \ref{nonFunR} summarize the results of the functional and non-functional requirements respectively. Subsequent sections summarize the test results in detail.
 
-\section{Functional Requirements Evaluation}
+\section{Functional Requirements Evaluation}\label{FunR}
+\subsection{Static Testing}
+\subsubsection{Code Walkthrough}
+Unfortunately, because of time, I could not do the static test.\\
+\subsection{Dynamic Testing}
+This section outlines the results of tests in table 2 in section 5.1 of the \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/VnVPlan}{VnV plan}. All the tests are related to input validation.\\
+\subsubsection{Input Validation}
+Table \ref{tbl_tc1} sets up the environment to run the test TC-Valid-Inputs, table \ref{tbl_res1} shows the expected output that is the result of running \cite{al-khazraji_2022}, and actual outputs are the outputs of the IP Simulator.\\
+\begin{table}[ht]
+\caption{TC-Valid-Inputs} \label{tbl_tc1}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&\textbf{Initial Conditions}&& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & duration \\ \hline
+0 & 0 & 0.1 & 0 &0.3 & 0.4& 1.5& 20& 0.1 &1.0000\\
+ \hline
+\end{tabular}
+\end{table}	
+  
 
-\section{Nonfunctional Requirements Evaluation}
+\begin{table}[ht]
+\caption{The results of TC-Valid-Inputs} \label{tbl_res1}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c|c c|} 
+ \hline
+&\textbf{Expected Output}& \textbf{Actual Output} &  \\ \hline
+$x_i$&$\theta{i}$ & $x_i$&$\theta{i}$  \\ \hline
+6.4817 &0.5560&  6.4483 &0.5583\\
+ \hline
+\end{tabular}
+\end{table}	
+Table \ref{tbl_tc2} sets up the environment to run the test TC-V-Zero-Input-$b$, table \ref{tbl_res2} shows the expected output that is the result of running \cite{al-khazraji_2022}, and actual outputs are the outputs of the IP Simulator.\\
+ 
+\begin{table}[h!]
+\caption{TC-V-Zero-Input-$b$} \label{tbl_tc2}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & Time \\ \hline
+0 & 0 & 0.1 & 0 & 0.5 & 0.2 & 0.3 & 50 & 0 & 6.000\\
+ \hline
+\end{tabular}
+\end{table}	
 
-\subsection{Usability}
-		
-\subsection{Performance}
+\begin{table}[h!]
+\caption{The results of TC-V-Zero-Input-$b$} \label{tbl_res2}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c|c c|} 
+ \hline
+&\textbf{Expected Output}& \textbf{Actual Output} &  \\ \hline
+$x_i$&$\theta{i}$ & $x_i$&$\theta{i}$  \\ \hline
+ 1043 & 0.57 & 1047.60 & 0.53\\
+ \hline
+\end{tabular}
+\end{table}	
+Table \ref{tbl_tc3} sets up the environment to run the test TC-V-Zero-Input-$f$, table \ref{tbl_res3} shows the expected output that is the result of running \cite{al-khazraji_2022}, and actual outputs are the outputs of the IP Simulator.\\
 
-\subsection{etc.}
-	
+\begin{table}[h!]
+\caption{TC-V-Zero-Input-$f$} \label{tbl_tc3}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & Time \\ \hline
+0 & 0 & 0.1 & 0 & 0.5 & 0.2 & 0.3 & 0 & 0.2 & 1.000\\
+ \hline
+\end{tabular}
+\end{table}	
+
+\begin{table}[h!]
+\caption{The results of TC-V-Zero-Input-$f$} \label{tbl_res3}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c|c c|} 
+ \hline
+&\textbf{Expected Output}& \textbf{Actual Output} &  \\ \hline
+$x_i$&$\theta{i}$ & $x_i$&$\theta{i}$  \\ \hline
+0.3121 & 0.8265 & 0.3120 & 0.8260\\
+ \hline
+\end{tabular}
+\end{table}	
+
+All the tests related to checking the validity of $m_c$, including I-Zero-Input-$m_c$, Neg-Input-$m_c$, OutofBound-$m_c$, and Null-Input-$m_c$ are passed successfully and figure \ref{cart} shows the result that a Value Error has raised.
+
+ \begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{cart.jpg}
+ \caption{Tests for checking the validity of mass of the cart}
+ \label{cart}
+ \end{center}
+ \end{figure}
+All the tests related to checking the validity of $m_p$, including I-Zero-Input-$m_p$, Neg-Input-$m_p$, OutofBound-$m_p$, and Null-Input-$m_p$ are passed and figure \ref{pend} shows the result that a Value Error has raised.
+
+
+  \begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{pend.jpg}
+ \caption{Tests for checking the validity of mass of the pendulum}
+ \label{pend}
+ \end{center}
+ \end{figure}
+ 
+ All the tests related to checking the validity of $l_p$, including I-Zero-Input-$l_p$, Neg-Input-$l_p$, OutofBound-$l_p$, and Null-Input-$l_p$ are passed and figure \ref{len} shows the result that a Value Error has raised.
+
+  \begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{len.jpg}
+ \caption{Tests for checking the validity of length of pendulum}
+ \label{len}
+ \end{center}
+ \end{figure}
+  All the tests related to checking the validity of $b$, including Neg-Input-$b$and Null-Input-$b$ are passed and figure \ref{friction} shows the result that a Value Error has been raised.
+
+  \begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{friction.jpg}
+ \caption{Tests for checking the validity of cart friction}
+ \label{friction}
+ \end{center}
+ \end{figure}
+
+\subsubsection{Output Validation}
+This section outline the validation of outputs according to table 3 in section 5.1.2 in \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/VnVPlan}{VnV plan}. The expected values are from \cite{al-khazraji_2022} while actual outputs are the result of running the IP Simulator. Table \ref{out1_res} shows the outputs considering the initial condition corresponding to table \ref{out1}.
+
+\begin{table}[ht]
+\caption{TC-IP-Out-1} \label{out1}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & Time \\ \hline
+0.2&0&0.3&0& 0.2 & 1.5& 1.3& 50 & 0.1 & 3.000\\
+ \hline
+\end{tabular}
+\end{table}	
+
+\begin{table}[ht]
+\caption{The results of TC-IP-Out-1} \label{out1_res}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c|c c|} 
+ \hline
+&\textbf{Expected Output}& \textbf{Actual Output} &  \\ \hline
+$x_i$&$\theta{i}$ & $x_i$&$\theta{i}$  \\ \hline
+109.000 & 0.6984&109.1997&  0.7002 \\
+ \hline
+\end{tabular}
+\end{table}	
+
+Table \ref{out2} investigates TC-IP-Out-2 of table 3 in VnV plan while table \ref{out2_res2} displays the outputs.
+\begin{table}[ht]
+\caption{TC-IP-Out-2} \label{out2}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & Time \\ \hline
+0&0&0.1&0& 2.5 & 0.1& 0.3& 20 & 0 & 3.000\\
+ \hline
+\end{tabular}
+\end{table}	
+
+\begin{table}[ht]
+\caption{The results of TC-IP-Out-2} \label{out2_res2}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c|c c|} 
+ \hline
+&\textbf{Expected Output}& \textbf{Actual Output} &  \\ \hline
+$x_i$&$\theta{i}$ & $x_i$&$\theta{i}$  \\ \hline
+21.6257 & 0.4034 &21.5857 &  0.3934  \\
+ \hline
+\end{tabular}
+\end{table}
+Table \ref{out3_res3} has the output for environment has been set up by table \ref{out3} values.
+
+\begin{table}[ht]
+\caption{TC-IP-Out-3} \label{out3}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & Time \\ \hline
+0&0.2&0.1&0& 0.5 & 4& 1.3& 2 & 0.2 & 7.000\\
+ \hline
+\end{tabular}
+\end{table}	
+
+\begin{table}[ht]
+\caption{The results of TC-IP-Out-3} \label{out3_res3}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c|c c|} 
+ \hline
+&\textbf{Expected Output}& \textbf{Actual Output} &  \\ \hline
+$x_i$&$\theta{i}$ & $x_i$&$\theta{i}$  \\ \hline
+  11.0721&  0.9152 &11.1207 &  0.9282 \\
+ \hline
+\end{tabular}
+\end{table}	
+
+The initial values of parameters in table \ref{out4} will produce the outputs are shown in table \ref{out4_res4}.
+\begin{table}[ht]
+\caption{Test Case-2} \label{out4}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & Time \\ \hline
+0 & 0 & 0.3 & 0 & 0.7 & 0.4 & 1 & 0 & 0 & 4.000\\
+ \hline
+\end{tabular}
+\end{table}	
+
+\begin{table}[ht]
+\caption{Test Case-2} \label{out4_res4}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c|c c|} 
+ \hline
+&\textbf{Expected Output}& \textbf{Actual Output} &  \\ \hline
+$x_i$&$\theta{i}$ & $x_i$&$\theta{i}$  \\ \hline
+0.0000&0.0485&0.0001& 0.0453\\
+ \hline
+\end{tabular}
+\end{table}	
+
+
+
+
+\section{Nonfunctional Requirements Evaluation}\label{nonFunR}
+This section describes the tests that have been done to investigate the non-functional requirements including portability, usability, and correctness. All the test run manually as mentioned in section 5.2 of  \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/VnVPlan}{VnV plan}.
+
+\subsection{Portability\label{portability}}
+According to section 5.2.1 of \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/VnVPlan}{VnV plan}, to verify the portability of the tool, the software with the tests described in VnV plan have been performed manually in different OS, including Linux, Windows, and MacOS.\\
+The software has been developed and tested in Python 3.10.2 in Microsoft Windows 10 Enterprise and all the test passed.\\
+It is also run on Ubuntu 21.04 and passed the tests, however, we could not run the program on MacOS because of lacking the system resources.\\
+
+\subsection{Usability}\label{use}
+To evaluate the usability of the tool, we use the \cite{hinderks_schrepp_thomaschewski}, as discussed in section 5.2.2 of \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/VnVPlan}{VnV plan}. 
+The system has been tested against the usability test and survey by different people with varying levels of experience with inverted pendulum systems. The tester team includes an undergraduate Physics student, a high school student, and the domain expert who has a Ph.D. in Physics.\\
+At first, the software, the tests described in VnV plan, and the questionnaire were delivered to the tester team. They run the list of tests manually and tried any input test considering input criteria. Then they completed the questionnaire.\\
+ This survey considers six different factors (attractiveness, perspicuity, efficiency, dependability, stimulation, and novelty) through twenty-six randomized questions to minimize answer tendencies.\\
+
+Using the data analysis tool which is prepared by \cite{hinderks_schrepp_thomaschewski}, the feedback from the survey is analysed and the results are shown below. The tool does not produce an overall score for the user experience.\\
+Figure \ref{j2} display the mean of values assigned to each question by all the tester team. It is worth mentioning that the green up arrow besides the mean values means all the values are greater than mean value in benchmarks and figure \ref{j3} shows the mean value per each of items for usability test of IP Simulator.
+ \begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{j2.jpg}
+ \caption{The mean values and variances of all the responses to each question}
+ \label{j2}
+ \end{center}
+ \end{figure}
+
+Figure \ref{j1} shows the scaled value for all six factors and the tester team.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{j1.jpg}
+ \caption{Scale Means value per person}
+ \label{j1}
+ \end{center}
+ \end{figure}
+
+
+ \begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{j3.jpg}
+ \caption{Mean value per item}
+ \label{j3}
+ \end{center}
+ \end{figure}
+ As shown in figure \ref{j4}, all the mean values for factors measured in this survey are higher than the mean value for benchmarks.
+ \begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{j4.jpg}
+ \caption{Mean values and variance for each factor}
+ \label{j4}
+ \end{center}
+ \end{figure}
+\newpage
+\subsection{Accuracy \label{accuracy}}
+As described in section 5.2.3 \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/VnVPlan}{VnV plan}, to verify the accuracy of the software, we use the pseudo-oracle and compare the results of running IP Simulator software with the results of \cite{al-khazraji_2022} in the similar situation, with the same input values and the same initial conditions.\\
+Then we calculate the relative error and the error less than 0.01 is good enough to accept the accuracy of the program.\\
+the process has been done for different inputs and all the relative errors are in the acceptance range. Table \ref{zf} sets up the test with normal input and a zero value for function and table \ref{zfr} shows the maximum relative error for all the calculated values during the 20 seconds of simulation. Figure \ref{zf1} also shows the graphs of running two programs, the left picture shows the result of the IP Simulator in Python and the right one shows the results of running \cite{al-khazraji_2022} in Matlab.
+
+
+\begin{table}[ht]
+\caption{TC-normal values with zero function} \label{zf}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & duration \\ \hline
+0 & 0 & 0.1 & 0 & 0.3 & 0.4 & 1 & 0 & 0.1 &[0, 20]\\
+ \hline
+\end{tabular}
+\end{table}	
+
+\begin{table}[ht]
+\caption{Relative error for TC-normal values with zero function} 
+\label{zfr}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|} 
+ \hline
+&\textbf{Relative Error}&&\\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ \\ \hline
+  1.0000e-02 & 2.2130e-03 & 3.7380e-02 &  1.1755e-04
+\\ \hline
+\end{tabular}
+\end{table}	
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{acc-g-1.jpg}
+ \caption{TC-normal values with zero function}
+ \label{zf1}
+ \end{center}
+ \end{figure}
+
+
+The TC-normal values with zero function are repeated with the smaller time range, the previous test run during [0, 20], while this test runs from 0 to 5 seconds. Table \ref{timestepV} shows the parameter values, table \ref{timestepV_res} shows the relative error, and figure \ref{acc1} is a picture of running IP Simulator and \cite{al-khazraji_2022}.
+
+
+\begin{table}[ht]
+\caption{TC-normal values with zero function in a shorter time} \label{timestepV}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & duration \\ \hline
+0 & 0 & 0.1 & 0 & 0.3 & 0.4 & 1 & 0 & 0.1 &[0, 5]\\
+ \hline
+\end{tabular}
+\end{table}	
+
+\begin{table}[ht]
+\caption{Relative error for TC-normal values with zero function in a shorter time} \label{timestepV_res}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|} 
+ \hline
+&\textbf{Relative Error}&&\\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ \\ \hline
+  0.2700e-01 & 1.34130e-02 & 4.7560e-02 &  0.3215e-03
+\\ \hline
+\end{tabular}
+\end{table}	
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{acc2.jpg}
+ \caption{TC-normal values with zero function in a shorter time}
+ \label{acc1}
+ \end{center}
+ \end{figure}
+
+
+In this test, the $f$ that is the function exerted on the cart is not zero and it has the value of 20 \si{\newton} and the time duration exceeded. Table \ref{long} and table \ref{longres} show the set up and maximum relative error of this test. Figure \ref{longe30} shows the graphs for this test.
+
+
+\begin{table}[ht]
+\caption{TC-positive normal values in longer time} \label{long}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & duration \\ \hline
+0 & 0 & 0.1 & 0 & 0.3 & 0.4 & 1.5 & 20 & 0.1 &[0, 30]\\
+ \hline
+\end{tabular}
+\end{table}	
+
+
+\begin{table}[ht]
+\caption{Relative Error for TC-positive normal values in longer time} \label{longres}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|} 
+ \hline
+&\textbf{Relative Error}&&\\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ \\ \hline
+3.0000e-03 & 1.0802e-02 & 1.6030e-02 & 3.9120e-02
+\\ \hline
+\end{tabular}
+\end{table}	
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{acc3.jpg}
+ \caption{TC-positive normal values in a longer time}
+ \label{longe30}
+ \end{center}
+ \end{figure}
+
+
+Table \ref{norm} shows the repetition of TC-positive normal values in a longer time test but in a shorter duration and table \ref{normres} shows the maximum relative error for this test while figure \ref{norm20} is devoted to the graphs.\\
+
+\begin{table}[ht]
+\caption{TC-positive normal values in a shorter time} \label{norm}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & duration \\ \hline
+0 & 0 & 0.1 & 0 & 0.3 & 0.4 & 1.5 & 20 & 0.1 &[0, 20]\\
+ \hline
+\end{tabular}
+\end{table}	
+
+
+\begin{table}[ht]
+\caption{Relative Error for TC-positive normal values in shorter time} \label{normres}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|} 
+ \hline
+&\textbf{Relative Error}&&\\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ \\ \hline
+2.0000e-01& 3.4484-02 & 1.0000e-01 & 2.5804e-03
+\\ \hline
+\end{tabular}
+\end{table}	
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{acc4.jpg}
+ \caption{TC-positive normal values in shorter time}
+ \label{norm20}
+ \end{center}
+ \end{figure}
+
+
+And in this test, the parameters for the cart and pendulum have changed and like other tests, table \ref{diffIni} shows the input parameters and table \ref{diffInires} shows the result of this test. Finally, the figure \ref{diffIni_fig} shows the graphs of results.
+
+\begin{table}[ht]
+\caption{TC-normal positive values with different initial conditions} \label{diffIni}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|c c c c c|c|} 
+ \hline
+&&\textbf{Initial Conditions}& &  &  &  \textbf{Inputs} &  &&\textbf{Time}  \\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ & $m_p$ & $m_c$ & $l_p$ & $f$ & $b$  & duration \\ \hline
+2 & 0 & 1.5 & 0 & 0.1 & 0.1 & 0.5 & 10 & 0.1 & [0,10]\\
+ \hline
+\end{tabular}
+\end{table}	
+
+
+\begin{table}[ht]
+\caption{Relative Error for TC-normal positive values with different initial conditions} \label{diffInires}
+\vspace*{2mm}
+\centering
+ \begin{tabular}{|c c c c|} 
+ \hline
+&\textbf{Relative Error}&&\\ \hline
+$x_i$&$dx_i$&$\theta{i}$&$\dot{\theta_{i}}$ \\ \hline
+2.3750e-03 & 3.2971e-02 & 2.5346e-01 & 1.6598e-02
+\\ \hline
+\end{tabular}
+\end{table}	
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{acc5.jpg}
+ \caption{TC-normal positive values with different initial conditions}
+ \label{diffIni_fig}
+ \end{center}
+ \end{figure}
+
+
 \section{Comparison to Existing Implementation}	
+The existing implementation of inverted pendulum that is used to compare the result of IP Simulator, is \cite{al-khazraji_2022}. This program is implemented in Matlab and the details of comparison the results is discussed in section \ref{accuracy}.\\
 
-This section will not be appropriate for every project.
+\section{Unit Testing}\label{unittest}
+\subsection{Tests for Functional Requirements}
+We use \href{https://docs.pytest.org/en/7.2.x/}{Pytest} framework for unit, functional, and integration automated testing.\\
 
-\section{Unit Testing}
+\subsubsection{Constant Parameter Module}\label{cons}
+This module is suppose to store the constants for the software, including constraints on input values, simulation variables and gravity. The \href{https://github.com/MinMah23/CAS741-Project/blob/main/src/constantM.py}{$constantM.py$} implements this requirement and using Pytest this module is tested and verified by running \href{https://github.com/MinMah23/CAS741-Project/blob/main/test/test_constantM.py}{$test\_constantM.py$}.\\
+
+\subsubsection{Input Parameters Module}\label{param}
+This module is implemented in \href{https://github.com/MinMah23/CAS741-Project/blob/main/src/inputM.py}{$inputM.py$}, has three functions, the read\_inputs reads all the inputs from the file that users inserted, as described in section 6 in \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/Design/SoftDetailedDes}{MIS}. The constrains on the parameters are checked in verify\_inputs using Constant Parameter Module, and then if all the constraints are met, convert\_inputs prepares the parameters for the calculation process. \href{https://github.com/MinMah23/CAS741-Project/blob/main/test/test_inputM.py}{$Test\_inputM.py$} checks the function of this module.\\
+
+\subsubsection{Motion ODE Module}\label{ode}
+ \href{https://github.com/MinMah23/CAS741-Project/blob/main/src/odeM.py}{$OdeM.py$} implements Motion ODE Module, and defines the motion equation for the cart and pendulum with their specification.\\
+ 
+\subsubsection{ODE Solver Module}\label{odeS}
+ODEs defined in the motion ODE module in addition to initial conditions that Input Parameters Module reads, are passed to ODE Solver Module that is implemented in \href{https://github.com/MinMah23/CAS741-Project/blob/main/src/odeSolverM.py}{$odeSolverM.py$} and using $Scipy$ library in Python is solved.\\
+To verify motion ODE and ODE solver modules, we compare the result of running \cite{al-khazraji_2022} with the output of these modules in section \ref{accuracy}.\\
+
+\subsubsection{Output Module}\label{output}
+ \href{https://github.com/MinMah23/CAS741-Project/blob/main/src/outputM.py}{$OutputM.py$} is responsible to verify the outputs and writes them to the output file and to do that, it has two functions, verify\_output, which checks the constrains on the generated outputs and write\_output\_to\_file function that gives the output file and the output that includes an array of time and corresponding values of position of the cart, velocity of the cart, the angle position of the pendulum, and the velocity of the pendulum , writes this array to the specified file.\\
+ 
+\subsubsection{Plotting Module}
+This module gives the time and the output of ODE solver module and shows the results as a graph in \href{https://github.com/MinMah23/CAS741-Project/blob/main/src/plotM.py}{$plotM.py$}
+
+\subsubsection{IP Control Module}\label{main}
+
+IP control module runs all the modules in a right way in \href{https://github.com/MinMah23/CAS741-Project/blob/main/src/mainM.py}{$mainM.py$}. \href{https://github.com/MinMah23/CAS741-Project/blob/main/test/test_mainM.py}{$Test\_mainM.py$} verifies the function of output, plotting modules together with all modules and with a lot of different test cases in input file.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{test.jpg}
+ \caption{The result of running unit tests}
+ \label{unit test}
+ \end{center}
+ \end{figure}
+It is worth mentioning that IP Simulator accepts float number of function of time as the $f$, external applies to the cart. The function can be defined using $lambda$ in python. $CheckFunction$ module is responsible to dealing with the parameter user inputs for the function variable. \href{https://github.com/MinMah23/CAS741-Project/blob/main/test/test_checkFunction.py}{$Test\_checkfunction$} is the unit test for verifying that this module works properly. \\
 
 \section{Changes Due to Testing}
+No major changes were implemented due to testing, and bugs in the IP Simulator software were continuously addressed throughout
+the course of the testing.
 
 \section{Automated Testing}
-		
+
+We use \href{https://docs.pytest.org/en/7.2.x/}{Pytest} framework for unit, functional, and integration automated testing, as discussed in section \ref{unittest}, \href{https://github.com/MinMah23/CAS741-Project}{git}, for tracking changes during software development, and \href{https://flake8.pycqa.org/en/latest/}{Flake8} to check for errors, enforces coding standards, and identifies code complexity issues.\\
+Figure \ref{flake8} shows the result of running flake8 on all modules. I decided to ignore $E501$ which is related to the length of the lines which is longer than 79 characters.\\
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{flake8.jpg}
+ \caption{Running flake8 on the modules}
+ \label{flake8}
+ \end{center}
+ \end{figure}
+
 \section{Trace to Requirements}
-		
+The purpose of the traceability matrices is to provide easy references on
+what has to be additionally modified if a certain component is changed.\\
+Table \ref{Tbltrace} shows the dependencies between the test cases and the requirements. Requirements can be found in \href{https://github.com/MinMah23/CAS741-Project/tree/main/docs/SRS}{SRS}.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{l l} 
+		\toprule		
+		\textbf{Requirements} & \textbf{Test section}\\
+		\midrule 
+		R1 & section \ref{FunR}\\
+		R2 & section \ref{FunR}\\
+		R3 & section \ref{FunR}\\
+		R4 & section \ref{FunR} \\
+		NFR1 & section \ref{portability}\\
+		NFR2 & section \ref{use}\\
+		NFR3 & section \ref{accuracy}\\
+		\bottomrule
+	\end{tabular}\\
+	
+	\caption{Traceability Between Test Cases and Requirements} 
+	\label{Tbltrace}
+\end{table}
+
+
 \section{Trace to Modules}		
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Table \ref{Tbltracemodule} shows the dependencies between the test cases and the modules.
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{l l} 
+		\toprule		
+		\textbf{Requirements} & \textbf{Test section}\\
+		\midrule 
+		Input Parameters Module & \ref{FunR}, \ref{param} \\
+		Constants Parameters Module & \ref{cons}\\
+		Motion ODE Module & \ref{main}\\
+            ODE Solver Module &\ref{main}\\
+		Output Module &\ref{FunR}, \ref{main}\\
+            Plotting Module &\ref{main} \\
+            IP Control Module & \ref{main} \\
+		\bottomrule
+	\end{tabular}\\
+	
+	\caption{Traceability Between Test Cases and modules} 
+	\label{Tbltracemodule}
+\end{table}	
 
 \section{Code Coverage Metrics}
-
+The following code coverage of each module is measured by \href{https://coverage.readthedocs.io/en/7.2.3/}{Coverage}. Figure \ref{coverage} shows the code coverage.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{coverage.jpg}
+ \caption{Code Coverage}
+ \label{coverage}
+ \end{center}
+ \end{figure}
 \bibliographystyle{plainnat}
-\bibliography{../../refs/References}
-
-\newpage{}
-\section*{Appendix --- Reflection}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.  Please answer the following questions:
-
-\begin{enumerate}
-  \item 
-  \item 
-\end{enumerate}
-
+\bibliography{ref.bib}
 \end{document}

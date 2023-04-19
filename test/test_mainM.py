@@ -4,10 +4,13 @@ from odeSolverM import solve
 from plotM import plot
 import constantM
 import pytest
+import os
 
 @pytest.fixture
 def file_path():
-    return 'E:/courses/winter/CAS741/project/code/inputs.txt'
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    input_path = os.path.join(script_dir, 'inputs.txt')
+    return input_path
 
 def test_all(file_path):
         with open(file_path, 'r') as f:

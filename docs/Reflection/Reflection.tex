@@ -3,50 +3,44 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 
-\title{Reflection Report on \progname}
+\title{Reflection Report on IP Simulator}
 
-\author{\authname}
+\author{Mina Mahdipour}
 
-\date{}
+\date{\today}
 
-\input{../Comments}
-\input{../Common}
+\input{}
 
 \begin{document}
 
+\newpage
+
+\maketitle
 \begin{table}[hp]
 \caption{Revision History} \label{TblRevisionHistory}
 \begin{tabularx}{\textwidth}{llX}
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+April 18, 2023 & Mina Mahdipour & First draft o the document\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\newpage
-
-\maketitle
-
-Put your introductory blurb here.
-
 \section{Project Overview}
 
-\plt{Summarize the original project goals and requirements}
+
+The IP Simulation project is defined to simulate the system of an inverted pendulum mounted on a cart. An external force is applied to the cart and it can move horizontally, to the left or right while the pendulum is free to rotate in the pivot. The software tries to calculate the position of the cart and the angle of the pendulum according to their specifications and the force that is a function of time and changes during a time interval of simulation. Two graphs of the cart and pendulum position over time are the outputs of the software. 
+
+
 
 \section{Key Accomplishments}
 
-\plt{What went well?  This can be what went well with the documentation, the
-  coding, the project management, etc.}
+In general, this project went very well. There is a lot of documentation about this Physics problem, as an inverted pendulum is a classical control problem used for illustrating non-linear control techniques widely. Going through the process of developing a scientific computing problem taught me a lot about documentation, testing, and team working. 
 
 \section{Key Problem Areas}
-
-\plt{What went wrong?  This can be what went wrong with the documentation, the
-  technology, the coding, time management, etc.}
+One of my problems was finding the pseudo-oracle program to verify the accuracy of the IP Simulator. The other issue was the Physic problem that took me a while to know it.
 
 \section{What Would you Do Differently Next Time}
-
+I will choose a totally different topic and will try other methods and tools for software testing.
 \end{document}

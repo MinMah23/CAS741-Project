@@ -52,11 +52,11 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-March 2, 2023 & 1.0 & First version, created and added introduction parts\\
-March 10, 2023 & 1.1 &  Added three modules\\
-March 12, 2023 & 1.2 &  Added the rest of modules\\
-March 17, 2023 & 1.3 &  Updated ODE modules\\
-March 21, 2023 & 1.4 &  Updated according to feedback of reviewers\\
+March 2, 2023 & 1.0 & First version created and added introduction parts\\
+March 12, 2023 & 1.1 &  Added the modules\\
+March 17, 2023 & 1.2 &  Updated ODE modules\\
+March 21, 2023 & 1.3 &  Updated according to feedback of reviewers\\
+April 16, 2023 & 1.4 &  Updated according to feedback of Prof.\ Smith\\
 \bottomrule
 \end{tabularx}
 
@@ -104,7 +104,6 @@ The following table summarizes the primitive data types used by IP Simulator.
 \midrule
 character & char & a single symbol or digit\\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
-non-negative integer& $\mathbb{N}_0$ &a number without a fractional component in [0, $\infty$)\\
 \bottomrule
 \end{tabular} 
 \end{center}
@@ -128,14 +127,14 @@ The following table is taken directly from the \href{https://github.com/MinMah23
 \midrule
 
 \multirow{5}{0.3\textwidth}{Behaviour-Hiding Module} & Input Parameters Module\\
-& Output Parameters Module\\
+& Output Module\\
 & Constant Parameter Module\\
 &Motion ODE  Module\\
 & IP Control Module\\
 \midrule
 
 \multirow{3}{0.3\textwidth}{Software Decision Module} & {ODE Solver Module}\\
-& Data Structure Module\\
+& Array Data Structure Module\\
 & Plotting Module\\
 \bottomrule
 
@@ -169,13 +168,18 @@ None
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
 load\_inputs & string & - &  FileError \\
-verify\_inputs & - & - & InvalidInput Error \\
+verify\_inputs & - & - & ValueError \\
 $ m_p$ & - & $\mathbb{R}$\\
 $l_p$ & - & $\mathbb{R}$\\
 $m_c$ & - & $\mathbb{R}$\\
 $friction$ & - & $\mathbb{R}$\\
-$f\_external(t)$ & $\mathbb{R}$ & $\mathbb{R}$&InvalidFunction\\
+$f\_external(t)$ & $\mathbb{R}$ & $\mathbb{R}$&\\
 $i_p$& - & $\mathbb{R}$\\
+$x_i$ & - & $\mathbb{R}$\\
+$\dot{x_i}$ & - & $\mathbb{R}$\\
+$\theta{i}$ & - & $\mathbb{R}$\\
+$\dot{\theta{i}}$ & - & $\mathbb{R}$\\
+
 \bottomrule
 \end{tabular}
 \subsection{Semantics}
@@ -186,12 +190,17 @@ $ m_p$: $\mathbb{R}$\\
 $l_p$: $\mathbb{R}$\\
 $m_c$: $\mathbb{R}$\\
 $friction$: $\mathbb{R}$\\
-$f\_external(t)$: $\mathbb{R} \rightarrow \mathbb{R}$\\
-$i_p$: $\mathbb{R}$
+$f\_external(t)$: t: $\mathbb{R} \rightarrow res: \mathbb{R}$\\
+$i_p$: $\mathbb{R}$\\
+$x_i$: $\mathbb{R}$\\
+$\dot{x_i}$: $\mathbb{R}$\\
+$\theta{i}$: $\mathbb{R}$\\
+$\dot{\theta{i}}$: $\mathbb{R}$\\
+
 
 \subsubsection{Environment Variables}
-In the case of this module, the environment variable is the input file which is containing the input data.
 
+In the case of this module, the environment variable is the $fName$, the name of input file which is containing the input data.
 
 \subsubsection{Assumptions}
 \begin{itemize}
@@ -200,11 +209,17 @@ In the case of this module, the environment variable is the input file which is 
 
 \item The file contains the expected inputs data in order, each on a new line. The order of the input data is as below:
 \begin{itemize}
-\item line 1: the pendulum mass  
-\item line 2: the pendulum length   
-\item line 3: the cart mass
-\item line 4: the friction of the cart
-\item line 5: the external force as a function of time
+\item line 1: a string of "test case" to specify the start of test
+\item line 2: the cart mass  
+\item line 3: the pendulum mass   
+\item line 4: the pendulum length
+\item line 5: the friction of the cart
+\item line 6: the external force as a function of time
+\item line 7: the initial condition for the position of the cart
+\item line 8: the initial condition for the velocity of the cart
+\item line 9: the initial condition for the angle of the pendulum
+\item line 10: the initial condition for the velocity of the pendulum
+\item line 11: a string of "end" to specify the end of this test
 \end{itemize}
 
 \end{itemize}
@@ -218,8 +233,9 @@ The value of each state variable can be accessed through its name (getter). An a
 \item Read data  from input file to populate the state variables from R1.
 \item Store the data parameters.
 \item Calculate the derived quantity as follows (from DD3 in SRS):\\
-        $i_p$= $\frac{1}{12}(m_p)(l_p^2)$ 
+        $i_p$= $m_p(l_p^2)$ 
 \item Verify the inputs through verify\_inputs().
+\item Convert the format of inputs through convert\_inputs().
 \end{enumerate}
 
 \item exception: exc := a file name $fName$ cannot be found OR the format of input file is incorrect $\Rightarrow$  FileError
@@ -232,16 +248,24 @@ The value of each state variable can be accessed through its name (getter). An a
 \end{itemize}
 
 \noindent \begin{longtable*}[l]{l l} 
-$\neg (m_{\text{pmin}} \leq m_p \leq m_{\text{pmax}})$ & $\Rightarrow$ Invalid Mass of the Pendulum\\
+$\neg (m_{\text{pmin}} \leq m_p \leq m_{\text{pmax}})$ & $\Rightarrow$ ValueError\\
 
-$\neg (l_{\text{pmin}} \leq l_p \leq l_{\text{pmax}})$& $\Rightarrow$  Invalid Length of the Pendulum\\
-$\neg (m_{\text{cmin}} \leq m_c\leq m_{\text{cmax}})$ & $\Rightarrow$  Invalid Mass of the Cart \\
-$\neg (0 \leq $friction$)$ & $\Rightarrow$ Invalid Value of the Car Friction\\
-$\neg  (0 < i_p)$ & $\Rightarrow$ Invalid Value of the Inertia of the Pendulum\\
-$f\_external$ is not a function of t & $\Rightarrow$ InvalidFunction\\
+$\neg (l_{\text{pmin}} \leq l_p \leq l_{\text{pmax}})$& $\Rightarrow$  ValueError\\
+$\neg (m_{\text{cmin}} \leq m_c\leq m_{\text{cmax}})$ & $\Rightarrow$  ValueError \\
+$\neg (0 \leq $friction$)$ & $\Rightarrow$ ValueError\\
+$\neg  (0 < x_i)$ & $\Rightarrow$ ValueError\\
+$\neg  (0 < \dot{x_i})$ & $\Rightarrow$ ValueError\\
+$\neg  (0 < \theta{i}<2\pi)$ & $\Rightarrow$ ValueError\\
+$\neg  (0 < \dot{\theta{i}})$ & $\Rightarrow$ ValueError\\
 \end{longtable*}
 etc.  See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and associated error messages.\\
 \newline
+\noindent convert\_inputs():
+\begin{itemize}
+\item out: \textit{out} := none
+\item exception: none 
+\end{itemize}
+
 \noindent InputM.$m_p$:
 \begin{itemize}
 \item output: \textit{out} := $m_p$
@@ -274,14 +298,36 @@ etc.  See Appendix (Section~\ref{Appendix}) for the complete list of exceptions 
 \begin{itemize}
 \item output: \textit{out} := $f\_external(t)$
 \item exception: none
-\end{itemize}\noindent 
+\end{itemize}\noindent
+
+\noindent InputM.$x_i$:
+\begin{itemize}
+\item output: \textit{out} := $x_i$
+\item exception: none
+\end{itemize}
+
+\noindent InputM.$\dot{x_i}$:
+\begin{itemize}
+\item output: \textit{out} := $\dot{x_i}$
+\item exception: none
+\end{itemize}
+
+\noindent InputM.$\theta{i}$:
+\begin{itemize}
+\item output: \textit{out} := $\theta{i}$
+\item exception: none
+\end{itemize}
+
+\noindent InputM.$\dot{\theta{i}}$:
+\begin{itemize}
+\item output: \textit{out} := $\dot{\theta{i}}$
+\item exception: none
+\end{itemize}
 
 
-\subsubsection{Local Functions}
-None
 
 \newpage
-\section{MIS of Output Parameters Module\label{MOutput} }
+\section{MIS of Output Module\label{MOutput} }
 
 
 \subsection{Module}
@@ -301,11 +347,10 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
- output& $fOName$: string, $t$$: \mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
- \mathbb{R}$ & - & -\\
-\hline
-verify\_out&  [$x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
- \mathbb{R}$] & - & InvalidOutput \\
+ output& $fOName$: string, $t$$: \mathbb{R}^{n}$, $x$$: \mathbb{R}^{n}$, $\dot{x}$: $\mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$, $\dot{\theta}$$: 
+ \mathbb{R}^{n}$ & - & FileError\\
+verify\_out&  [$x$$: \mathbb{R}^{n}$, $\dot{x}$: $\mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$, $\dot{\theta}$$: 
+ \mathbb{R}^{n}$] & - & InvalidOutput \\
 \end{tabular}
 \end{center}
 
@@ -314,43 +359,39 @@ verify\_out&  [$x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}
 \subsubsection{State Variables}
 None
 \subsubsection{Environment Variables}
-The environment variable is the output file which includes the angle of the pendulum and position of the cart with regards to the data inputs.
+The environment variable is the $fOName$, the name of the output file which includes a sequence of angle of the pendulum and a sequence of position of the cart with regards to the data inputs during the time of simulation.
 
 \subsubsection{Assumptions}
 None
 \subsubsection{Access Routine Semantics}
 
 
-\noindent output ($fOName$: string, $t$$: \mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
- \mathbb{R}$):
+\noindent output ($fOName$: string, $t$$: \mathbb{R}^{n}$, $x$$: \mathbb{R}^{n}$, $\dot{x}$: $\mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$, $\dot{\theta}$$: 
+ \mathbb{R}^{n}$):
 \begin{itemize}
 
-\item transition: The filename $fOName$ is associated with the outputFile. The inputs of this function are $x$ and $\dot{x}$, the position and velocity of the cart while $\theta$ and $\dot{\theta}$ are the position and velocity of the pendulum at time $t$.
+\item transition: The filename $fOName$ is associated with the outputFile. The inputs of this function are the sequence of $x$ and $\dot{x}$, the array of position and velocity of the cart while the sequence of  $\theta$ and $\dot{\theta}$ are the array of position and velocity of the pendulum at time $t$.
 The below procedure is followed:
 \begin{enumerate}
-\item verify\_out ($x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: 
- \mathbb{R}$)
+\item verify\_out ($x$$: \mathbb{R}^{n}$, $\dot{x}$: $\mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$, $\dot{\theta}$$: \mathbb{R}^{n}$)
 \item write the calculated cart position, cart velocity, pendulum angle, and pendulum velocity for a specified time in the output file.
 \end{enumerate}
 
-\item exception: none 
+\item exception: exc := a file name $fOName$ cannot be found $\Rightarrow$  FileError
 
 \end{itemize}
 
-\noindent verify\_out ($x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$):
+\noindent verify\_out ($x$$: \mathbb{R}^{n}$, $\dot{x}$: $\mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$, $\dot{\theta}$$: \mathbb{R}^{n}$):
 \begin{itemize}
 \item output: none
 \item exception: exec:= 
 \end{itemize}
 
-
-
-
 \noindent
 \begin{longtable*}[l]{l l} 
- $\theta$ $\leq$ $0$ & $\Rightarrow$ Invalid Angle the Pendulum\\
-
-$\dot{\theta}$ $\leq$ $0$ & $\Rightarrow$ Invalid Velocity of the Pendulum\\
+\# for $ (0 \leq i \leq n)$, all items in the sequence of outputs: \\ 
+$\neg  (0 < \theta < 2\cdot\pi)$& $\Rightarrow$ Invalid Angle the Pendulum\\
+$\neg  (0 < x)$ & $\Rightarrow$ Invalid Velocity of the Pendulum\\
 \end{longtable*}
 
 
@@ -388,13 +429,9 @@ $ l_{\text{pmin}}$&$\mathbb{R}$&0.01 \si{\m}&minimum value of the length of the 
 $ l_{\text{pmax}}$&$\mathbb{R}$&10 \si{\m}&maximum value of the length of the pendulum\\
 $ m_{\text{cmin}}$&$\mathbb{R}$& 0.01 \si{\kg} &minimum value of the mass of the cart\\
 $ m_{\text{cmax}}$&$\mathbb{R}$&50 \si{\kg} &maximum value of the mass of the cart\\
-$x$&$\mathbb{R}$&0 & the initial value of the position of the cart\\
-$\dot{x}$&$\mathbb{R}$&0 \si {\metre\per\square\second}&the initial value of the velocity of the cart\\
-$\theta$& $\mathbb{R}$ &$\pi$ $ \si{\radian} $& the initial value of the angle of the pendulum\\
-$\dot{\theta}$&$\mathbb{R}$&0 \si {\metre\per\square\second}&the initial value of the velocity of the pendulum\\
-$y_\text{iniCond}$ & sequence of $\mathbb{R}$ & [$x$, $\dot{x}$, $\theta$, $\dot{\theta}$]& the initial condition for solving the ODEs at the time $t_\text{start}$.\\
-$t_\text{start}$&$\mathbb{R}$&0 \si {\min}&the start time of simulation\\
-$t_\text{span}$&$\mathbb{R}$&100 \si {\min}&the duration time of simulation\\
+
+$t_\text{start}$&$\mathbb{R}$&0 \si {\second}&the start time of simulation\\
+$t_\text{span}$&$\mathbb{R}$&20 \si {\second}&the duration time of simulation\\
  \hline
 
 \end{tabular}
@@ -431,7 +468,7 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-ODE\_Motion & $ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t)$: string, $i_p$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$ & $\dot{x}$: $\mathbb{R}$, $\ddot{x}$: $\mathbb{R}$, $\dot{\theta}$: $\mathbb{R}$, $\ddot{\theta}$: $\mathbb{R}$  & - \\
+ODE\_Motion & $ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t)$: string, $i_p$: $\mathbb{R}$, $x_i$$: \mathbb{R}$, $\dot{x_i}$: $\mathbb{R}$, $\theta{i}$: $\mathbb{R}$, $\dot{\theta{i}}$$: \mathbb{R}$ & $\dot{x}$: $\mathbb{R}$, $\ddot{x}$: $\mathbb{R}$, $\dot{\theta}$: $\mathbb{R}$, $\ddot{\theta}$: $\mathbb{R}$  & - \\
 \end{tabular}
 \end{center}
 
@@ -448,11 +485,13 @@ None
 
 
 
-\noindent ODE\_Motion($ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t))$:
+\noindent ODE\_Motion($ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t)$, $i_p$: $\mathbb{R}$, $x_i$$: \mathbb{R}$, $\dot{x_i}$: $\mathbb{R}$, $\theta{i}$: $\mathbb{R}$, $\dot{\theta{i}}$$: \mathbb{R}$):
 \\
 
-$\ddot{x} =\dfrac{ friction } {(m_c+m_p)}\dot{x}+ \dfrac{ f\_external(t)- m_pl_p\ddot{\theta}\cos{\theta}+ m_pl_p(\dot{\theta}) ^ 2 \sin{\theta}} {(m_c+m_p)}$\\
+\noindent$\dot{x} = \dot{x} $\\
+$\ddot{x} =\dfrac{- friction } {(m_c+m_p)}\dot{x}+ \dfrac{ f\_external(t)- m_pl_p\ddot{\theta}\cos{\theta}+ m_pl_p(\dot{\theta}) ^ 2 \sin{\theta}} {(m_c+m_p)}$\\
 
+\noindent$\dot{\theta} = \dot{\theta}$\\
 $\ddot{\theta}$= $\dfrac{m_pgl_p}{(i_p+m_pl_p^2)}\sin{\theta}-\dfrac{m_pl_p\ddot{x}}{(i_p+m_pl_p^2)}\cos{\theta}$\
 \begin{itemize}
 \item output:
@@ -471,7 +510,7 @@ None
 \section{MIS of IP Control Module \label{MControl} }
 
 \subsection{Module}
-Control
+main
 
 
 \subsection{Uses}
@@ -492,8 +531,8 @@ Plot (Section \ref{MPlot}),
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-control & - & - & - \\
-\hline
+main & - & - & - \\
+
 \end{tabular}
 \end{center}
 
@@ -508,17 +547,17 @@ None
 
 \subsubsection{Access Routine Semantics}
 
-\noindent control():
+\noindent main():
 \begin{itemize}
 \item transition: Control the flow input data, calculation, and the output data by following below steps: \\
-\noindent Get ($fName$: string) from user\\
+\noindent Get ($fName$: string, $fOName$: string) from user\\
 \noindent load\_inputs($fName$)\\
 \noindent verify\_inputs()\\
-\noindent ODE\_Motion($ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t)$, $i_p$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$)\\
-\noindent solveODE($\textbf{f}: (\mathbb{R}^{8} \rightarrow \mathbb{R}^4),  t_\text{start}: \mathbb{R}, \textbf{y}_\text{iniCond}: \mathbb{R}^4, t_\text{span}: \mathbb{R}$)\\
-\noindent verify\_out($x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$)\\
-\noindent plot($t$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\theta$: $\mathbb{R}$)\\
-\noindent output($fOName$, $x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$)\\
+\noindent ODE\_Motion($ m_p$: $\mathbb{R}$, $l_p$: $\mathbb{R}$, $m_c$: $\mathbb{R}$, $friction$: $\mathbb{R}$, $f\_external(t)$, $i_p$: $\mathbb{R}$, $x_i: \mathbb{R}$, $\dot{x_i}$: $\mathbb{R}$, $\theta{i}$: $\mathbb{R}$, $\dot{\theta{i}}$$: \mathbb{R}$)\\
+\noindent solveODE($ODE\_Motion$, $ m_p: \mathbb{R}$, $l_p: \mathbb{R}$, $m_c: \mathbb{R}$, $friction: \mathbb{R}$, $f\_external(t)$, $i_p: \mathbb{R}$, $x_i: \mathbb{R}$, $\dot{x_i}: \mathbb{R}$, $\theta{i}: \mathbb{R}$, $\dot{\theta{i}}: \mathbb{R}$,  $t_\text{start}: \mathbb{R}$$, $[$x_i$, $\dot{x_i}$, $\theta{i}$, $\dot{\theta{i}}$]$: \mathbb{R}^4, t_\text{span}: \mathbb{R}$)\\
+\noindent verify\_out($x$$: \mathbb{R}^{n}$, $\dot{x}$: $\mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$, $\dot{\theta}$$: \mathbb{R}^{n}$)\\
+\noindent plot($t$: $\mathbb{R}^{n}$, $x$$: \mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$)\\
+\noindent output($fOName$, $x$$: \mathbb{R}^{n}$, $\dot{x}$: $\mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$, $\dot{\theta}^{n}$$: \mathbb{R}^{n}$)\\
 \item exception: none
 \end{itemize}
 
@@ -546,7 +585,10 @@ None
   \hline
   \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Except.} \\
   \hline
-  solveODE & $\textbf{f}: (\mathbb{R}^{8} \rightarrow \mathbb{R}^4),  t_\text{start}: \mathbb{R}, \textbf{y}_\text{iniCond}: \mathbb{R}^4, t_\text{span}: \mathbb{R}$ & $\textbf{y}$: [$x$$: \mathbb{R}$, $\dot{x}$: $\mathbb{R}$, $\theta$: $\mathbb{R}$, $\dot{\theta}$$: \mathbb{R}$] & ODE\_Error\\
+  solveODE & $ODE\_Motion: (\mathbb{R}^{n} \rightarrow \mathbb{R}^n)$, [$x_i$, $\dot{x_i}$, $\theta{i}$, $\dot{\theta{i}}$]: $\mathbb{R}^4$, $t_\text{start}: \mathbb{R}$, $t_\text{span}: \mathbb{R}$ & $\textbf{y}$: [$x: \mathbb{R}$, $\dot{x}: \mathbb{R}$, $\theta: \mathbb{R}$, $\dot{\theta}: \mathbb{R}$] & ODE\_Error\\
+
+
+
  
 \end{tabular}
 \end{center}
@@ -563,11 +605,14 @@ None
 
 \subsubsection{Access Routine Semantics}
 
-\noindent solveODE($\textbf{f}$, $t_\text{start}$, $\textbf{y}_\text{iniCond}$, $t_\text{span}$): 
+\noindent solveODE($ODE\_Motion$, $ m_p: \mathbb{R}$, $l_p: \mathbb{R}$, $m_c: \mathbb{R}$, $friction: \mathbb{R}$, $f\_external(t)$, $i_p: \mathbb{R}$, $x_i: \mathbb{R}$, $\dot{x_i}: \mathbb{R}$, $\theta{i}: \mathbb{R}$, $\dot{\theta{i}}: \mathbb{R}$,  $t_\text{start}: \mathbb{R}$$, $[$x_i$, $\dot{x_i}$, $\theta{i}$, $\dot{\theta{i}}$]$: \mathbb{R}^4, t_\text{span}: \mathbb{R}$):\\ 
 \begin{itemize}
 \item output: $out := \textbf{y}(t)$ where 
-$$\textbf{y}(t) = \textbf{y}_\text{iniCond} + \int_{t_\text{start}}^{t_\text{span}} \textbf{f}(s, \textbf{y}(s)) ds$$ 
- $\textbf{f}$ are the ODEs generated by module EqMo \ref{MC}. $y(t)$ is calculated from $t = t_\text{start}$ to $t = t_\text{span}$, and the $\textbf{y}_\text{iniCond}$ is the initial conditions for solving the ODE.\\
+
+$$\textbf{y}(t) = \textbf{y}_\text{iniCond} + \int_{t_\text{start}}^{t_\text{span}} \textbf{f}(s, \textbf{y}(s)) ds$$ and
+$\textbf{y}_\text{iniCond}$ = [$x_i$, $\dot{x_i}$, $\theta{i}$, $\dot{\theta{i}}$]\\
+
+ $\textbf{f}$ is the $ODE\_Motion$, the function in module EqMo \ref{MC}. $y(t)$ is calculated from $t = t_\text{start}$ to $t = t_\text{span}$, and the $\textbf{y}_\text{iniCond}$ is the initial conditions for solving the ODE.\\
 We have two coupled ODEs in the IP software, which the first one describes the motion of the cart and the second one describes the motion of the pendulum.
 
 \item exception: $exc :=$ ( ODE Solver Fails $\Rightarrow$ ODE\_ERR)
@@ -596,8 +641,8 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-plot & $t$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\theta$: $\mathbb{R}$ & - & - \\
-\hline
+plot & $t$: $\mathbb{R}^{n}$, $x$$: \mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$ & - & - \\
+
 \end{tabular}
 \end{center}
 \subsection{Semantics}
@@ -611,7 +656,7 @@ win: 2D diagram displayed on the screen
 
 \subsubsection{Access Routine Semantics}
 
-\noindent  plot($t$: $\mathbb{R}$, $x$$: \mathbb{R}$, $\theta$: $\mathbb{R}$):
+\noindent  plot($t$: $\mathbb{R}^{n}$, $x$$: \mathbb{R}^{n}$, $\theta$: $\mathbb{R}^{n}$):
 \begin{itemize}
 \item transition: Modify win to display a plot where the vertical axis
   is the angle of the pendulum and the position of the cart.  The time should run from $t_\text{start}$ to $t_\text{span}$.
@@ -637,12 +682,10 @@ None
 \textbf{Message ID} & \textbf{Error Message} \\
 \midrule
 FileError & Error: The expected file does not exist. \\
-InvalidFunction & Error: The function of external force must be only the function of time.\\
-Invalid Mass of the Pendulum& Error: The mass of the pendulum should be positive.\\
-Invalid Length of the Pendulum&Error: The length of the pendulum should be positive. \\
-Invalid Mass of the Cart&Error: The mass of the cart should be positive.\\
-Invalid Value of the Car Friction&Error: The $friction$ must be greater that zero.\\
-InvalidOutput& Error: The angle and velocity of the pendulum must be greater that zero.\\
+
+ValueError & Error: The input is not valid. \\
+
+InvalidOutput& Error: The output is not valid.\\
 ODE\_Error&Error: When fails to solve the ODE.\\
 \bottomrule
 \end{longtable}

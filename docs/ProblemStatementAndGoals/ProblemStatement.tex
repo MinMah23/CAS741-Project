@@ -23,28 +23,29 @@
 \midrule
 January 20, 2023 & Mina Mahdipour & First version of document\\
 January 25, 2023 & Mina Mahdipour & Changes in problem and input-output sections\\
-March 29, 2023 & Mina Mahdipour & Checking consistencies in all artifacts\\
+April 14, 2023 & Mina Mahdipour & Updating all documents\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
 
-An inverted pendulum is a pendulum upside down with it pivot point under its center of mass. It is unstable and without additional help and by any small disturbances will fall over. To stay upright, it needs a controller to keep its center of mass above its pivot point even when disturbances occur. The objective of the control system is to balance the inverted pendulum by applying a force to the place that the pendulum is attached to.\\
-Inverted Pendulums are everywhere, from the human posture system, Segway, to the launching of a rocket.
+An inverted pendulum is a pendulum upside down with its pivot point under its center of mass. It is unstable and without additional help and by any small disturbances will fall over. To stay upright, it needs a controller to keep its center of mass above its pivot point even when disturbances occur. The objective of the control system is to balance the inverted pendulum by applying a force to the place that the pendulum is attached to.\\
+Inverted Pendulums are everywhere, from the human posture system, and Segway, to the launching of a rocket.
 
 \subsection{Problem}
 
-Simulating the system of an unstable pole mounted on a cart, which can move horizontally, is the main problem of this project. There are two degrees of freedom in this problem, the horizontally movement of cart and the pendulum angle with vertical axis. Therefore, there are two equations of motion, one for each. Solving these equations describe the motion of the cart and the pendulum.
+Simulating the system of an unstable pole mounted on a cart, which can move horizontally, is the main problem of this project. There are two degrees of freedom in this problem, the horizontal movement of cart and the pendulum rotation angle with vertical axis. Therefore, there are two equations of motion, one for each. Solving these equations describe the motion of the cart and the pendulum and help to understand the system in different positions and time.
 
 \subsection{Inputs and Outputs}
 
-The inputs of the system will be the cart and pendulum specifications such as mass of cart, mass of pendulum, pendulum length, inertia of the pendulum, the coefficient of friction of the cart, and also an external force to the cart which can be a function of time.\\
+The inputs of the system will be the cart and pendulum specifications such as the mass of cart, the mass of the pendulum, pendulum length, the inertia of the pendulum, the coefficient of friction of the cart, and also an external force to the cart which can be a function of time and the initial condition of the system.\\
 The outputs are the angular position of the pendulum and the horizontal position of the cart.
 
 \subsection{Stakeholders}
 
-As the inverted pendulum is widely used as a benchmark for testing control strategies and algorithms, and it can be used in different applications, the potential stakeholders could be all the related industries using this system. On the other hand, it is a classic problem in dynamics and control theory, so the final system can be used in high schools as an educational material.
+As the inverted pendulum is widely used as a benchmark for testing control strategies and algorithms, and it can be used in different applications, the potential stakeholders could be all the related industries using this system.\\
+This project is the first step to creating a stable system, therefore, it can be extended to design a control system in a way that stabilizes the inverted pendulum. On the other hand, it is a classic problem in dynamics and control theory, so the final system can be used in high schools as educational material.
 
 \subsection{Environment}
 
@@ -53,13 +54,13 @@ There is no limitation on this system and the final software will be compatible 
 \section{Goals}
 
 \begin{enumerate}
-  \item Designing a software system which simulates the behavior of the system.
-  \item Showing the effects of the different parameters values on the system behavior.
+  \item Designing software that simulates the behavior of the system.
+  \item Showing the effects of the different parameter values on the system behavior.
 \end{enumerate}
 \section{Stretch Goals}
 \begin{enumerate}
   \item Visualizing the problem with an interactive graphic design.
-  \item Designing a software system that can control and stabilize the pendulum.
+  \item Designing a system that can control and stabilize the pendulum.
   \item Simulating double inverted pendulum problem.
 \end{enumerate}
 
