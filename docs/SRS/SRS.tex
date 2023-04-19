@@ -143,7 +143,7 @@ February 4, 2023  & 1.2 & Update Requirements part\\
 February 6, 2023  & 1.3 & Update Specific System Description part\\
 February 10, 2023 & 1.4 & Refine Solution Characteristic Specification\\
 February 15, 2023 & 1.5 & Refine according to Dr.Smith comments\\
-March 29, 2023 & 1.6&Check consistencies in all artifacts\\
+April 14, 2023 & 2.0& Update and check consistencies in all documents\\
 \bottomrule
 \end{tabularx}
 
@@ -166,9 +166,15 @@ Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed
     \midrule 
     \si{\kilogram} & mass & kilogram\\
     \si{\newton} & force & newton\\
-   \si{\radian} & angle & radian\\
+    \si{\radian} & angle & radian\\
     \si{\metre} & distance or length & metre\\
     \si{\newton\metre} & torque & newton.metre\\
+    \si{\second} & time & second\\
+    \si {\metre\per\square\second} & acceleration & metre.second$^{-2}$\\
+    \si{\metre\per\second} & velocity & metre.second$^{-1}$\\
+    \si{\kilogram\square\metre} & moment of inertia & kilogram.metre$^{2}$\\
+    \si{\radian\per\second} & angular velocity & radian.second$^{-1}$ \\
+    \si{\radian\per\square\second} & angular acceleration  &radian.second$^{-2}$ \\
     \bottomrule
   \end{tabular}
   %	\caption{Provide a caption}
@@ -196,12 +202,12 @@ $m_c$ & \si{\kilogram} & Mass of the cart\\
 $m_p$ & \si{\kilogram} & Mass of the pendulum\\
 $r$ & \si {\metre} &  Radius from the axis of rotation to the location where the force is exerted for calculating torque\\
 $V$ & \si {\newton} & Vertical reaction force component of the cart or the pole\\
-$x(t)$ & \si{\metre} & The distance which cart transfer during time (t) \\
+$x(t)$ & \si{\metre} & The distance which cart transfer over time (t) \\
 $\dot{x}(t)$ & \si {\metre\per\second} & Velocity of the cart over time\\
-$\ddot{x} $ & \si {\metre\per\square\second} & Acceleration of the cart\\  
+$\ddot{x}(t)$ & \si {\metre\per\square\second} & Acceleration of the cart over time\\  
 $\theta (t)$ & \si{\radian} & Pendulum angle from vertical over time\\
 $\dot{\theta}(t)$ & \si {\radian\per\second} & Angular velocity of the pendulum over time\\
-$\ddot{\theta}$ & \si {\radian\per\square\second} & Angular acceleration of the pendulum\\
+$\ddot{\theta}(t)$ & \si {\radian\per\square\second} & Angular acceleration of the pendulum over time\\
 
 \bottomrule
 \end{longtable*}
@@ -236,25 +242,24 @@ $\ddot{\theta}$ & \si {\radian\per\square\second} & Angular acceleration of the 
 \pagenumbering{arabic}
 
 \section{Introduction}
-
-The inverted pendulum is a classical control problem used for illustrating non-linear control techniques. The system is motivated by applications such as control of rockets and anti-seismic control of buildings. The inverted pendulum system consists of a pendulum which is attached to a cart, that can move horizontally. It is unstable because its center of mass is above its pivot point so without additional help it will fall over. The cart moves horizontally by an external force and by manipulating the force, the position of pendulum is controlled.\\
+The inverted pendulum is a classical control problem used for illustrating non-linear control techniques. The system is motivated by applications such as control of rockets and anti-seismic control of buildings. The inverted pendulum system consists of a pendulum that is attached to a cart and can move horizontally. It is unstable because its center of mass is above its pivot point so without additional help it will fall over. The cart moves horizontally by an external force and by manipulating the force, the position of the pendulum is controlled.\\
 Considering the force, we would like to simulate the behavior of the system and measure the position of the cart and the angle of the pendulum in the presence of the external force. We called the software, IP Simulator. The final tool can also be incorporated into a control system to stabilize the inverted pendulum system.\\
 The following section provides an overview of Software Requirement Specification (SRS) for a pendulum-cart system, discussing the scope and purpose of the work.
 
 
 \subsection{Purpose of Document}
 
-The main purpose of this document is to describe the mathematical model of Inverted Pendulum (IP) system. To clarify software requirements, detailed information about goals, assumptions, theoretical models, and definitions will be explained.\\
-Therefore, this document will be the reference during producing the software. It will provide  requirements of the software which will be used in planing for design stage. The following SRS document will remain abstract, exploring what is being solved rather than how it will be solved.
+The main purpose of this document is to describe the mathematical model of the Inverted Pendulum (IP) system. To clarify software requirements, detailed information about goals, assumptions, theoretical models, and definitions will be explained.\\
+Therefore, this document will be the reference during producing the software. It will provide requirements of the software which will be used in planing for the design stage. The following SRS document will remain abstract, exploring what is being solved rather than how it will be solved.
 
 \subsection{Scope of Requirements} 
 
 The problem is restricted to two dimensions. The pendulum is attached to the cart in such a way that it is free to rotate in the pivot, and the cart can move horizontally left or right.\\
-This project dos not cover the control algorithms to stabilize the system and only focus on simulating the behavior of the system.
-For more details, the reader can refer to the assumptions section (Section~\ref{sec_assumpt}).
+This project does not cover the control algorithms to stabilize the system and focuses only on simulating the behavior of the system.
+For more details, the reader can refer to the assumptions section  (Section~\ref{sec_assumpt}).
  
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
-Intended Reader(s) or Reviewer(s) should have knowledge about Physics and more specifically in the equations of motion. Good understanding of solving an ordinary differential equation (ODE) in Mathematics is also needed, both of the topics are offered in the undergraduate engineering courses or high school Mathematics and Physics subjects.
+Intended Reader(s) or Reviewer(s) should have knowledge of Physics and more specifically the equations of motion. A good understanding of solving an ordinary differential equation (ODE) in Mathematics is also needed, both of the topics are offered in undergraduate engineering courses or high school Mathematics and Physics subjects.
 
 
 \subsection{Organization of Document}
@@ -264,10 +269,10 @@ This document follows the SRS template as specified by Smith and Lai\cite{SmithA
 \section{General System Description}
 
 This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user
-characteristics and lists the system constraints.  
+characteristics, and lists the system constraints.  
 
 \subsection{System Context}
-Figure \ref{Fig_SystemContext} represents an abstract view of the software. The rectangular node represents the IP simulator tool, and the circular nodes are users who interact the software through a user interface.
+Figure \ref{Fig_SystemContext} represents an abstract view of the software. The rectangular node represents the IP simulator tool, and the circular nodes are users who interact with the software through a user interface.
 
 \begin{figure}[h!]
 \begin{center}
@@ -279,14 +284,14 @@ Figure \ref{Fig_SystemContext} represents an abstract view of the software. The 
 
 The responsibilities of the user and the software are as follows:
 \begin{itemize}
-\item User Responsibilities:
+\item User responsibilities:
 \begin{itemize}
-\item Provide required inputs including cart and pole specifications.
+\item Provide required inputs including cart, pole specifications,  and initial conditions of the system.
 \end{itemize}
-\item The Inverted Pendulum Simulator Responsibilities:
+\item The Inverted Pendulum Simulator responsibilities:
 \begin{itemize}
-\item Ensure all inputs are in correct format and detect data type mismatch.
-\item Calculate and show the expected outputs including the position of the cart and the pendulum.
+\item Ensure all inputs are in the correct format and detect data type mismatch.
+\item Calculate and show the expected outputs including the position of the cart and the pendulum over the simulation time .
 \end{itemize}
 \end{itemize}
 
@@ -304,7 +309,7 @@ This section first presents the problem description, which gives a high-level vi
 specification, which presents the assumptions, theories, definitions and finally the instance models.
 
 \subsection{Problem Description} \label{Sec_pd}
-The Inverted Pendulum Simulator tool is intended to describe and simulate the behaviour of the system in the presence of different value of input. As the IP is widely used as a benchmark to demonstrate concepts and test control strategies and algorithms in nonlinear control, the final tool can show system status and be a great help as an educational material for students and engineers, It can also be incorporated into control software to stabilize the whole pendulum-cart system.
+The Inverted Pendulum Simulator tool is intended to describe and simulate the behavior of the system in the presence of different values of input. As the IP is widely used as a benchmark to demonstrate concepts and test control strategies and algorithms in nonlinear control, the final tool can show system status and be a great help as educational material for students and engineers, It can also be incorporated into control software to stabilize the whole pendulum-cart system.
 
 
 \subsubsection{Terminology and  Definitions}
@@ -319,12 +324,12 @@ sections and their meanings, with the purpose of reducing ambiguity and making i
 
 \item{Friction: The force that resists the sliding or rolling of one solid object over another.}
 
-\item{Moment: The turning effect of a force is called the moment. The moment is the result of the force multiplied by the perpendicular distance from the line of action of the force to the pivot or point where the object will turn.}
-
 \item{Center of Mass: The center of mass is a position defined relative to an object or system of objects. It is the average position of all the parts of the system, weighted according to their masses.
 For simple rigid objects with uniform density, the center of mass is located at the centroid.}
 
 \item{Centroid: In mathematics and physics, the centroid, also known as geometric center or center of figure, of a plane figure or solid figure is the arithmetic mean position of all the points in the surface of the figure}
+
+\item{Moment: The turning effect of a force is called the moment. The moment is the result of the force multiplied by the perpendicular distance from the line of action of the force to the pivot or point where the object will turn.}
 
 \item{Moment of Inertia: A quantity expressing a body's tendency to resist angular acceleration. It is the sum of the products of the mass of each particle in the body with the square of its distance from the axis of rotation.}
 \end{itemize}
@@ -343,14 +348,12 @@ includes the following elements:
 
 \end{itemize}
 
-%\plt{A figure here makes sense for most SRS documents}
-
  \begin{figure}[h!]
 \begin{center}
  %\rotatebox{-90}
  
 \includegraphics[width=0.5\textwidth]{physic_system.jpg}
- \caption{The Physical system of IP Simulator.}
+ \caption{The Physical System of IP Simulator.}
  \label{fig_physys}
  \end{center}
  \end{figure}
@@ -372,18 +375,18 @@ Calculate the angle of the pendulum arm over time.
 
 This section simplifies the original problem and helps in developing the
 theoretical model by filling in the missing information for the physical
-system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
+system. The numbers given in the square brackets refer to the theoretical model [T], the general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
 
 \begin{itemize}
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_systemdimension}:]
 The system has two degrees of freedom. The first degree of freedom is the horizontal motion of the cart and the second degree of freedom is the rotational motion of the pendulum.
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_pendfrictionl}:]
-The pendulum is friction-less.
+The pendulum is frictionless.
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_cartfrictionl}:]
 The cart has friction.
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_pendulumInertia}:]
-The  moment of inertia of the pendulum is constant.
+The moment of inertia of the pendulum is constant.
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_CartDimension}:]
 The cart is allowed to move in a one-dimension plane, horizontally left or right.
 
@@ -409,7 +412,7 @@ Label&  \bf Newton's Second Law of Motion\\
 \hline
 Equation & {$ F = ma$ }\\ 
 \hline
-Description & {Newton’s second law of motion pertains to the behavior of objects for which all existing forces are not balanced. The second law states that the acceleration of an object is dependent upon two variables, the net force acting upon the object which is $a$ and the mass of the object that is $m$. The acceleration of an object depends directly upon the net force acting upon the object, and inversely upon the mass of the object. As the force acting upon an object is increased, the acceleration of the object is increased. As the mass of an object is increased, the acceleration of the object is decreased.}\\
+Description & {Newton’s second law of motion pertains to the behavior of objects for which all existing forces are not balanced. The second law states that the acceleration of an object is dependent upon two variables, the net force acting upon the object which is $a$, and the mass of the object which is $m$. The acceleration of an object depends directly upon the net force acting upon the object, and inversely upon the mass of the object. As the force acting upon an object is increased, the acceleration of the object is increased. As the mass of an object is increased, the acceleration of the object is decreased.}\\
 & $F$ is the net force acting upon the object in \si{\newton},\\
 & $a$ is the acceleration of the object in \si {\metre\per\square\second},\\
 & $m$ is the mass of that object in {\si{\kilogram}}.  \\
@@ -463,13 +466,13 @@ Number& TM\refstepcounter{theorynum}\thetheorynum\label{TorqueDef}\\
 \hline
 Label&  \bf Torque Definition \\
 \hline
-Equation & {$\tau=rF\sin(\theta)$ }\\ 
+Equation & {$\tau=rF\sin(\beta)$ }\\ 
 \hline
 Description & {Measure of the twisting action caused by a force that can cause an object to rotate about an axis.}  \\
 & $\tau$ is torque, the rotational equivalent of linear force in \si{\newton\metre}, \\
-& $F$ is applied force to an object that makes the object to rotate around an axis and is measured in \si{\newton},\\
+& $F$ is applied force to an object that makes the object rotate around an axis and is measured in \si{\newton},\\
 &$r$ is the radius from the axis of rotation to the location where the force is exerted in \si{\metre},\\
-&$\theta$ is the angle between $F$ and $r$ in \si{\radian}.\\
+&$\beta$ is the angle between $F$ and $r$ in \si{\radian}.\\
 \hline
 Notes & none. \\ 
 \hline
@@ -522,7 +525,7 @@ Label&  \bf Acceleration Definition\\
 \hline
 Equation & {$a=\ddot{x}$} \\ 
 \hline
-Description & { Velocity is the derivative of position with respect to time and acceleration is the derivative of velocity with respect to time, so acceleration is the second derivative of position with respect to time.}\\
+Description & { Velocity is the derivative of position concerning time and acceleration is the derivative of velocity for time, so acceleration is the second derivative of position to time.}\\
 & $a$ is the acceleration of the object in \si {\metre\per\square\second},\\ 
 & $x$ is the position of the object in \si{\metre}. \\ 
 \hline
@@ -555,13 +558,13 @@ Label &\bf Newton's Second Law of Motion for Cart in Horizontal Direction \\
 % \hline
 SI Units& \si{\newton} \\
 \hline
-Equation& $m_c\ddot{x}= F-H-b\dot{x}$,  \\
+Equation& $m_c\ddot{x}(t)= F(t)-H-b\dot{x}(t)$,  \\
 \hline
-Description & Based on Newton's second law of motion, sum of all forces applied to the cart in {$x$} direction is equal to $m_ca$, so the velocity of the cart is $\dot{x}$ and its acceleration will be $\ddot{x}$, therefore $a$ is equal to $\ddot{x}$.\\
-& $F$ is the external force exerted to the cart in \si{\newton},\\
-& $H$ is the force component in {x} direction of the reaction force which pendulum applies on the cart and measured in \si{\newton},\\
-& $b$ is coefficient of friction for the cart,\\
-& $\dot{x}$ is the velocity of the cart and therefore $\ddot{x}$ will be its acceleration.\\
+Description & Based on Newton's second law of motion, the sum of all forces applied to the cart in {$x$} direction is equal to $m_ca$, so the velocity of the cart is $\dot{x}$ and its acceleration will be $\ddot{x}$, therefore $a$ is equal to $\ddot{x}$.\\
+& $F(t)$ is the external force exerted to the cart over time and in \si{\newton},\\
+& $H$ is the force component in {x} direction of the reaction force which the pendulum applies on the cart and measured in \si{\newton},\\
+& $b$ is the coefficient of friction for the cart,\\
+& $\dot{x}(t)$ is the velocity of the cart and therefore $\ddot{x}$ will be its acceleration.\\
 \hline
   Source & \url{https://ctms.engin.umich.edu/CTMS/index.php?example=InvertedPendulum&section=SystemModeling} \\
   \hline
@@ -587,12 +590,12 @@ Label &\bf Newton's Second Law of Motion for the Pendulum in Horizontal Directio
 % \hline
 SI Units& All forces are measured in \si{\newton} \\
 \hline
-Equation& $m_p\ddot{x}= H$ \\
+Equation& $m_p\ddot{x}(t)= H$ \\
 \hline
-Description &Based on Newton's second law of motion, sum of all forces applied to the pendulum in {$x$} direction is equal to $m_pa$.
+Description &Based on Newton's second law of motion, the sum of all forces applied to the pendulum in {$x$} direction is equal to $m_pa$.
 \\
 & $H$ is the force component in {$x$} direction of the force exerted by the cart on the pendulum and measured in \si{\newton},\\
-& $m_p$ is mass of the pendulum,\\
+& $m_p$ is the mass of the pendulum,\\
 & $\ddot{x}$ is the pendulum acceleration.\\
 \hline
   Source & \url{https://ctms.engin.umich.edu/CTMS/index.php?example=InvertedPendulum&section=SystemModeling }\\
@@ -620,10 +623,10 @@ SI Units& All forces are measured in \si{\newton} \\
 \hline
 Equation& $m_p\ddot{(l-l\cos(\theta))}= m_pg-V$ \\
 \hline
-Description & Based on Newton's second law of motion, sum of all forces applied to the pendulum in {$y$} direction is equal to $m_pa$. The total displacement traveled by the center of mass of the pendulum is equlal to $l-l\cos(\theta)$, because the second derivation of $l$ as a constant values is zero, therefore the equation reduces to $m_p\ddot{(-l\cos(\theta))}= m_pg-V$.\\
+Description & Based on Newton's second law of motion, the sum of all forces applied to the pendulum in {$y$} direction is equal to $m_pa$. The total displacement traveled by the center of mass of the pendulum is equal to $l-l\cos(\theta)$ because the second derivation of $l$ as a constant value is zero, therefore the equation reduces to $m_p\ddot{(-l\cos(\theta))}= m_pg-V$.\\
 
-& $V$ is the force component in {$y$} direction of the force exerted by cart on the pendulum and measured in \si{\newton}.\\
-& $m_p$ is mass of the pendulum.\\
+& $V$ is the force component in {$y$} direction of the force exerted by the cart on the pendulum and measured in \si{\newton}.\\
+& $m_p$ is the mass of the pendulum.\\
 & $l-l\cos(\theta)$ is the vertical displacement of the pendulum.\\
 \hline
 Source &\url{https://ctms.engin.umich.edu/CTMS/index.php/example=InvertedPendulum&section=SystemModeling }\\
@@ -649,9 +652,9 @@ Label &\bf Calculate Angular Displacement of the Pendulum \\
 % \hline
 SI Units& \si{\tau}\\
 \hline
-Equation& $I\ddot{\theta}$ =$l( V\sin(\theta)$ - $H\cos(\theta)$)\\
+Equation& $I\ddot{\theta}(t)$ = $l( V\sin(\theta)$ - $H\cos(\theta)$)\\
 \hline
-Description & Let's take the center of mass of the pendulum as a center of rotation so the pendulum rotates about its center of mass. The torques due to forces exerted to pendulum will calculate as below: the torque of weight force of pendulum is zero since the perpendicular distance of this force from center of rotation is zero. For reaction forces $V$, $H$, we decompose these forces to components which are perpendicular to the pendulum which we have, $V\sin(\theta)$ and $H\cos(\theta)$.\\
+Description & Let's take the center of mass of the pendulum as a center of rotation so the pendulum rotates about its center of mass. The torques due to forces exerted on the pendulum will calculate as below: the torque of the weight force of the pendulum is zero since the perpendicular distance of this force from the center of rotation is zero. For reaction forces $V$, $H$, we decompose these forces to components that are perpendicular to the pendulum which we have, $V\sin(\theta)$ and $H\cos(\theta)$.\\
 & $I$ is the moment of inertia of the pendulum.\\
 & $\ddot{\theta}$ is pendulum angular acceleration.\\
 \hline
@@ -663,17 +666,7 @@ Description & Let's take the center of mass of the pendulum as a center of rotat
 \end{tabular}
 \end{minipage}\\
 
-
-%\subsubsection*{Detailed derivation of the member length}
-
-%\plt{This may be necessary when the necessary information does not fit in the description field.}
-%\plt{Derivations are important for justifying a given GD.  You want it to be clear where the equation came from.}
-
 \subsubsection{Data Definitions}\label{sec_datadef}
-
-%\plt{The Data Definitions are definitions of symbols and equations that are given for the problem.  They are not derived; they are simply used by other models.  For instance, if a problem depends on density, there may be a data  definition for the equation defining density.  The DDs are given information that you can use in your other modules.}
-
-%\plt{All Data Definitions should be used (referenced) by at least one other model.}
 
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.  %\plt{Modify the examples below for your problem, and add additional definitions as appropriate.}
 
@@ -698,8 +691,8 @@ Symbol &$d_px$\\
   Equation&$ d_px =l\sin(\theta) + {x(t)} $\\
  \hline
 Description & 
-The distance traveled by the center of mass of the pendulum is due to two reasons, first, horizontal displacement of the cart, and second, due to angular rotation of the pendulum. The distance due to angular rotation in the pendulum will be $l\sin(\theta)$ while the half length of the pendulum is $l$, and the angular rotation in the pendulum is $\theta(t)$.
-Therefore, the total distance traveled by the center of mass of pendulum is equal to $ =l\sin(\theta) + {x(t)} $.\\
+The distance traveled by the center of mass of the pendulum is due to two reasons, first, horizontal displacement of the cart, and second, angular rotation of the pendulum. The distance due to angular rotation in the pendulum will be $l\sin(\theta)$ while the half length of the pendulum is $l$, and the angular rotation in the pendulum is $\theta(t)$.
+Therefore, the total distance traveled by the center of mass of the pendulum is equal to $ =l\sin(\theta) + {x(t)} $.\\
 & $l$ is  the half length of the pendulum in \si{\metre}, \\
 & $x(t)$ is the horizontal distance traveled by the center of mass of the pendulum in \si{\metre},\\
 &$\theta(t)$ is the angular rotation in the pendulum in \si{\radian}. \\
@@ -733,7 +726,7 @@ Symbol &$d_py$\\
   \hline
   Equation& $d_py= l-l\cos(\theta)$\\
  \hline
-Description & When the pendulum rotates, its center of mass travels a vertical displacement, and as the half length of the pendulum is $l$, so the vertical distance travelled by the center of mass of the pendulum will be equal to $l\cos(\theta)$, hence the total displacement is equal to $l-l\cos(\theta).$   \\
+Description & When the pendulum rotates, its center of mass travels a vertical displacement, and as the half length of the pendulum is $l$, the vertical distance traveled by the center of mass of the pendulum will be equal to $l\cos(\theta)$, hence the total displacement is equal to ($l-l\cos(\theta)$).   \\
 & $l$ is  the half length of the pendulum in \si{\metre}, \\
 &$\theta(t)$ is the angular rotation in the pendulum in \si{\radian}. \\
   \hline
@@ -764,10 +757,10 @@ Symbol &$I$\\
   SI Units & \si{\kilogram\metre^2}\\
   \hline
   
-  Equation& $I$= $\frac{1}{12}(m_pl^2)$ \\
+  Equation& $I$= $m_pl^2$ \\
   
  \hline
-Description & The moment of inertia of a rod is related to its mass and length. Its center of mass is located at the middle of its length.   \\
+Description & The moment of inertia of a rod is related to its mass and length. Its center of mass is located in the middle of its length.   \\
 & the mass of rod is denoted by $m_p$ and is measured in \si{\kilogram}, \\
 & and its length is denoted by $l$ and is measured in \si{\metre}.\\ 
   \hline
@@ -787,7 +780,7 @@ This section is not applicable for the problem.
 \\
 
 \subsubsection{Instance Models} \label{sec_instance}  
-This section describes the instance models and figure~\ref{fig_freebody} depicts the free body of the system, so the forces applied to the cart and the pendulum are shown.
+This section describes the instance models and figure~\ref{fig_freebody} depicts the free body of the system, so the forces applied to the cart and the pendulum is shown.
 
 \begin{figure}
 \begin{center}
@@ -808,12 +801,12 @@ This section describes the instance models and figure~\ref{fig_freebody} depicts
   \rowcolor[gray]{0.9}
   Number& IM\refstepcounter{instnum}\theinstnum \label{Findx}\\
   \hline
-  Label& \bf Equation of motion for the cart\\
+  Label& \bf Equation of Motion for the Cart\\
   \hline
   Input& $F(t)$, $m_c$, $m_p$, $b$, $l$\\
   \hline
   Output& $x(t)$ in \si{\metre}, such that $F(t)$= $ (m_c+m_p)\ddot{x}+ b\dot{x} + m_pl\ddot{\theta}\cos{\theta} - m_pl(\dot{\theta}) ^ 2 \sin{\theta} \rightarrow$\\
-&$\ddot{x} =\dfrac{F(t)- b\dot{x}- m_pl\ddot{\theta}\cos{\theta}+ m_pl(\dot{\theta}) ^ 2 \sin{\theta}}{(m_c+m_p)}$ \\
+&$\ddot{x}(t) =\dfrac{F(t)- b\dot{x}(t)- m_pl\ddot{\theta}\cos{\theta}+ m_pl(\dot{\theta}) ^ 2 \sin{\theta}}{(m_c+m_p)}$ \\
  
   \hline
   Description&
@@ -821,7 +814,7 @@ This section describes the instance models and figure~\ref{fig_freebody} depicts
   &$m_p$ is the mass of the pendulum (\si{\kilogram}).\\
   &$b$ is the coefficient friction of the cart (dimensionless).\\
   &$l$ is the length of pendulum in \si{\metre}.\\
-  &$\theta$ is the pendulum angle from vertical in (\si{\radian}). \\
+  &$\theta(t)$ is the pendulum angle from vertical in (\si{\radian}) over time. \\
   & and by writing equation of motion for the cart, the relationship between inputs and cart motion is clarified. \\
   
   \hline
@@ -848,8 +841,8 @@ This section describes the instance models and figure~\ref{fig_freebody} depicts
   Input&  $m_c$, $m_p$, $b$, $l$\\
 
   \hline
-  Output & $\theta(t)$, such that $(I+m_pl^2)\ddot{\theta} + m_pl\ddot{x}\cos{\theta} - m_pgl\sin{\theta} = 0 $\rightarrow\\
-  &$\ddot{\theta}$= $\dfrac{m_pgl\sin{\theta}-m_pl\ddot{x}\cos{\theta}}{(I+m_pl^2)}$\\
+  Output & $\theta(t)$, such that $(I+m_pl^2) \ddot{\theta}(t) + m_pl\ddot{x}(t)\cos{\theta} - m_pgl\sin{\theta} = 0 \rightarrow$\\
+  &$\ddot{\theta}(t)$= $\dfrac{m_pgl\sin{\theta}-m_pl\ddot{x}(t)\cos{\theta}}{(I+m_pl^2)}$\\
   \hline
   Description&
   $m_c$ is the mass of the cart (\si{\kilogram}).\\
@@ -861,7 +854,7 @@ This section describes the instance models and figure~\ref{fig_freebody} depicts
   \hline
   Sources&  \url{https://www.mathworks.com/help/control/ug/control-of-an-inverted-pendulum-on-a-cart.html } \\
   \hline
-  Ref.\ By &\\
+  Ref.\ By & -\\
   \hline
 \end{tabular}
 \end{minipage}\\
@@ -874,12 +867,12 @@ This section describes the instance models and figure~\ref{fig_freebody} depicts
 \noindent \begin{itemize}
 
 \item Finding \iref{Findx}:
-This subsection shows how the \iref{Findx} is derived. We should start from \dref{AngDis}, where we have this equation, $I$$\ddot{\theta}$ = $l$($V\sin(\theta)$ - $H\cos(\theta)$), we need to substitute $V$ and $H$ in this equation. Therefore, we have the value of $H$ form \dref{NLHP}, consider that we also  calculate $x$ in the \ddref{HDC}, so we will have the $H$ as $m_p\ddot{x}$+$m_pl\ddot{\sin{\theta}}$.\\
-For finding $V$, we use \dref{NLVP}, when we have $m_p\ddot{(l-l\cos(\theta))}= (m_p)g-V$, so $V= (m_p)g - m_p\ddot{(l-l\cos(\theta))}$. The point is that the force that the cart applied to the pendulum is equal to the force that exerted to the cart by the pendulum. Hence, by substituting $V$ and $H$ in \dref{AngDis}, the \iref{Findx} is obtained.\\
+This subsection shows how the \iref{Findx} is derived. We should start from \dref{AngDis}, where we have this equation, $I$$\ddot{\theta}$ = $l$($V\sin(\theta)$ - $H\cos(\theta)$), we need to substitute $V$ and $H$ in this equation. Therefore, we have the value of $H$ form \dref{NLHP}, consider that we also  calculate $x$ in the \ddref{HDC}, so we will have the $H$ as $m_p\ddot{x}(t)$+$m_pl\ddot{\sin{\theta}}$.\\
+For finding $V$, we use \dref{NLVP}, when we have $m_p\ddot{(l-l\cos(\theta))}= (m_p)g-V$, so $V= (m_p)g - m_p\ddot{(l-l\cos(\theta))}$. The point is that the force that the cart applied to the pendulum is equal to the force exerted on the cart by the pendulum. Hence, by substituting $V$ and $H$ in \dref{AngDis}, the \iref{Findx} is obtained.\\
 
 \item Finding \iref{FindTehta}:
-This subsection shows how the \iref{FindTehta} is derived. In \dref{NLHC}, we have $m_c\ddot{x}= F(t)-H-b\dot{x}$, by writing the Newton's second law of motion for the pendulum in vertical direction. As $F(t)$ in the input of the system and we also have the value of $H$ form \dref{NLHP}, consider that we also calculate $x(t)$ in the \ddref{HDC}, so we will have the $H$ as $m_p\ddot{x}+m_pl\ddot{\sin{\theta}}$.\\
-Therefore, by substituting $H$, we will reach $(I+m_pl^2)\ddot{\theta} + m_pl\ddot{x}\cos{\theta} - m_pgl\sin{\theta} = 0$. The point is that the force that the cart applied to the pendulum is equal to the force that exerted to the cart by the pendulum.\\
+This subsection shows how the \iref{FindTehta} is derived. In \dref{NLHC}, we have $m_c\ddot{x}(t) = F(t)-H-b\dot{x}$, by writing Newton's second law of motion for the pendulum in the vertical direction. As $F(t)$ in the input of the system and we also have the value of $H$ form \dref{NLHP}, consider that we also calculate $x(t)$ in the \ddref{HDC}, so we will have the $H$ as $m_p\ddot{x}(t) + m_pl\ddot{\sin{\theta}}$.\\
+Therefore, by substituting $H$, we will reach $(I+m_pl^2)\ddot{\theta}(t) + m_pl\ddot{x}(t)\cos{\theta} - m_pgl\sin{\theta} = 0$. The point is that the force that the cart applied to the pendulum is equal to the force exerted on the cart by the pendulum.\\
 
 \end{itemize}
 
@@ -893,7 +886,7 @@ Table~\ref{TblSpecParams}.
 
 \begin{table}[!h]
   \caption{Input Variables} \label{TblInputVar}
-  \renewcommand{\arraystretch}{1.2}
+  \renewcommand{\arraystretch}{1}
 \noindent \begin{longtable*}{l l l l c} 
   \toprule
   \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} &
@@ -904,8 +897,11 @@ Table~\ref{TblSpecParams}.
  $b$ & $0 \leq b$ & $0 \leq b$ & 0.1\si[per-mode=symbol]  (dimensionless) &  --\\
  $l$ & $0<l $ & $l_{\text{pmin}} \leq l \leq l_{\text{pmax}}$ & 0.3 \si[per-mode=symbol] {\metre} &  --\\
  $I$ & $0<I $ & $0<I$ & 0.006 \si{\kilogram. \metre^2} & -- \\
-
-
+$F(t)$ & $0<F(t) $ & $0<F(t)$ & 20 \si{\newton} & -- \\
+$x_i$ & $0 \leq x_i $ & $0 \leq x_i$ & 0 \si{\metre} & -- \\
+$\dot{x_i}$ & $0 \leq \dot{x_i} $ & $0 \leq \dot{x_i}$ & 0 \si{{\metre\per\second}} & -- \\
+$\theta{i}$ & $0 \leq \theta{i} $ & $0 \leq \theta{i}$ & 0.2 \si{\radian} & -- \\
+$\dot{\theta{i}}$ & $0 \leq \dot{\theta{i}} $ & $0 \leq \dot{\theta{i}}$ & 0 \si{\radian\per\second} & -- \\
   \bottomrule
 \end{longtable*}
 \end{table}
@@ -936,25 +932,26 @@ Table~\ref{TblOutputVar} shows the physical constraints on the output.
   \toprule
   \textbf{Var} & \textbf{Physical Constraints}\\
   \midrule 
-  $\theta$ &  $0\leq \theta$   \si{\radian}\\
+  $\theta(t)$ &  $0\leq \theta(t)\leq 2\cdot\pi$   \si{\radian}\\
+  $x(t)$ &  $0\leq x(t)$   \si{\metre}\\
   \bottomrule
 \end{tabular}
 \end{table}
 
 \section{Requirements}
 
-This section provides the functional requirements, and the business tasks that the IP simulator is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the business tasks that the IP simulator is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit.
 
 \subsection{Functional Requirements}
 
 \noindent \begin{itemize}
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_Inputs}:] 
-{Provide input values such as the cart and pole features according to Table\ref{TblInputVar}.}
+{Provide input values such as the cart specification, the pendulum features, and initial conditions according to Table\ref{TblInputVar}.}
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_Validity}:] {Check the validity of input parameters}.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Calculate}:] {Calculate horizontal position of the cart and the angular position of the pendulum from \iref{Findx} and \iref{FindTehta}}.
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Calculate}:] {Calculate the horizontal position of the cart and the angular position of the pendulum from \iref{Findx} and \iref{FindTehta}} over the time specified.
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_Output}:] {Check the validity of outputs}.
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_Plot}:] {Visualize the outputs}.
@@ -966,8 +963,7 @@ The nonfunctional requirements are listed below:
 \noindent \begin{itemize}
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Portability}:]
-{Portability: IP Simulator can be run on all different operating environments, such as Windows, Mac-OS, and Linux.}
-
+{Portability: IP Simulator can run on all different operating environments, such as Windows, Mac-OS, and Linux.}
  
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Usability}:] 
 {Usability: The properties of the software should be able to be tested through section 5.2.2 in the \href{https://github.com/MinMah23/CAS741-Project/blob/main/docs/VnVPlan/VnVPlan.pdf}{verification and validation plan}.}
@@ -997,15 +993,12 @@ The nonfunctional requirements are listed below:
 
 \section{Traceability Matrices and Graphs}
 
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed.  Every time a component is changed, the items in the column of that component that are marked with an ``X'' may have to be modified as well. Table~\ref{Table:trace} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:A_trace} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions. Table~\ref{Table:R_trace} shows the
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed.  Every time a component is changed, the items in the column of that component that is marked with an ``X'' may have to be modified as well. Table~\ref{Table:trace} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:A_trace} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes in the assumptions. Table~\ref{Table:R_trace} shows the
 dependencies of instance models, requirements, and data constraints on each
 other. 
 
-
-%\afterpage{
 \begin{landscape}
 \begin{table}[h!]
-%\begin{adjustbox}{max width=\textwidth}
 \caption{Traceability Matrix Showing the Connections Between Items of Different SectionsAssumptions and Other Items}
 \label{Table:trace}
 \centering
@@ -1013,20 +1006,20 @@ other.
 \hline
 	& \tref{NSL}&\tref{NSLR}&\tref{TorqueDef}&\tref{FoG}& \tref{AD}& \dref{NLHC}& \dref{NLHP}& \dref{NLVP}& \dref{AngDis}& \ddref{HDC}&\ddref{VDP}&\ddref{Inertia of pendulum} &\iref{Findx}&\iref{FindTehta}\\
 \hline
-\tref{NSL}        & & & & &X &X &X & & & & &X &&\\ \hline
-\tref{NSLR}       & & & & & & & & & & & & &X&\\ \hline
-\tref{TorqueDef}  & & & & & & & & & & &X & &&\\ \hline
-\tref{FoG}        & & & & & & & & X& & & & &&\\ \hline
-\tref{AD}         & & & & & & & & & & & & &&\\ \hline 
-\dref{NLHC}       & X& & & & & & & & & & &X & &\\ \hline
-\dref{NLHP}       & X& & & & & & & & & & & &X&\\ \hline
-\dref{NLVP}       & X& & & & & & & & & & & &X&\\ \hline
-\dref{AngDis}     & & & & & X& & & & & & & & &\\ \hline
-\ddref{HDC}       & & & & & & X& & & & & & & &\\ \hline
-\ddref{VDP}       & & & & & & X& & & && & & & \\ \hline
-\ddref{Inertia of pendulum}       & & & & & & X& & & & & & &&\\ \hline
-\iref{Findx}  & X& & & & & & & & & & & &&\\ \hline
-\iref{FindTehta} & & X& & & & & & & & & & &&\\ \hline
+\tref{NSL}        &   &  &  &  &  X& X & X & X &  &  &  & &X&\\ \hline
+\tref{NSLR}       & & &X & & & & & &X & & & &&X\\ \hline
+\tref{TorqueDef}  & &X & & & & & & &X & & & &&X\\ \hline
+\tref{FoG}        & & & & & & & & X& & & & &X&\\ \hline
+\tref{AD}         &X & & & & & X& X& & & & & &&X\\ \hline 
+\dref{NLHC}       & X& & & & X& & & & & & & &X &\\ \hline
+\dref{NLHP}       & X& & & & X& & & & X& & & &X&X\\ \hline
+\dref{NLVP}       & X& & & X& & & & & & & & &&X\\ \hline
+\dref{AngDis}     & & X&X & & & &X & & & & & & &X\\ \hline
+\ddref{HDC}       & & & & & & & & & & & & & &X\\ \hline
+\ddref{VDP}       & & & & & & & & & && & & & X\\ \hline
+\ddref{Inertia of pendulum}       & & & & & & & & & & & & &&X\\ \hline
+\iref{Findx}  & X& & & X&&X & X& & & & & &&\\ \hline
+\iref{FindTehta} & & X&X & X& & &X &X & X&X &X & X&&\\ \hline
 \end{tabular}
 %\end{adjustbox}
 \end{table}
@@ -1047,11 +1040,11 @@ other.
 \hline        
 	& \tref{NSL}&\tref{NSLR}&\tref{TorqueDef}&\tref{FoG}&\tref{AD} & \dref{NLHC}& \dref{NLHP}& \dref{NLVP}& \dref{AngDis}& \ddref{HDC}&\ddref{VDP}&\ddref{Inertia of pendulum} &\iref{Findx}&\iref{FindTehta}\\
 \hline
-\aref{A_systemdimension}      & & X& & &X & & & &X & X& &X &X&\\ \hline
-\aref{A_pendfrictionl}        & & & X& & &X &X & & & & &X &&\\ \hline
-\aref{A_cartfrictionl}      & & & & & X& & & & & & & & &\\ \hline
-\aref{A_pendulumInertia}      & & & & & & & &X & & & & & X&\\ \hline
-\aref{A_CartDimension}      & & X& & & & & & & & & & & &\\ \hline
+\aref{A_systemdimension}      && & & & & &X &X &X & & & &X&X\\ \hline
+\aref{A_pendfrictionl}        & & & & & & &X& X& X& X& X&X &&X\\ \hline
+\aref{A_cartfrictionl}      & & & & & &X & & & & & & & X&\\ \hline
+\aref{A_pendulumInertia}      & & & & & & & & & & & & X& &X\\ \hline
+\aref{A_CartDimension}      & & & & & &X & & & & & & &X &\\ \hline
 
 
 \hline
